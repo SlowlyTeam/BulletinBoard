@@ -5,8 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.slowly.team</groupId>
-    <artifactId>bulletin-board</artifactId>
+    <artifactId>bulletin-board-all</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <name>Bulletin Board All</name>
 
+    <modules>
+        <module>BulletinBoardClient</module>
+        <module>BulletinBoardServer</module>
+        <module>BulletinBoardCommon</module>
+    </modules>
 
 </project>
