@@ -8,5 +8,4 @@ import java.io.Serializable;
  * Created by Emil Kleszcz on 2014-11-29.
  */
 public abstract class Packet implements Serializable {
-    //TODO - client id?
 }

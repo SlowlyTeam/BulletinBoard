@@ -3,6 +3,7 @@ package pl.slowly.team.server.connection;
 import org.apache.log4j.Logger;
 import pl.slowly.team.common.packages.Packet;
 import pl.slowly.team.common.packages.request.authorization.LogInRequest;
+import pl.slowly.team.common.packages.response.Response;
 import pl.slowly.team.server.helpers.PacketWrapper;
 
 import java.io.IOException;
@@ -134,35 +135,29 @@ public class MultiThreadedServer implements IServer, Runnable {
     /**
      * Sending package to specified client.
      *
-     * @param pack Packet to send to client.
+     * @param response Packet to send to client.
      * @param clientId   Identifier of the client.
      * @return True when correctly sent package.
      */
     @Override
-    public boolean sendPacket(Packet pack, Integer clientId) {
+    public boolean sendResponse(Response response, Integer clientId) throws IOException {
         final ClientInfo clientInfo = clientMap.get(clientId);
         if (clientInfo == null) {
             return false;
         }
-
         if (!clientInfo.isAuthorized()) {
-            try {
-                clientInfo.getOout().writeObject(pack);
-                return true;
-            } catch (IOException e) {
-                logger.error(e);
-                return false;
-            }
+            // zmienic na inny response
+            clientInfo.getOout().writeObject(response);
+            return true;
         }
-
         try {
-            clientInfo.getOout().writeObject(pack);
+            clientInfo.getOout().writeObject(response);
+            return true;
         } catch (final IOException e) {
             e.printStackTrace();
             logger.error(e);
             return false;
         }
-        return true;
     }
 
     /**
@@ -226,6 +221,7 @@ public class MultiThreadedServer implements IServer, Runnable {
             //TODO remove client with specified id
             removeClientFromMap(1);
             try {
+                oin.close();
                 clientSocket.close();
             } catch (final IOException e1) {
                 e1.printStackTrace();

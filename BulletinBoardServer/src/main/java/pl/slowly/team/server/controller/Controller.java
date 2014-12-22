@@ -2,11 +2,14 @@ package pl.slowly.team.server.controller;
 
 import pl.slowly.team.common.packages.Packet;
 import pl.slowly.team.common.packages.helpers.Credentials;
+import pl.slowly.team.common.packages.helpers.ResponseStatus;
 import pl.slowly.team.common.packages.request.authorization.LogInRequest;
+import pl.slowly.team.common.packages.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -46,7 +49,6 @@ public class Controller {
     }
 
     private void fillStrategyMap() {
-        //TODO - put into strategy map package with bind strategy
         strategyMap.put(LogInRequest.class, new LogInStrategy());
 
     }
@@ -57,16 +59,19 @@ public class Controller {
      * <p/>
      * Taking incoming packages from the blocking queue and executing the strategy.
      */
-    public void takePackagesAndExecuteStratagy() {
+    public void takePackagesAndExecuteStrategy() {
         while (true) {
             try {
                 PacketWrapper wrappedPacket = packetsQueue.take();
                 Packet packet = wrappedPacket.getPacket();
                 Strategy strategy = strategyMap.get(packet.getClass());
-                strategy.execute(packet, wrappedPacket.getUserID());
+                strategy.execute(wrappedPacket);
             } catch (final InterruptedException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
+            } catch (IOException e) {
+                System.out.println("Could not execute strategy. Network problems.");
+                e.printStackTrace();
             }
         }
     }
@@ -78,20 +83,23 @@ public class Controller {
         /**
          * Execute strategy for the package.
          *
-         * @param packet Packet for which strategy is executed.
+         * @param packetWrapper PacketWrapper for which strategy is executed.
          */
-        public abstract void execute(final Packet packet, final int clientId);
+        public abstract void execute(final PacketWrapper packetWrapper) throws IOException;
     }
 
     private class LogInStrategy extends Strategy {
 
         @Override
-        public void execute(final Packet packet, final int clientId) {
-            LogInRequest logIn = (LogInRequest) packet;
+        public void execute(final PacketWrapper packetWrapper) throws IOException {
+            LogInRequest logIn = (LogInRequest) packetWrapper.getPacket();
             Credentials credentials = logIn.getUserCredentials();
+            int userId = packetWrapper.getUserID();
             if (model.checkCredentials(credentials)) {
-                server.authorizeClient(clientId);
-                System.out.println("Sukces");
+                server.authorizeClient(userId);
+                server.sendResponse(new Response(ResponseStatus.AUTHORIZED, null), userId);
+            } else {
+                server.sendResponse(new Response(ResponseStatus.NOT_AUTHORIZED, null), userId);
             }
         }
     }
