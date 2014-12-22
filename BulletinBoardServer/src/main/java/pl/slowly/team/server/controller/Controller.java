@@ -1,7 +1,10 @@
 package pl.slowly.team.server.controller;
 
-import pl.slowly.team.common.packages.Package;
+import pl.slowly.team.common.packages.Packet;
+import pl.slowly.team.common.packages.helpers.Credentials;
+import pl.slowly.team.common.packages.request.authorization.LogInRequest;
 import pl.slowly.team.server.connection.IServer;
+import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
 import java.util.HashMap;
@@ -28,36 +31,39 @@ public class Controller {
     /**
      * Strategy map for the receiving packages from the client.
      */
-    private final Map<Class<? extends Package>, Strategy> strategyMap = new HashMap<>();
+    private final Map<Class<? extends Packet>, Strategy> strategyMap = new HashMap<>();
 
     /**
      * Reference to the event's queue which is transfer to a controller.
      */
-    private final BlockingQueue<Package> packagesQueue;
+    private final BlockingQueue<PacketWrapper> packetsQueue;
 
-    public Controller(IModel model, IServer server, BlockingQueue<Package> packagesQueue) {
+    public Controller(IModel model, IServer server, BlockingQueue<PacketWrapper> packetsQueue) {
         this.model = model;
         this.server = server;
-        this.packagesQueue = packagesQueue;
+        this.packetsQueue = packetsQueue;
         fillStrategyMap();
     }
 
     private void fillStrategyMap() {
         //TODO - put into strategy map package with bind strategy
+        strategyMap.put(LogInRequest.class, new LogInStrategy());
+
     }
 
     /**
      * Funkcja pobierająca w nieskończonej pętli przychodzące zdarzenia z
      * kolejki blokującej.
      * <p/>
-     * Taking coming packages from the blocking queue and executing them.
+     * Taking incoming packages from the blocking queue and executing the strategy.
      */
-    public void takePackagesAndExecuteStratagies() {
+    public void takePackagesAndExecuteStratagy() {
         while (true) {
             try {
-                final Package pack = packagesQueue.take();
-                final Strategy strategy = strategyMap.get(pack.getClass());
-                strategy.execute(pack);
+                PacketWrapper wrappedPacket = packetsQueue.take();
+                Packet packet = wrappedPacket.getPacket();
+                Strategy strategy = strategyMap.get(packet.getClass());
+                strategy.execute(packet, wrappedPacket.getUserID());
             } catch (final InterruptedException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
@@ -72,8 +78,21 @@ public class Controller {
         /**
          * Execute strategy for the package.
          *
-         * @param pack Package for which strategy is executed.
+         * @param packet Packet for which strategy is executed.
          */
-        public abstract void execute(final Package pack);
+        public abstract void execute(final Packet packet, final int clientId);
+    }
+
+    private class LogInStrategy extends Strategy {
+
+        @Override
+        public void execute(final Packet packet, final int clientId) {
+            LogInRequest logIn = (LogInRequest) packet;
+            Credentials credentials = logIn.getUserCredentials();
+            if (model.checkCredentials(credentials)) {
+                server.authorizeClient(clientId);
+                System.out.println("Sukces");
+            }
+        }
     }
 }

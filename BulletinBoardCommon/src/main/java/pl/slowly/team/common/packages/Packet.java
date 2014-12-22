@@ -7,6 +7,6 @@ import java.io.Serializable;
  * <p/>
  * Created by Emil Kleszcz on 2014-11-29.
  */
-public abstract class Package implements Serializable {
+public abstract class Packet implements Serializable {
     //TODO - client id?
 }

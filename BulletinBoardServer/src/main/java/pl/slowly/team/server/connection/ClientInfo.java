@@ -11,12 +11,13 @@ import java.net.Socket;
 public class ClientInfo {
 
     private final ObjectOutputStream oout;
-
     private final Socket clientSocket;
+    private boolean authorized;
 
     public ClientInfo(ObjectOutputStream oout, Socket clientSocket) {
         this.oout = oout;
         this.clientSocket = clientSocket;
+        this.authorized = false;
     }
 
     public ObjectOutputStream getOout() {
@@ -25,5 +26,13 @@ public class ClientInfo {
 
     public Socket getClientSocket() {
         return clientSocket;
+    }
+
+    public boolean isAuthorized() {
+        return authorized;
+    }
+
+    public void setAuthorized(boolean authorized) {
+        this.authorized = authorized;
     }
 }

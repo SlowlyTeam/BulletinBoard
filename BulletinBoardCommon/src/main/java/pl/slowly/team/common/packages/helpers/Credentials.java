@@ -10,4 +10,12 @@ public class Credentials implements Serializable {
         this.user = user;
         this.password = password;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUser() {
+        return user;
+    }
 }

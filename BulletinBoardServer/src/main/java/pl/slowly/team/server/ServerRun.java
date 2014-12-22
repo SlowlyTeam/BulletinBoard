@@ -1,9 +1,10 @@
 package pl.slowly.team.server;
 
-import pl.slowly.team.common.packages.Package;
+import pl.slowly.team.common.packages.Packet;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.connection.MultiThreadedServer;
 import pl.slowly.team.server.controller.Controller;
+import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.FakeModel;
 import pl.slowly.team.server.model.IModel;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class ServerRun {
     public static void main(String[] args) {
-        final BlockingQueue<Package> blockingQueue = new LinkedBlockingQueue<Package>();
+        final BlockingQueue<PacketWrapper> blockingQueue = new LinkedBlockingQueue<>();
         final IModel model = new FakeModel();
         final IServer server;
 
@@ -31,7 +32,7 @@ public class ServerRun {
         server.listen();
         System.out.println("Serwer został uruchomiony.");
         final Controller controller = new Controller(model, server, blockingQueue);
-        controller.takePackagesAndExecuteStratagies();
+        controller.takePackagesAndExecuteStratagy();
         System.out.println("Serwer został zamknięty.");
     }
 }

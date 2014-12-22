@@ -1,7 +1,9 @@
 package pl.slowly.team.server.connection;
 
 import org.apache.log4j.Logger;
-import pl.slowly.team.common.packages.Package;
+import pl.slowly.team.common.packages.Packet;
+import pl.slowly.team.common.packages.request.authorization.LogInRequest;
+import pl.slowly.team.server.helpers.PacketWrapper;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,28 +24,21 @@ import java.util.concurrent.Executors;
 public class MultiThreadedServer implements IServer, Runnable {
 
     final static Logger logger = Logger.getLogger(MultiThreadedServer.class);
-
-    private ServerSocket serverSocket;
-
     private ExecutorService threadPool = Executors.newFixedThreadPool(20);
-
+    private ServerSocket serverSocket;
     private final int port;
-
-    /**
-     * Map where key is unique client id and element is reference to clientSocket.
-     */
+    private Integer clientId;
+    /** Map where key is unique client id and element is reference to clientSocket. */
     private final Map<Integer, ClientInfo> clientMap;
-
-    /**
-     * Reference to the event's queue which is transfer to a controller.
-     */
-    private final BlockingQueue<Package> packagesQueue;
+    /** Reference to the event's queue which is transfer to a controller. */
+    private final BlockingQueue<PacketWrapper> packetsQueue;
 
 
-    public MultiThreadedServer(final int port, final BlockingQueue<Package> packagesQueue) {
+    public MultiThreadedServer(final int port, final BlockingQueue<PacketWrapper> packetsQueue) {
         this.port = port;
-        clientMap = new HashMap<>();
-        this.packagesQueue = packagesQueue;
+        this.clientMap = new HashMap<>();
+        this.packetsQueue = packetsQueue;
+        this.clientId = 0;
     }
 
     /**
@@ -73,12 +68,10 @@ public class MultiThreadedServer implements IServer, Runnable {
 
                 final ObjectOutputStream oout = new ObjectOutputStream(nextClientSocket.getOutputStream());
                 final ClientInfo clientsSocketInfo = new ClientInfo(oout, nextClientSocket);
-                //TODO - ID na sztywno - generowanie unikalnego id lub wywalic id i zostawic w liscie tylko
-                //info o gniezdzie albo zastapic id jakims loginem uzytkownika - ja proponuje generowac poprzez
-                //inkrementowanie zmiennej statycznej id klientow nowo podlaczonych do serwera
-                addClientToMap(1, clientsSocketInfo);
+                addClientToMap(clientId, clientsSocketInfo);
+                threadPool.execute(new ClientConnection(nextClientSocket, clientId));
+                incrementClientDynamicId();
 
-                this.threadPool.execute(new ClientConnection(nextClientSocket));
             } catch (IOException e) {
                 logger.error("Error occurred during listen for new clients.", e);
             }
@@ -128,18 +121,38 @@ public class MultiThreadedServer implements IServer, Runnable {
         return test;
     }
 
+    public void authorizeClient(final int clientId) {
+        ClientInfo client;
+        synchronized (clientMap) {
+            if ((client = clientMap.get(clientId)) != null) {
+                client.setAuthorized(true);
+                System.out.println("User authorized");
+            }
+        }
+    }
+
     /**
      * Sending package to specified client.
      *
-     * @param pack Package to send to client.
-     * @param id   Identifier of the client.
+     * @param pack Packet to send to client.
+     * @param clientId   Identifier of the client.
      * @return True when correctly sent package.
      */
     @Override
-    public boolean sendPackage(Package pack, Integer id) {
-        final ClientInfo clientInfo = clientMap.get(id);
+    public boolean sendPacket(Packet pack, Integer clientId) {
+        final ClientInfo clientInfo = clientMap.get(clientId);
         if (clientInfo == null) {
             return false;
+        }
+
+        if (!clientInfo.isAuthorized()) {
+            try {
+                clientInfo.getOout().writeObject(pack);
+                return true;
+            } catch (IOException e) {
+                logger.error(e);
+                return false;
+            }
         }
 
         try {
@@ -155,11 +168,11 @@ public class MultiThreadedServer implements IServer, Runnable {
     /**
      * Send broadcast to all the clients connected to the server.
      *
-     * @param pack Package to send to clients.
+     * @param packet Packet to send to clients.
      * @return True when correctly sent packages to all the clients.
      */
     @Override
-    public boolean sendBroadcastPackage(Package pack) {
+    public boolean sendBroadcastPacket(Packet packet) {
         for (ClientInfo clientInfo : clientMap.values()) {
 
             if (clientInfo == null) {
@@ -167,7 +180,7 @@ public class MultiThreadedServer implements IServer, Runnable {
             }
 
             try {
-                clientInfo.getOout().writeObject(pack);
+                clientInfo.getOout().writeObject(packet);
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.error(e);
@@ -176,6 +189,12 @@ public class MultiThreadedServer implements IServer, Runnable {
 
         }
         return true;
+    }
+
+    private void incrementClientDynamicId() {
+        synchronized (clientId) {
+            clientId++;
+        }
     }
 
     //TODO - Add service for user verification by login and/or password and comparing it with database's data
@@ -189,14 +208,12 @@ public class MultiThreadedServer implements IServer, Runnable {
      */
     public class ClientConnection implements Runnable {
         private final Socket clientSocket;
-
-        /**
-         * Input Stream to reciving packages from typed client
-         */
+        private int clientId;
         private ObjectInputStream oin;
 
-        public ClientConnection(Socket clientSocket) {
+        public ClientConnection(Socket clientSocket, int clientId) {
             this.clientSocket = clientSocket;
+            this.clientId = clientId;
             try {
                 oin = new ObjectInputStream(clientSocket.getInputStream());
             } catch (IOException e) {
@@ -222,10 +239,8 @@ public class MultiThreadedServer implements IServer, Runnable {
         public void run() {
             try {
                 while (true) {
-                    final Package event = (Package) oin.readObject();
-                    //TODO set unique identifier of the sender in the event
-
-                    packagesQueue.add(event);
+                    final Packet packet = (Packet) oin.readObject();
+                    packetsQueue.add(new PacketWrapper(clientId, packet));
                 }
             } catch (IOException | ClassNotFoundException e) {
                 // Broken connection
