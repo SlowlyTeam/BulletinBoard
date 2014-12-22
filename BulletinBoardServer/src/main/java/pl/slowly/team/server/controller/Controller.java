@@ -4,8 +4,12 @@ import pl.slowly.team.common.packages.Packet;
 import pl.slowly.team.common.packages.helpers.Credentials;
 import pl.slowly.team.common.packages.helpers.ResponseStatus;
 import pl.slowly.team.common.packages.request.authorization.LogInRequest;
+import pl.slowly.team.common.packages.request.data.GetCategoriesRequest;
 import pl.slowly.team.common.packages.response.Response;
 import pl.slowly.team.server.connection.IServer;
+import pl.slowly.team.server.controller.strategies.GetCategoriesStrategy;
+import pl.slowly.team.server.controller.strategies.LogInStrategy;
+import pl.slowly.team.server.controller.strategies.Strategy;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
@@ -49,8 +53,8 @@ public class Controller {
     }
 
     private void fillStrategyMap() {
-        strategyMap.put(LogInRequest.class, new LogInStrategy());
-
+        strategyMap.put(LogInRequest.class, new LogInStrategy(server, model));
+        strategyMap.put(GetCategoriesRequest.class, new GetCategoriesStrategy(server, model));
     }
 
     /**
@@ -59,13 +63,21 @@ public class Controller {
      * <p/>
      * Taking incoming packages from the blocking queue and executing the strategy.
      */
-    public void takePackagesAndExecuteStrategy() {
+    public void takePacketAndExecuteStrategy() {
         while (true) {
             try {
                 PacketWrapper wrappedPacket = packetsQueue.take();
                 Packet packet = wrappedPacket.getPacket();
                 Strategy strategy = strategyMap.get(packet.getClass());
-                strategy.execute(wrappedPacket);
+                if (!canExecuteStrategies(wrappedPacket)) {
+                    server.sendResponse(new Response(ResponseStatus.NOT_AUTHORIZED), wrappedPacket.getUserID());
+                } else {
+                    if (strategy != null) {
+                        strategy.execute(wrappedPacket);
+                    } else {
+                        System.out.println("Unknown strategy.");
+                    }
+                }
             } catch (final InterruptedException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
@@ -76,31 +88,13 @@ public class Controller {
         }
     }
 
-    /**
-     * Logic strategy based on packages from clients.
-     */
-    private abstract class Strategy {
-        /**
-         * Execute strategy for the package.
-         *
-         * @param packetWrapper PacketWrapper for which strategy is executed.
-         */
-        public abstract void execute(final PacketWrapper packetWrapper) throws IOException;
+    private boolean canExecuteStrategies(PacketWrapper wrappedPacket) throws IOException {
+        Packet packet = wrappedPacket.getPacket();
+        return (packet instanceof LogInRequest ||
+                (!(packet instanceof LogInRequest) && isAuthorized(wrappedPacket.getUserID())));
     }
 
-    private class LogInStrategy extends Strategy {
-
-        @Override
-        public void execute(final PacketWrapper packetWrapper) throws IOException {
-            LogInRequest logIn = (LogInRequest) packetWrapper.getPacket();
-            Credentials credentials = logIn.getUserCredentials();
-            int userId = packetWrapper.getUserID();
-            if (model.checkCredentials(credentials)) {
-                server.authorizeClient(userId);
-                server.sendResponse(new Response(ResponseStatus.AUTHORIZED, null), userId);
-            } else {
-                server.sendResponse(new Response(ResponseStatus.NOT_AUTHORIZED, null), userId);
-            }
-        }
+    private boolean isAuthorized(int userId) {
+        return true;
     }
 }

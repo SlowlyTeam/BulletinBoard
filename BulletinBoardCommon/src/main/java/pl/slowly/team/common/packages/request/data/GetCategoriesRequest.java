@@ -2,8 +2,9 @@ package pl.slowly.team.common.packages.request.data;
 
 import pl.slowly.team.common.packages.request.Request;
 
+import java.util.List;
+
 /**
- * Get categories specified by the client.
+ * Get all categories.
  */
-public class GetCategoriesRequest extends Request {
-}
+public class GetCategoriesRequest extends Request {}

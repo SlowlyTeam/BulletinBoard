@@ -1,12 +1,11 @@
 package pl.slowly.team.common.packages.helpers;
 
-/**
- * Created by Marek Majde on 2014-12-22.
- */
 public enum ResponseStatus {
 
     AUTHORIZED (201, "User successfully authorized."),
-    NOT_AUTHORIZED (401, "User not authorized.");
+    NOT_AUTHORIZED (401, "User not authorized."),
+    OK(200, "OK"),
+    ERROR(400, "Error.");
 
     private int responseCode;
     private String friendlyMessage;

@@ -39,7 +39,7 @@ public class MultiThreadedServer implements IServer, Runnable {
         this.port = port;
         this.clientMap = new HashMap<>();
         this.packetsQueue = packetsQueue;
-        this.clientId = 0;
+        this.clientId = 1;
     }
 
     /**

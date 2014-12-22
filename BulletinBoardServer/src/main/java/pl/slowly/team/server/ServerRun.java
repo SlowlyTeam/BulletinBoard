@@ -31,7 +31,7 @@ public class ServerRun {
         server.listen();
         System.out.println("Serwer został uruchomiony.");
         final Controller controller = new Controller(model, server, blockingQueue);
-        controller.takePackagesAndExecuteStrategy();
+        controller.takePacketAndExecuteStrategy();
         System.out.println("Serwer został zamknięty.");
     }
 }

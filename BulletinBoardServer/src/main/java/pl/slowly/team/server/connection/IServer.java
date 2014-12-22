@@ -37,4 +37,9 @@ public interface IServer {
      * @return True when correctly sended broadcast.
      */
     public boolean sendBroadcastPacket(Packet pack);
+
+    /**
+     * Returns username for specified client id.
+     */
+    public String getUsername(int clientId);
 }
