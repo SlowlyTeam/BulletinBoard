@@ -15,52 +15,20 @@ public class RequestSender {
     private Client client;
 
     public RequestSender() throws IOException {
-        client = new Client(null, 8081);
+//        this.client = new Client(null, 8081);
     }
-
-    public void sendTestRequests() throws IOException, InterruptedException {
-        if (connectToServer()) {
-            logIn("marek", "7875");
-//            getCategories();
-            addBulletin();
-//            deleteBulletin();
-//            getBulletins(null);
-//            getUserBulletins();
-        }
-//        disconnectFromServer();
-    }
-
-    private void disconnectFromServer() throws IOException, InterruptedException {
-        client.sendRequest(new DisconnectFromServerRequest());
-    }
-
-    private boolean connectToServer() throws IOException {
-        return client.connectToServer();
-    }
-
-    public void logIn(String userName, String password) throws IOException {
-        client.sendRequest(new LogInRequest(new Credentials(userName, password)));
-    }
-
-    public void addBulletin() throws IOException {
-        client.sendRequest(new AddBulletinRequest(new Bulletin("my own bulletin?")));
-    }
-
-    public void deleteBulletin() throws IOException {
-        client.sendRequest(new DeleteBulletinRequest(1));
-    }
-
-    public void getCategories() throws IOException {
-        client.sendRequest(new GetCategoriesRequest());
-    }
-
-    public void getBulletins(List<Integer> bulletinsIds) throws IOException {
-        client.sendRequest(new GetBulletinsRequest(bulletinsIds, null));
-    }
-
-    public void getUserBulletins() throws IOException {
-        client.sendRequest(new GetUserBulletinsRequest());
-    }
+//
+//    public void sendTestRequests() throws IOException, InterruptedException {
+//        if (connectToServer()) {
+//            logIn("marek", "7875");
+////            getCategories();
+//            addBulletin();
+////            deleteBulletin();
+////            getBulletins(null);
+////            getUserBulletins();
+//        }
+////        disconnectFromServer();
+//    }
 
 
 }

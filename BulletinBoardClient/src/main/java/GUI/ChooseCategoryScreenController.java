@@ -4,6 +4,7 @@ package GUI;/*
  * and open the template in the editor.
  */
 
+import connection.Client;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -39,7 +40,7 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
     }
 
     @Override
-    public void setScreenController(ScreensController screenPage) {
+    public void setScreenController(ScreensController screenPage, Client client) {
         screensController = screenPage;
     }
 

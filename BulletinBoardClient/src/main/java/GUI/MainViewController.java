@@ -3,6 +3,7 @@
  */
 package GUI;
 
+import connection.Client;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -35,6 +36,7 @@ public class MainViewController implements ControlledScreen, Initializable {
     private int curPage;
     private double xOffset;
     private double yOffset;
+    private Client client;
 
     @FXML
     private Label exitImage;
@@ -107,8 +109,9 @@ public class MainViewController implements ControlledScreen, Initializable {
     }
 
     @Override
-    public void setScreenController(ScreensController screenPage) {
+    public void setScreenController(ScreensController screenPage, Client client) {
         screensController = screenPage;
+        this.client = client;
     }
 
     @Override

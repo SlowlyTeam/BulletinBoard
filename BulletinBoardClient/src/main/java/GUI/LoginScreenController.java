@@ -4,6 +4,8 @@ package GUI;/*
  * and open the template in the editor.
  */
 
+import View.RequestSender;
+import connection.Client;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -12,7 +14,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import pl.slowly.team.common.packets.helpers.ResponseStatus;
+import pl.slowly.team.common.packets.response.Response;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginScreenController implements ControlledScreen {
 
     private ScreensController screensController;
+    private Client client;
 
     @FXML
     private TextField login;
@@ -33,26 +39,25 @@ public class LoginScreenController implements ControlledScreen {
     private double xOffset;
     private double yOffset;
 
-    public LoginScreenController() {
-        super();
+    public void login() throws IOException {
+        screensController.showProgressScreen();
+        client.logIn(login.getText(), password.getText());
     }
 
-    public void login() {
-        // login.getParent().setDisable(true);
-        screensController.showProgressScreen();
-        new Thread(() -> {
-            try {
-                doInBackground();
-                done(true);
-            } catch (Exception e) {
-                done(false);
-            }
-        }).start();
+    public void logInResponse(Response logInResponse) {
+        if (logInResponse.getResponseStatus().equals(ResponseStatus.AUTHORIZED)) {
+            done(true);
+        }
+        else {
+            done(false);
+        }
+
     }
 
     @Override
-    public void setScreenController(ScreensController screenPage) {
-        screensController = screenPage;
+    public void setScreenController(ScreensController screenPage, Client client) {
+        this.screensController = screenPage;
+        this.client = client;
     }
 
     @Override

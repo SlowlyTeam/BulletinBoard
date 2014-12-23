@@ -4,6 +4,7 @@ package GUI;/*
  * and open the template in the editor.
  */
 
+import connection.Client;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,6 +12,8 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.IOException;
 
 /**
  * @author Maxym
@@ -34,9 +37,18 @@ public class GUI extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         ScreensController screensController = new ScreensController();
-        screensController.loadScreen(GUI.loginScreenID, GUI.loginScreenFile);
-        screensController.loadScreen(GUI.chooseCategoryID, GUI.chooseCategoryFile);
-        screensController.loadScreen(GUI.mainScreenID, GUI.mainScreenFile);
+        Client client;
+        try {
+            client = new Client(null, 8081, screensController);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+        client.connectToServer();
+
+        screensController.loadScreen(GUI.loginScreenID, GUI.loginScreenFile, client);
+        screensController.loadScreen(GUI.chooseCategoryID, GUI.chooseCategoryFile, client);
+        screensController.loadScreen(GUI.mainScreenID, GUI.mainScreenFile, client);
         screensController.addProgressScreen(new ProgressPanel());
 
         screensController.setScreen(GUI.loginScreenID, false);
