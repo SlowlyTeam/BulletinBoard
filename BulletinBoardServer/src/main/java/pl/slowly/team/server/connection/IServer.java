@@ -1,7 +1,7 @@
 package pl.slowly.team.server.connection;
 
-import pl.slowly.team.common.packages.Packet;
-import pl.slowly.team.common.packages.response.Response;
+import pl.slowly.team.common.packets.Packet;
+import pl.slowly.team.common.packets.response.Response;
 
 import java.io.IOException;
 

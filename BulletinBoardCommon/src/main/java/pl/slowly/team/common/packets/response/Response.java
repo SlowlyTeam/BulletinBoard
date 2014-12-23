@@ -1,9 +1,9 @@
-package pl.slowly.team.common.packages.response;
+package pl.slowly.team.common.packets.response;
 
 import com.sun.istack.internal.Nullable;
-import pl.slowly.team.common.packages.Packet;
-import pl.slowly.team.common.packages.data.Entity;
-import pl.slowly.team.common.packages.helpers.ResponseStatus;
+import pl.slowly.team.common.packets.Packet;
+import pl.slowly.team.common.packets.data.Entity;
+import pl.slowly.team.common.packets.helpers.ResponseStatus;
 
 import java.util.ArrayList;
 import java.util.List;

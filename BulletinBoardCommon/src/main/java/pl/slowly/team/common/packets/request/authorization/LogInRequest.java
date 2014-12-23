@@ -1,7 +1,7 @@
-package pl.slowly.team.common.packages.request.authorization;
+package pl.slowly.team.common.packets.request.authorization;
 
-import pl.slowly.team.common.packages.helpers.Credentials;
-import pl.slowly.team.common.packages.request.Request;
+import pl.slowly.team.common.packets.helpers.Credentials;
+import pl.slowly.team.common.packets.request.Request;
 
 /**
  * Send login and password in order to authenticate account.

@@ -1,4 +1,4 @@
-package pl.slowly.team.common.packages.data;
+package pl.slowly.team.common.packets.data;
 
 public class Bulletin extends Entity {
     private String bulletinTitle;

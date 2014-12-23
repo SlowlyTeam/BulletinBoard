@@ -1,7 +1,7 @@
-package pl.slowly.team.common.packages.request.data;
+package pl.slowly.team.common.packets.request.data;
 
 import com.sun.istack.internal.Nullable;
-import pl.slowly.team.common.packages.request.Request;
+import pl.slowly.team.common.packets.request.Request;
 
 import java.time.LocalDateTime;
 import java.util.List;

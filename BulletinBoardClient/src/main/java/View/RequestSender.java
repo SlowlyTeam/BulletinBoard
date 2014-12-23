@@ -1,10 +1,10 @@
 package View;
 
 import connection.Client;
-import pl.slowly.team.common.packages.data.Bulletin;
-import pl.slowly.team.common.packages.helpers.Credentials;
-import pl.slowly.team.common.packages.request.authorization.LogInRequest;
-import pl.slowly.team.common.packages.request.data.*;
+import pl.slowly.team.common.packets.data.Bulletin;
+import pl.slowly.team.common.packets.helpers.Credentials;
+import pl.slowly.team.common.packets.request.authorization.LogInRequest;
+import pl.slowly.team.common.packets.request.data.*;
 
 import java.io.IOException;
 import java.util.List;

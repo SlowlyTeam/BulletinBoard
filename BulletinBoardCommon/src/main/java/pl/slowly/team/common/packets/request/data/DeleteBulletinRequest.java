@@ -1,6 +1,6 @@
-package pl.slowly.team.common.packages.request.data;
+package pl.slowly.team.common.packets.request.data;
 
-import pl.slowly.team.common.packages.request.Request;
+import pl.slowly.team.common.packets.request.Request;
 
 /**
  * Delete bulletin that belongs to the client.

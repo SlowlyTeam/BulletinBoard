@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Logic strategy based on packages from clients.
+ * Logic strategy based on packets from clients.
  */
 public abstract class Strategy {
 

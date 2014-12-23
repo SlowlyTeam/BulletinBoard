@@ -1,8 +1,8 @@
 package pl.slowly.team.server.connection;
 
 import org.apache.log4j.Logger;
-import pl.slowly.team.common.packages.Packet;
-import pl.slowly.team.common.packages.response.Response;
+import pl.slowly.team.common.packets.Packet;
+import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.helpers.PacketWrapper;
 
 import java.io.IOException;
@@ -58,8 +58,8 @@ public class MultiThreadedServer implements IServer, Runnable {
 
     /**
      * Listen for new clients and when they connect add them to the map with required info
-     * to sending and receiving any packages.
-     * Create new connection in separate thread which receive packages in a loop from the
+     * to sending and receiving any packets.
+     * Create new connection in separate thread which receive packets in a loop from the
      * connected client.
      */
     @Override
@@ -153,7 +153,7 @@ public class MultiThreadedServer implements IServer, Runnable {
      * Send broadcast to all the clients connected to the server.
      *
      * @param packet Packet to send to clients.
-     * @return True when correctly sent packages to all the clients.
+     * @return True when correctly sent packets to all the clients.
      */
     @Override
     public boolean sendBroadcastPacket(Packet packet) {
@@ -197,7 +197,7 @@ public class MultiThreadedServer implements IServer, Runnable {
     }
 
     //TODO - Add service for user verification by login and/or password and comparing it with database's data
-    //Send some information packages between client and server about that.
+    //Send some information packets between client and server about that.
     //In case of failed log into system user should be informed by sending appropriate statement
 
     /**
@@ -233,7 +233,7 @@ public class MultiThreadedServer implements IServer, Runnable {
         }
 
         /**
-         * Reciving packages from specified client in a loop.
+         * Reciving packets from specified client in a loop.
          */
         @Override
         public void run() {

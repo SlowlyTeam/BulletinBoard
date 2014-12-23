@@ -1,6 +1,6 @@
-package pl.slowly.team.common.packages.request;
+package pl.slowly.team.common.packets.request;
 
-import pl.slowly.team.common.packages.Packet;
+import pl.slowly.team.common.packets.Packet;
 
 /**
  * Base class for all requests.

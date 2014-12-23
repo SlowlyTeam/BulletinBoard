@@ -1,7 +1,7 @@
-package pl.slowly.team.common.packages.request.broadcast;
+package pl.slowly.team.common.packets.request.broadcast;
 
 
-import pl.slowly.team.common.packages.Packet;
+import pl.slowly.team.common.packets.Packet;
 
 public class DeleteBulletinBroadcast extends Packet {
     private int bulletinId;

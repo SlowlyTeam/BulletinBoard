@@ -1,6 +1,6 @@
 package pl.slowly.team.server.helpers;
 
-import pl.slowly.team.common.packages.Packet;
+import pl.slowly.team.common.packets.Packet;
 
 /**
  * Created by Marek Majde on 2014-12-22.

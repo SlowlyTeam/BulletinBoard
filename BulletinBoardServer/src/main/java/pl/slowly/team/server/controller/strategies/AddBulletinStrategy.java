@@ -1,10 +1,10 @@
 package pl.slowly.team.server.controller.strategies;
 
-import pl.slowly.team.common.packages.data.Bulletin;
-import pl.slowly.team.common.packages.helpers.ResponseStatus;
-import pl.slowly.team.common.packages.request.broadcast.SendNewBulletinBroadcast;
-import pl.slowly.team.common.packages.request.data.AddBulletinRequest;
-import pl.slowly.team.common.packages.response.Response;
+import pl.slowly.team.common.packets.data.Bulletin;
+import pl.slowly.team.common.packets.helpers.ResponseStatus;
+import pl.slowly.team.common.packets.request.broadcast.SendNewBulletinBroadcast;
+import pl.slowly.team.common.packets.request.data.AddBulletinRequest;
+import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;

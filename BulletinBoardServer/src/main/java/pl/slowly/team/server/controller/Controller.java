@@ -1,10 +1,10 @@
 package pl.slowly.team.server.controller;
 
-import pl.slowly.team.common.packages.Packet;
-import pl.slowly.team.common.packages.helpers.ResponseStatus;
-import pl.slowly.team.common.packages.request.authorization.LogInRequest;
-import pl.slowly.team.common.packages.request.data.*;
-import pl.slowly.team.common.packages.response.Response;
+import pl.slowly.team.common.packets.Packet;
+import pl.slowly.team.common.packets.helpers.ResponseStatus;
+import pl.slowly.team.common.packets.request.authorization.LogInRequest;
+import pl.slowly.team.common.packets.request.data.*;
+import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.controller.strategies.*;
 import pl.slowly.team.server.helpers.PacketWrapper;
@@ -17,14 +17,14 @@ import java.util.concurrent.BlockingQueue;
 
 /**
  * Controller to manage logic of the server and connection
- * between the clients and the server during sending packages.
+ * between the clients and the server during sending packets.
  */
 public class Controller {
     /** Model being main class of the logic. */
     private final IModel model;
     /** Server managing connections with clients. */
     private final IServer server;
-    /** Strategy map for the receiving packages from the client. */
+    /** Strategy map for the receiving packets from the client. */
     private final Map<Class<? extends Packet>, Strategy> strategyMap = new HashMap<>();
 
     /**
@@ -49,7 +49,7 @@ public class Controller {
     }
 
     /**
-     * Taking incoming packages from the blocking queue and executing the strategy.
+     * Taking incoming packets from the blocking queue and executing the strategy.
      */
     public void takePacketAndExecuteStrategy() {
         while (true) {

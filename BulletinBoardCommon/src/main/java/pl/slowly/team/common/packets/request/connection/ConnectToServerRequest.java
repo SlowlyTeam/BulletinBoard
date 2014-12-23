@@ -1,6 +1,6 @@
-package pl.slowly.team.common.packages.request.connection;
+package pl.slowly.team.common.packets.request.connection;
 
-import pl.slowly.team.common.packages.request.Request;
+import pl.slowly.team.common.packets.request.Request;
 
 /**
  * Sent when client wants to connect to server.

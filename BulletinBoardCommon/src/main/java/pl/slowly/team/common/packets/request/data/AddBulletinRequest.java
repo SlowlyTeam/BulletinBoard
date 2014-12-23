@@ -1,7 +1,7 @@
-package pl.slowly.team.common.packages.request.data;
+package pl.slowly.team.common.packets.request.data;
 
-import pl.slowly.team.common.packages.data.Bulletin;
-import pl.slowly.team.common.packages.request.Request;
+import pl.slowly.team.common.packets.data.Bulletin;
+import pl.slowly.team.common.packets.request.Request;
 
 /**
  * Add new bulletin for specific client.

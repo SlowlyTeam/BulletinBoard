@@ -1,4 +1,4 @@
-package pl.slowly.team.common.packages.helpers;
+package pl.slowly.team.common.packets.helpers;
 
 import java.io.Serializable;
 

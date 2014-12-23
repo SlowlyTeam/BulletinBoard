@@ -1,8 +1,8 @@
 package connection;
 
-import pl.slowly.team.common.packages.Packet;
-import pl.slowly.team.common.packages.request.Request;
-import pl.slowly.team.common.packages.request.broadcast.SendNewBulletinBroadcast;
+import pl.slowly.team.common.packets.Packet;
+import pl.slowly.team.common.packets.request.Request;
+import pl.slowly.team.common.packets.request.broadcast.SendNewBulletinBroadcast;
 
 import java.io.*;
 import java.net.Socket;
