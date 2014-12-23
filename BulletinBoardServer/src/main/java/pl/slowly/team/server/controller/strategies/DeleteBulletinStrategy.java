@@ -9,15 +9,16 @@ import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
 import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
 
+/**
+ * Strategy executed when user wants to delete one of his bulletins.
+ *
+ * @see DeleteBulletinRequest
+ */
 public class DeleteBulletinStrategy extends Strategy {
 
-    private BlockingQueue<PacketWrapper> packetsQueue;
-
-    public DeleteBulletinStrategy(IServer server, IModel model, BlockingQueue<PacketWrapper> packetsQueue) {
+    public DeleteBulletinStrategy(IServer server, IModel model) {
         super(server, model);
-        this.packetsQueue = packetsQueue;
     }
 
     @Override

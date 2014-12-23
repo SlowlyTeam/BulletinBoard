@@ -3,6 +3,7 @@ package pl.slowly.team.server.controller;
 import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.authorization.LogInRequest;
+import pl.slowly.team.common.packets.request.connection.DisconnectFromServerRequest;
 import pl.slowly.team.common.packets.request.data.*;
 import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
@@ -17,19 +18,16 @@ import java.util.concurrent.BlockingQueue;
 
 /**
  * Controller to manage logic of the server and connection
- * between the clients and the server during sending packets.
+ * between the clients and the server while sending packets.
  */
 public class Controller {
     /** Model being main class of the logic. */
     private final IModel model;
     /** Server managing connections with clients. */
     private final IServer server;
-    /** Strategy map for the receiving packets from the client. */
+    /** Strategy map for the received packets from the client. */
     private final Map<Class<? extends Packet>, Strategy> strategyMap = new HashMap<>();
-
-    /**
-     * Reference to the event's queue which is transfer to a controller.
-     */
+    /** Reference to the event's queue which is transfer to a controller. */
     private final BlockingQueue<PacketWrapper> packetsQueue;
 
     public Controller(IModel model, IServer server, BlockingQueue<PacketWrapper> packetsQueue) {
@@ -42,14 +40,15 @@ public class Controller {
     private void fillStrategyMap() {
         strategyMap.put(LogInRequest.class, new LogInStrategy(server, model));
         strategyMap.put(GetCategoriesRequest.class, new GetCategoriesStrategy(server, model));
-        strategyMap.put(AddBulletinRequest.class, new AddBulletinStrategy(server, model, packetsQueue));
-        strategyMap.put(DeleteBulletinRequest.class, new DeleteBulletinStrategy(server, model, packetsQueue));
+        strategyMap.put(AddBulletinRequest.class, new AddBulletinStrategy(server, model));
+        strategyMap.put(DeleteBulletinRequest.class, new DeleteBulletinStrategy(server, model));
         strategyMap.put(GetUserBulletinsRequest.class, new GetUserBulletinsStrategy(server, model));
         strategyMap.put(GetBulletinsRequest.class, new GetBulletinsStrategy(server, model));
+        strategyMap.put(DisconnectFromServerRequest.class, new DisconnectFromServerStrategy(server, model));
     }
 
     /**
-     * Taking incoming packets from the blocking queue and executing the strategy.
+     * Takes incoming packets from the blocking queue and executes the strategy.
      */
     public void takePacketAndExecuteStrategy() {
         while (true) {
@@ -66,6 +65,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Executes the strategy if user tries to authorize or user is already authorized.
+     */
     private void executeStrategyIfAuthorized(PacketWrapper wrappedPacket) throws IOException, InterruptedException {
         Packet packet = wrappedPacket.getPacket();
         Strategy strategy = strategyMap.get(packet.getClass());

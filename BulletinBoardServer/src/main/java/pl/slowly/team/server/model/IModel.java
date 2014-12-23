@@ -2,8 +2,8 @@ package pl.slowly.team.server.model;
 
 
 import com.sun.istack.internal.Nullable;
-import pl.slowly.team.common.packets.data.Bulletin;
-import pl.slowly.team.common.packets.data.Category;
+import pl.slowly.team.common.data.Bulletin;
+import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.Credentials;
 
 import java.time.LocalDateTime;

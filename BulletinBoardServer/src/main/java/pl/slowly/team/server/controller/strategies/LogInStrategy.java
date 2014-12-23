@@ -10,6 +10,11 @@ import pl.slowly.team.server.model.IModel;
 
 import java.io.IOException;
 
+/**
+ * Strategy executed when user tries to log in.
+ *
+ * @see LogInRequest
+ */
 public class LogInStrategy extends Strategy {
 
     public LogInStrategy(IServer server, IModel model) {

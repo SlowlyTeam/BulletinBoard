@@ -1,4 +1,4 @@
-package pl.slowly.team.common.packets.data;
+package pl.slowly.team.common.data;
 
 import com.sun.istack.internal.Nullable;
 

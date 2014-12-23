@@ -1,6 +1,6 @@
 package pl.slowly.team.common.packets.request.data;
 
-import pl.slowly.team.common.packets.data.Bulletin;
+import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.request.Request;
 
 /**

@@ -102,6 +102,14 @@ public class MultiThreadedServer implements IServer, Runnable {
         return test;
     }
 
+    // TODO dodać sensowne rozłączanie z klientem jeżeli on wyśle taką prośbę.
+    // TODO spojrzeć na wątki które trzeba będzie zamknąć.
+//    public boolean endConnectionWithClient(int clientId) {
+//        synchronized (clientMap) {
+//            ClientInfo clientInfo = clientMap.get(clientId);
+//        }
+//    }
+
     /**
      * Remove client's socket info from the map.
      *
@@ -189,7 +197,9 @@ public class MultiThreadedServer implements IServer, Runnable {
         }
     }
 
-
+    /**
+     * Increments client dynamic Id, so each client can be uniquely identified.
+     */
     private void incrementClientDynamicId() {
         synchronized (currentClientId) {
             currentClientId++;
@@ -223,7 +233,7 @@ public class MultiThreadedServer implements IServer, Runnable {
 
         void closeClientsConnection() {
             //TODO remove client with specified id
-            removeClientFromMap(1);
+            removeClientFromMap(clientId);
             try {
                 oin.close();
                 clientSocket.close();

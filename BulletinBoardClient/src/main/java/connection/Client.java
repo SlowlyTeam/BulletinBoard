@@ -7,7 +7,7 @@ import pl.slowly.team.common.packets.request.broadcast.SendNewBulletinBroadcast;
 import java.io.*;
 import java.net.Socket;
 
-public class Client implements AutoCloseable{
+public class Client {
 
     private int port;
     private String host;
@@ -35,13 +35,11 @@ public class Client implements AutoCloseable{
         System.out.println("wysyłanie żądania...");
     }
 
-
-    @Override
     public void close() throws IOException, InterruptedException {
-        inputStream.close();
-        outputStream.close();
-        socket.close();
-        serverResponseListener.join();
+//        inputStream.close();
+//        outputStream.close();
+//        socket.close();
+//        serverResponseListener.join();
     }
 
     public class ServerResponseListener extends Thread {

@@ -1,6 +1,6 @@
 package pl.slowly.team.server.controller.strategies;
 
-import pl.slowly.team.common.packets.data.Bulletin;
+import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.broadcast.SendNewBulletinBroadcast;
 import pl.slowly.team.common.packets.request.data.AddBulletinRequest;
@@ -10,15 +10,16 @@ import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
 import java.io.IOException;
-import java.util.concurrent.BlockingQueue;
 
+/**
+ * Strategy executed when user wants to add new bulletin.
+ *
+ * @see AddBulletinRequest
+ */
 public class AddBulletinStrategy extends Strategy {
 
-    private BlockingQueue<PacketWrapper> packetsQueue;
-
-    public AddBulletinStrategy(IServer server, IModel model, BlockingQueue<PacketWrapper> packetsQueue) {
+    public AddBulletinStrategy(IServer server, IModel model) {
         super(server, model);
-        this.packetsQueue = packetsQueue;
     }
 
     @Override

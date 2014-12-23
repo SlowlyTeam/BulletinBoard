@@ -1,7 +1,7 @@
 package pl.slowly.team.common.packets.request.broadcast;
 
 import pl.slowly.team.common.packets.Packet;
-import pl.slowly.team.common.packets.data.Bulletin;
+import pl.slowly.team.common.data.Bulletin;
 
 
 /**

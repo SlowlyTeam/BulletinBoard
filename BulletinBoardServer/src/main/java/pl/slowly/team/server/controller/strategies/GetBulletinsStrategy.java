@@ -1,6 +1,6 @@
 package pl.slowly.team.server.controller.strategies;
 
-import pl.slowly.team.common.packets.data.Bulletin;
+import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.data.GetBulletinsRequest;
 import pl.slowly.team.common.packets.response.Response;
@@ -11,6 +11,11 @@ import pl.slowly.team.server.model.IModel;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Strategy executed when user wants to retrieve bulletins from specified categories, since specified date.
+ *
+ * @see GetBulletinsRequest
+ */
 public class GetBulletinsStrategy extends Strategy {
 
     public GetBulletinsStrategy(IServer server, IModel model) {
