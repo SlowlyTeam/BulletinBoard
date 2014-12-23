@@ -9,7 +9,10 @@ public class ClientRun {
     {
         try {
             RequestSender requestSender = new RequestSender();
+            requestSender.sendTestRequests();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

@@ -61,11 +61,12 @@ public class Client implements AutoCloseable{
                     // tutaj aktualizacja widoku
                     System.out.println(serverResponse.getResponseStatus().toString());
                     List<? extends Entity> entities = serverResponse.getEntities();
-                    for (Entity entity : entities) {
-                        if (entity instanceof Category) {
-                            System.out.println(((Category) entity).getCategoryName());
+                    if (entities != null) {
+                        for (Entity entity : entities) {
+                            System.out.print(entity);
                         }
                     }
+                    System.out.println();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

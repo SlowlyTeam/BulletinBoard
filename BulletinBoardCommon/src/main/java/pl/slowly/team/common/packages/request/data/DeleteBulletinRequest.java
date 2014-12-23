@@ -12,4 +12,8 @@ public class DeleteBulletinRequest extends Request {
     public DeleteBulletinRequest(int bulletinId) {
         this.bulletinId = bulletinId;
     }
+
+    public int getBulletinId() {
+        return bulletinId;
+    }
 }

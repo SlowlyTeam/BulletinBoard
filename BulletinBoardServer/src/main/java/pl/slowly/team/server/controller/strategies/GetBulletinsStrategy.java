@@ -1,8 +1,10 @@
 package pl.slowly.team.server.controller.strategies;
 
-import pl.slowly.team.common.packages.data.Category;
+import pl.slowly.team.common.packages.data.Bulletin;
+import pl.slowly.team.common.packages.data.Entity;
 import pl.slowly.team.common.packages.helpers.ResponseStatus;
-import pl.slowly.team.common.packages.request.data.GetCategoriesRequest;
+import pl.slowly.team.common.packages.request.data.AddBulletinRequest;
+import pl.slowly.team.common.packages.request.data.GetBulletinsRequest;
 import pl.slowly.team.common.packages.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
@@ -19,9 +21,9 @@ public class GetBulletinsStrategy extends Strategy {
 
     @Override
     public void execute(final PacketWrapper packetWrapper) throws IOException {
-//        GetCategoriesRequest getCategories = (GetCategoriesRequest) packetWrapper.getPacket();
-//        int userId = packetWrapper.getUserID();
-//        List<Category> categories = model.getCategories();
-//        server.sendResponse(new Response(ResponseStatus.OK, categories), userId);
+        GetBulletinsRequest getBulletins = (GetBulletinsRequest) packetWrapper.getPacket();
+        int clientId = packetWrapper.getUserID();
+        List<Bulletin> bulletins = model.getBulletins(getBulletins.getCategoriesIds(), getBulletins.getSince());
+        server.sendResponse(new Response(ResponseStatus.OK, bulletins), clientId);
     }
 }

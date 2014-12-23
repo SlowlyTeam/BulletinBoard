@@ -186,6 +186,11 @@ public class MultiThreadedServer implements IServer, Runnable {
         return true;
     }
 
+    @Override
+    public String getUsername(int clientId) {
+        return null;
+    }
+
     private void incrementClientDynamicId() {
         synchronized (clientId) {
             clientId++;

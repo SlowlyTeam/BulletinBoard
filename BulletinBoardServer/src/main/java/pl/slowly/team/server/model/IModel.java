@@ -1,13 +1,14 @@
 package pl.slowly.team.server.model;
 
 
+import com.sun.istack.internal.Nullable;
 import pl.slowly.team.common.packages.data.Bulletin;
 import pl.slowly.team.common.packages.data.Category;
 import pl.slowly.team.common.packages.helpers.Credentials;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-//TODO add ids
 public interface IModel {
     /** Checks credentials. Returns true if user credentials are valid. */
     public boolean checkCredentials(Credentials credentials);
@@ -16,5 +17,9 @@ public interface IModel {
     /** Returns bulletins for specified user. */
     public List<Bulletin> getUserBulletins(String username);
     /** Adds a bulletin to database for specified user. */
-    boolean addBulletin(Bulletin bulletin, String username);
+    public boolean addBulletin(Bulletin bulletin, String username);
+    /** Deletes the bulletin from database for specified user. */
+    public boolean deleteBulletin(int bulletinId, String username);
+    /** Returns bulletins from specified categories, from optional date since. */
+    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since);
 }

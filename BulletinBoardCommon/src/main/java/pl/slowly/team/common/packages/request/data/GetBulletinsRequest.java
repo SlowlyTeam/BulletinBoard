@@ -12,8 +12,18 @@ import java.util.List;
 public class GetBulletinsRequest extends Request {
 
     private List<Integer> categoriesIds;
+    private LocalDateTime since;
 
     public GetBulletinsRequest(List<Integer> categoriesIds, @Nullable LocalDateTime since) {
         this.categoriesIds = categoriesIds;
     }
+
+    public List<Integer> getCategoriesIds() {
+        return categoriesIds;
+    }
+
+    public LocalDateTime getSince() {
+        return since;
+    }
+
 }

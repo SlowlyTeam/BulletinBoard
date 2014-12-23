@@ -1,15 +1,12 @@
 package pl.slowly.team.server.controller;
 
 import pl.slowly.team.common.packages.Packet;
-import pl.slowly.team.common.packages.helpers.Credentials;
 import pl.slowly.team.common.packages.helpers.ResponseStatus;
 import pl.slowly.team.common.packages.request.authorization.LogInRequest;
-import pl.slowly.team.common.packages.request.data.GetCategoriesRequest;
+import pl.slowly.team.common.packages.request.data.*;
 import pl.slowly.team.common.packages.response.Response;
 import pl.slowly.team.server.connection.IServer;
-import pl.slowly.team.server.controller.strategies.GetCategoriesStrategy;
-import pl.slowly.team.server.controller.strategies.LogInStrategy;
-import pl.slowly.team.server.controller.strategies.Strategy;
+import pl.slowly.team.server.controller.strategies.*;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
@@ -55,6 +52,10 @@ public class Controller {
     private void fillStrategyMap() {
         strategyMap.put(LogInRequest.class, new LogInStrategy(server, model));
         strategyMap.put(GetCategoriesRequest.class, new GetCategoriesStrategy(server, model));
+        strategyMap.put(AddBulletinRequest.class, new AddBulletinStrategy(server, model, packetsQueue));
+        strategyMap.put(DeleteBulletinRequest.class, new DeleteBulletinStrategy(server, model, packetsQueue));
+        strategyMap.put(GetUserBulletinsRequest.class, new GetUserBulletinsStrategy(server, model));
+        strategyMap.put(GetBulletinsRequest.class, new GetBulletinsStrategy(server, model));
     }
 
     /**

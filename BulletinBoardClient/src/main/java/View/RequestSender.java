@@ -6,9 +6,7 @@ import pl.slowly.team.common.packages.helpers.Credentials;
 import pl.slowly.team.common.packages.request.authorization.LogInRequest;
 import pl.slowly.team.common.packages.request.data.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 public class RequestSender {
@@ -16,15 +14,19 @@ public class RequestSender {
     private Client client;
 
     public RequestSender() throws IOException {
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-        Client client = new Client(null, 8081);
+        client = new Client(null, 8081);
     }
 
-    public void sendTestRequests() throws IOException {
+    public void sendTestRequests() throws IOException, InterruptedException {
         if (client.connectToServer()) {
             logIn("marek", "7875");
             getCategories();
+            addBulletin();
+            deleteBulletin();
+            getBulletins(null);
+            getUserBulletins();
         }
+//        client.close();
     }
 
     public void logIn(String userName, String password) throws IOException {
@@ -32,7 +34,7 @@ public class RequestSender {
     }
 
     public void addBulletin() throws IOException {
-        client.sendRequest(new AddBulletinRequest(new Bulletin()));
+        client.sendRequest(new AddBulletinRequest(new Bulletin("my own bulletin")));
     }
 
     public void deleteBulletin() throws IOException {
@@ -48,7 +50,7 @@ public class RequestSender {
     }
 
     public void getUserBulletins() throws IOException {
-        client.sendRequest(new GetMyBulletinsRequest());
+        client.sendRequest(new GetUserBulletinsRequest());
     }
 
 

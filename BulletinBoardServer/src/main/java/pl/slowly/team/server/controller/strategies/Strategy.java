@@ -1,12 +1,11 @@
 package pl.slowly.team.server.controller.strategies;
 
-import pl.slowly.team.common.packages.data.Entity;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Logic strategy based on packages from clients.

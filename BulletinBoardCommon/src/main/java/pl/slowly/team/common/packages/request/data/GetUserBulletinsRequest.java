@@ -5,4 +5,4 @@ import pl.slowly.team.common.packages.request.Request;
 /**
  * Get all bulletins that belong to the client.
  */
-public class GetMyBulletinsRequest extends Request {}
+public class GetUserBulletinsRequest extends Request {}
