@@ -4,7 +4,9 @@ import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.request.Request;
 import pl.slowly.team.common.packets.request.broadcast.SendNewBulletinBroadcast;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Client {

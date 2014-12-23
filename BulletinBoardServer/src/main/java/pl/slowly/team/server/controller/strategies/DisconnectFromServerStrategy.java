@@ -1,7 +1,6 @@
 package pl.slowly.team.server.controller.strategies;
 
 import pl.slowly.team.server.connection.IServer;
-import pl.slowly.team.server.controller.strategies.Strategy;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
@@ -18,7 +17,7 @@ public class DisconnectFromServerStrategy extends Strategy {
 
     @Override
     public void execute(PacketWrapper packetWrapper) throws IOException, InterruptedException {
-        server.
+
     }
 
 }

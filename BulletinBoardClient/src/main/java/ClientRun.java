@@ -1,7 +1,6 @@
 import View.RequestSender;
-import connection.Client;
 
-import java.io.*;
+import java.io.IOException;
 
 public class ClientRun {
 
