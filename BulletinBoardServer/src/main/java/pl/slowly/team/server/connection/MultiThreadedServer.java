@@ -2,7 +2,6 @@ package pl.slowly.team.server.connection;
 
 import org.apache.log4j.Logger;
 import pl.slowly.team.common.packages.Packet;
-import pl.slowly.team.common.packages.request.authorization.LogInRequest;
 import pl.slowly.team.common.packages.response.Response;
 import pl.slowly.team.server.helpers.PacketWrapper;
 
@@ -24,11 +23,13 @@ import java.util.concurrent.Executors;
  */
 public class MultiThreadedServer implements IServer, Runnable {
 
-    final static Logger logger = Logger.getLogger(MultiThreadedServer.class);
+    public final static Logger LOGGER = Logger.getLogger(MultiThreadedServer.class);
+
     private ExecutorService threadPool = Executors.newFixedThreadPool(20);
     private ServerSocket serverSocket;
     private final int port;
-    private Integer clientId;
+    /** Defines current client Id to be assigned for new client. 0 is reserved for server. */
+    private Integer currentClientId;
     /** Map where key is unique client id and element is reference to clientSocket. */
     private final Map<Integer, ClientInfo> clientMap;
     /** Reference to the event's queue which is transfer to a controller. */
@@ -39,7 +40,7 @@ public class MultiThreadedServer implements IServer, Runnable {
         this.port = port;
         this.clientMap = new HashMap<>();
         this.packetsQueue = packetsQueue;
-        this.clientId = 1;
+        this.currentClientId = 1;
     }
 
     /**
@@ -50,7 +51,7 @@ public class MultiThreadedServer implements IServer, Runnable {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            logger.error("Could not listen on port: " + port, e);
+            LOGGER.error("Could not listen on port: " + port, e);
         }
         new Thread(this).start();
     }
@@ -66,15 +67,14 @@ public class MultiThreadedServer implements IServer, Runnable {
         while (true) {
             try {
                 Socket nextClientSocket = serverSocket.accept();
-
                 final ObjectOutputStream oout = new ObjectOutputStream(nextClientSocket.getOutputStream());
                 final ClientInfo clientsSocketInfo = new ClientInfo(oout, nextClientSocket);
-                addClientToMap(clientId, clientsSocketInfo);
-                threadPool.execute(new ClientConnection(nextClientSocket, clientId));
+                addClientToMap(currentClientId, clientsSocketInfo);
+                threadPool.execute(new ClientConnection(nextClientSocket, currentClientId));
                 incrementClientDynamicId();
 
             } catch (IOException e) {
-                logger.error("Error occurred during listen for new clients.", e);
+                LOGGER.error("Error occurred during listen for new clients.", e);
             }
         }
     }
@@ -83,7 +83,6 @@ public class MultiThreadedServer implements IServer, Runnable {
     public void disconnect() throws IOException {
         serverSocket.close();
     }
-
 
     /**
      * Adding client's socket info to the map.
@@ -122,11 +121,12 @@ public class MultiThreadedServer implements IServer, Runnable {
         return test;
     }
 
-    public void authorizeClient(final int clientId) {
+    public void authorizeClient(final int clientId, String username) {
         ClientInfo client;
         synchronized (clientMap) {
             if ((client = clientMap.get(clientId)) != null) {
                 client.setAuthorized(true);
+                client.setUsername(username);
                 System.out.println("User authorized");
             }
         }
@@ -140,24 +140,13 @@ public class MultiThreadedServer implements IServer, Runnable {
      * @return True when correctly sent package.
      */
     @Override
-    public boolean sendResponse(Response response, Integer clientId) throws IOException {
+    public boolean sendResponseToClient(Response response, Integer clientId) throws IOException {
         final ClientInfo clientInfo = clientMap.get(clientId);
         if (clientInfo == null) {
             return false;
         }
-        if (!clientInfo.isAuthorized()) {
-            // zmienic na inny response
-            clientInfo.getOout().writeObject(response);
-            return true;
-        }
-        try {
-            clientInfo.getOout().writeObject(response);
-            return true;
-        } catch (final IOException e) {
-            e.printStackTrace();
-            logger.error(e);
-            return false;
-        }
+        clientInfo.getOout().writeObject(response);
+        return true;
     }
 
     /**
@@ -178,7 +167,7 @@ public class MultiThreadedServer implements IServer, Runnable {
                 clientInfo.getOout().writeObject(packet);
             } catch (IOException e) {
                 e.printStackTrace();
-                logger.error(e);
+                LOGGER.error(e);
                 return false;
             }
 
@@ -188,12 +177,22 @@ public class MultiThreadedServer implements IServer, Runnable {
 
     @Override
     public String getUsername(int clientId) {
-        return null;
+        synchronized (clientMap) {
+            return clientMap.get(clientId).getUsername();
+        }
     }
 
+    @Override
+    public boolean isAuthorized(int userId) {
+        synchronized (clientMap) {
+            return clientMap.get(userId).isAuthorized();
+        }
+    }
+
+
     private void incrementClientDynamicId() {
-        synchronized (clientId) {
-            clientId++;
+        synchronized (currentClientId) {
+            currentClientId++;
         }
     }
 
@@ -217,7 +216,7 @@ public class MultiThreadedServer implements IServer, Runnable {
             try {
                 oin = new ObjectInputStream(clientSocket.getInputStream());
             } catch (IOException e) {
-                logger.error("An I/O error occured when creating the input stream.", e);
+                LOGGER.error("An I/O error occured when creating the input stream.", e);
                 e.printStackTrace();
             }
         }

@@ -20,11 +20,11 @@ public class RequestSender {
     public void sendTestRequests() throws IOException, InterruptedException {
         if (client.connectToServer()) {
             logIn("marek", "7875");
-            getCategories();
+//            getCategories();
             addBulletin();
-            deleteBulletin();
-            getBulletins(null);
-            getUserBulletins();
+//            deleteBulletin();
+//            getBulletins(null);
+//            getUserBulletins();
         }
 //        client.close();
     }
@@ -34,7 +34,7 @@ public class RequestSender {
     }
 
     public void addBulletin() throws IOException {
-        client.sendRequest(new AddBulletinRequest(new Bulletin("my own bulletin")));
+        client.sendRequest(new AddBulletinRequest(new Bulletin("my own bulletin?")));
     }
 
     public void deleteBulletin() throws IOException {

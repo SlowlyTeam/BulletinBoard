@@ -26,7 +26,7 @@ public class FakeModel implements IModel {
     @Override
     public List<Bulletin> getUserBulletins(String username) {
         List<Bulletin> l = new ArrayList<>();
-        l.add(new Bulletin("my own bulletin"));
+        l.add(new Bulletin("my own bulletin."));
         return l;
     }
 

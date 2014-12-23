@@ -25,6 +25,6 @@ public abstract class Strategy {
      *
      * @param packetWrapper PacketWrapper for which strategy is executed.
      */
-    public abstract void execute(final PacketWrapper packetWrapper) throws IOException;
+    public abstract void execute(final PacketWrapper packetWrapper) throws IOException, InterruptedException;
 }
 

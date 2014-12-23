@@ -1,9 +1,7 @@
 package pl.slowly.team.server.controller.strategies;
 
 import pl.slowly.team.common.packages.data.Bulletin;
-import pl.slowly.team.common.packages.data.Entity;
 import pl.slowly.team.common.packages.helpers.ResponseStatus;
-import pl.slowly.team.common.packages.request.data.AddBulletinRequest;
 import pl.slowly.team.common.packages.request.data.GetBulletinsRequest;
 import pl.slowly.team.common.packages.response.Response;
 import pl.slowly.team.server.connection.IServer;
@@ -24,6 +22,6 @@ public class GetBulletinsStrategy extends Strategy {
         GetBulletinsRequest getBulletins = (GetBulletinsRequest) packetWrapper.getPacket();
         int clientId = packetWrapper.getUserID();
         List<Bulletin> bulletins = model.getBulletins(getBulletins.getCategoriesIds(), getBulletins.getSince());
-        server.sendResponse(new Response(ResponseStatus.OK, bulletins), clientId);
+        server.sendResponseToClient(new Response(ResponseStatus.OK, bulletins), clientId);
     }
 }

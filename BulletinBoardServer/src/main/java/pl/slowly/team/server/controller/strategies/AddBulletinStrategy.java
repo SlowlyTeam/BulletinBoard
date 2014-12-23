@@ -1,7 +1,8 @@
 package pl.slowly.team.server.controller.strategies;
 
+import pl.slowly.team.common.packages.data.Bulletin;
 import pl.slowly.team.common.packages.helpers.ResponseStatus;
-import pl.slowly.team.common.packages.request.broadcast.SendNewBulletin;
+import pl.slowly.team.common.packages.request.broadcast.SendNewBulletinBroadcast;
 import pl.slowly.team.common.packages.request.data.AddBulletinRequest;
 import pl.slowly.team.common.packages.response.Response;
 import pl.slowly.team.server.connection.IServer;
@@ -9,7 +10,6 @@ import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
 public class AddBulletinStrategy extends Strategy {
@@ -22,17 +22,17 @@ public class AddBulletinStrategy extends Strategy {
     }
 
     @Override
-    public void execute(final PacketWrapper packetWrapper) throws IOException {
-        AddBulletinRequest addBulletin = (AddBulletinRequest) packetWrapper.getPacket();
+    public void execute(final PacketWrapper packetWrapper) throws IOException, InterruptedException {
+        AddBulletinRequest addBulletinReq = (AddBulletinRequest) packetWrapper.getPacket();
+        Bulletin bulletin = addBulletinReq.getBulletin();
         int clientId = packetWrapper.getUserID();
-        boolean result = model.addBulletin(addBulletin.getBulletin(), server.getUsername(clientId));
+        boolean result = model.addBulletin(bulletin, server.getUsername(clientId));
         if (result) {
-            server.sendResponse(new Response(ResponseStatus.OK, null), clientId);
-            // TODO dodac broadcast message
-//            packetsQueue.put(new PacketWrapper(new SendNewBulletin(addBulletin.getBulletin(), new ArrayList<Integer>())));
+            server.sendResponseToClient(new Response(ResponseStatus.OK, null), clientId);
+            server.sendBroadcastPacket(new SendNewBulletinBroadcast(bulletin));
         }
         else {
-            server.sendResponse(new Response(ResponseStatus.ERROR, null), clientId);
+            server.sendResponseToClient(new Response(ResponseStatus.ERROR, null), clientId);
         }
     }
 }

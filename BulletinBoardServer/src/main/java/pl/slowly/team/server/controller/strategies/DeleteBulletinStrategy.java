@@ -1,7 +1,7 @@
 package pl.slowly.team.server.controller.strategies;
 
 import pl.slowly.team.common.packages.helpers.ResponseStatus;
-import pl.slowly.team.common.packages.request.broadcast.SendNewBulletin;
+import pl.slowly.team.common.packages.request.broadcast.DeleteBulletinBroadcast;
 import pl.slowly.team.common.packages.request.data.DeleteBulletinRequest;
 import pl.slowly.team.common.packages.response.Response;
 import pl.slowly.team.server.connection.IServer;
@@ -24,14 +24,14 @@ public class DeleteBulletinStrategy extends Strategy {
     public void execute(final PacketWrapper packetWrapper) throws IOException {
         DeleteBulletinRequest deleteBulletin = (DeleteBulletinRequest) packetWrapper.getPacket();
         int clientId = packetWrapper.getUserID();
-        boolean result = model.deleteBulletin(deleteBulletin.getBulletinId(), server.getUsername(clientId));
+        int bulletinId = deleteBulletin.getBulletinId();
+        boolean result = model.deleteBulletin(bulletinId, server.getUsername(clientId));
         if (result) {
-            server.sendResponse(new Response(ResponseStatus.OK, null), clientId);
-            // TODO add broadcast message that bulletin has been deleted
-            //packetsQueue.add(new SendNewBulletin())
+            server.sendResponseToClient(new Response(ResponseStatus.OK, null), clientId);
+            server.sendBroadcastPacket(new DeleteBulletinBroadcast(bulletinId));
         }
         else {
-            server.sendResponse(new Response(ResponseStatus.ERROR, null), clientId);
+            server.sendResponseToClient(new Response(ResponseStatus.ERROR, null), clientId);
         }
     }
 }

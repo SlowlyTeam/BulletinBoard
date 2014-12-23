@@ -22,10 +22,10 @@ public class LogInStrategy extends Strategy {
         Credentials credentials = logIn.getUserCredentials();
         int userId = packetWrapper.getUserID();
         if (model.checkCredentials(credentials)) {
-            server.authorizeClient(userId);
-            server.sendResponse(new Response(ResponseStatus.AUTHORIZED), userId);
+            server.authorizeClient(userId, credentials.getUsername());
+            server.sendResponseToClient(new Response(ResponseStatus.AUTHORIZED), userId);
         } else {
-            server.sendResponse(new Response(ResponseStatus.NOT_AUTHORIZED), userId);
+            server.sendResponseToClient(new Response(ResponseStatus.NOT_AUTHORIZED), userId);
         }
     }
 }

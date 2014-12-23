@@ -18,23 +18,13 @@ import java.util.concurrent.BlockingQueue;
 /**
  * Controller to manage logic of the server and connection
  * between the clients and the server during sending packages.
- * <p/>
- * Created by Emil Kleszcz on 2014-12-17.
  */
 public class Controller {
-    /**
-     * Model being main class of the logic.
-     */
+    /** Model being main class of the logic. */
     private final IModel model;
-
-    /**
-     * Server managing connections with clients.
-     */
+    /** Server managing connections with clients. */
     private final IServer server;
-
-    /**
-     * Strategy map for the receiving packages from the client.
-     */
+    /** Strategy map for the receiving packages from the client. */
     private final Map<Class<? extends Packet>, Strategy> strategyMap = new HashMap<>();
 
     /**
@@ -59,26 +49,13 @@ public class Controller {
     }
 
     /**
-     * Funkcja pobierająca w nieskończonej pętli przychodzące zdarzenia z
-     * kolejki blokującej.
-     * <p/>
      * Taking incoming packages from the blocking queue and executing the strategy.
      */
     public void takePacketAndExecuteStrategy() {
         while (true) {
             try {
                 PacketWrapper wrappedPacket = packetsQueue.take();
-                Packet packet = wrappedPacket.getPacket();
-                Strategy strategy = strategyMap.get(packet.getClass());
-                if (!canExecuteStrategies(wrappedPacket)) {
-                    server.sendResponse(new Response(ResponseStatus.NOT_AUTHORIZED), wrappedPacket.getUserID());
-                } else {
-                    if (strategy != null) {
-                        strategy.execute(wrappedPacket);
-                    } else {
-                        System.out.println("Unknown strategy.");
-                    }
-                }
+                executeStrategyIfAuthorized(wrappedPacket);
             } catch (final InterruptedException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
@@ -89,13 +66,36 @@ public class Controller {
         }
     }
 
-    private boolean canExecuteStrategies(PacketWrapper wrappedPacket) throws IOException {
+    private void executeStrategyIfAuthorized(PacketWrapper wrappedPacket) throws IOException, InterruptedException {
         Packet packet = wrappedPacket.getPacket();
-        return (packet instanceof LogInRequest ||
-                (!(packet instanceof LogInRequest) && isAuthorized(wrappedPacket.getUserID())));
+        Strategy strategy = strategyMap.get(packet.getClass());
+        if (!canExecuteStrategies(wrappedPacket)) {
+            sendNotAuthorizedResponse(wrappedPacket);
+        } else {
+            executeStrategy(wrappedPacket, strategy);
+        }
     }
 
-    private boolean isAuthorized(int userId) {
-        return true;
+    private boolean canExecuteStrategies(PacketWrapper wrappedPacket) throws IOException {
+        Packet packet = wrappedPacket.getPacket();
+        int userId = wrappedPacket.getUserID();
+        return (isLoginRequest(packet) ||
+                (!(isLoginRequest(packet)) && server.isAuthorized(userId)));
+    }
+
+    private boolean isLoginRequest(Packet packet) {
+        return packet instanceof LogInRequest;
+    }
+
+    private void sendNotAuthorizedResponse(PacketWrapper wrappedPacket) throws IOException {
+        server.sendResponseToClient(new Response(ResponseStatus.NOT_AUTHORIZED), wrappedPacket.getUserID());
+    }
+
+    private void executeStrategy(PacketWrapper wrappedPacket, Strategy strategy) throws IOException, InterruptedException {
+        if (strategy != null) {
+            strategy.execute(wrappedPacket);
+        } else {
+            System.out.println("Unknown strategy.");
+        }
     }
 }

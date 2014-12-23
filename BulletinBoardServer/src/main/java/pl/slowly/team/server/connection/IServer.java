@@ -19,7 +19,7 @@ public interface IServer {
      */
     public void disconnect() throws IOException;
 
-    public void authorizeClient(final int id);
+    public void authorizeClient(final int id, String username);
 
     /**
      * Sending package to specified client.
@@ -28,7 +28,7 @@ public interface IServer {
      * @param id   Identifier of the client.
      * @return True when correctly sended package.
      */
-    public boolean sendResponse(final Response response, Integer id) throws IOException;
+    public boolean sendResponseToClient(final Response response, Integer id) throws IOException;
 
     /**
      * Send broadcast to all the clients connected to the server.
@@ -42,4 +42,9 @@ public interface IServer {
      * Returns username for specified client id.
      */
     public String getUsername(int clientId);
+
+    /**
+     * Checks if user is authorized, so the controller can execute the strategy.
+     */
+    public boolean isAuthorized(int userId);
 }

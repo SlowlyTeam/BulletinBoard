@@ -1,16 +1,11 @@
 package connection;
 
-import pl.slowly.team.common.packages.data.Category;
-import pl.slowly.team.common.packages.data.Entity;
-import pl.slowly.team.common.packages.helpers.Credentials;
+import pl.slowly.team.common.packages.Packet;
 import pl.slowly.team.common.packages.request.Request;
-import pl.slowly.team.common.packages.request.authorization.LogInRequest;
-import pl.slowly.team.common.packages.request.data.GetCategoriesRequest;
-import pl.slowly.team.common.packages.response.Response;
+import pl.slowly.team.common.packages.request.broadcast.SendNewBulletinBroadcast;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
 
 public class Client implements AutoCloseable{
 
@@ -55,18 +50,21 @@ public class Client implements AutoCloseable{
         public void run() {
             try {
                 while (true) {
-                    Response serverResponse = getResponse();
+                    Packet serverResponse = getResponsePacket();
                     if (serverResponse == null)
                         return;
                     // tutaj aktualizacja widoku
-                    System.out.println(serverResponse.getResponseStatus().toString());
-                    List<? extends Entity> entities = serverResponse.getEntities();
-                    if (entities != null) {
-                        for (Entity entity : entities) {
-                            System.out.print(entity);
-                        }
+//                    System.out.println(serverResponse.getResponseStatus().toString());
+                    if (serverResponse instanceof SendNewBulletinBroadcast) {
+                        System.out.println(((SendNewBulletinBroadcast) serverResponse).getBulletin().getBulletinTitle());
                     }
-                    System.out.println();
+//                    List<? extends Entity> entities = serverResponse.getEntities();
+//                    if (entities != null) {
+//                        for (Entity entity : entities) {
+//                            System.out.print(entity);
+//                        }
+//                    }
+//                    System.out.println();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -75,10 +73,10 @@ public class Client implements AutoCloseable{
             }
         }
 
-        private Response getResponse() throws IOException, ClassNotFoundException {
+        private Packet getResponsePacket() throws IOException, ClassNotFoundException {
             synchronized (socket) {
                 if (!socket.isClosed()) {
-                    return (Response) inputStream.readObject();
+                    return (Packet) inputStream.readObject();
                 }
                 return null;
             }

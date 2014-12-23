@@ -13,6 +13,7 @@ public class ClientInfo {
     private final ObjectOutputStream oout;
     private final Socket clientSocket;
     private boolean authorized;
+    private String username;
 
     public ClientInfo(ObjectOutputStream oout, Socket clientSocket) {
         this.oout = oout;
@@ -34,5 +35,13 @@ public class ClientInfo {
 
     public void setAuthorized(boolean authorized) {
         this.authorized = authorized;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

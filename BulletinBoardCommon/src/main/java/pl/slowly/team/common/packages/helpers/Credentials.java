@@ -15,7 +15,7 @@ public class Credentials implements Serializable {
         return password;
     }
 
-    public String getUser() {
+    public String getUsername() {
         return user;
     }
 }
