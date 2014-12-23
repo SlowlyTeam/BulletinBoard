@@ -1,0 +1,67 @@
+.bulletinBackground {
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 6, 6);
+}
+
+.title {
+    -fx-font-family: "Arial";
+    -fx-text-fill: black;
+    -fx-font-size: 170%;
+    -fx-font-weight: bold;
+    -fx-effect: null;
+    -fx-alignment: bottom-left;
+    -fx-padding: 8px 8px 0px 8px;
+    /*-fx-border-color: black;*/
+    /*-fx-border-style: solid;*/
+}
+
+.contents {
+    -fx-font-family: "Reenie Beanie", arial, sans-serif;
+    -fx-font-smoothing-type: lcd;
+    -fx-font-size: 180%;
+    -fx-text-fill: black;
+    -fx-padding: 0px 5px 0px 15px;
+    -fx-alignment: top-left;
+    -fx-effect: null;
+    -fx-wrap-text: true;
+    /*-fx-border-color: black;*/
+    /*-fx-border-style: solid;*/
+}
+
+.controls {
+    -fx-padding: 0px 3px 0px 0px;
+    /*-fx-border-color: black;*/
+    /*-fx-border-style: solid;*/
+}
+.accept {
+    -fx-background-image: url("../images/accept.png");
+}
+.delete {
+    -fx-background-image: url("../images/cancel.png");
+}
+.delete, .accept {
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 75%;
+    -fx-background-position: center;
+}
+
+.delete:hover, .accept:hover {
+    -fx-background-size: 90%;
+}
+
+.edit {
+    -fx-background-image: url("../images/editNote.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 75%;
+    -fx-background-position: center;
+}
+
+.edit:hover {
+    -fx-background-size: 90%;
+}
+
+@font-face {
+    font-family: 'Reenie Beanie';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/ReenieBeanie.ttf');
+}

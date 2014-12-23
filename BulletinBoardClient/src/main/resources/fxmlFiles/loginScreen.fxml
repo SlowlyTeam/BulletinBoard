@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.Color?>
+<?import java.net.URL?>
+<AnchorPane id="AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.LoginScreenController"
+            onMousePressed="#mousePressed" onMouseDragged="#onMouseDragged" onKeyReleased="#keyPressed">
+    <children>
+        <HBox id="hBox1" alignment="CENTER">
+            <children>
+                <AnchorPane id="anchorPane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                            minWidth="-Infinity" prefHeight="322.0" prefWidth="400.0"
+                            styleClass="background">
+                    <children>
+                        <VBox id="vBox1" prefHeight="200.0" prefWidth="300.0" spacing="5.0" styleClass="top-segment"
+                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <!--                                <ImageView id="logo">
+                                    <effect>
+                                        <DropShadow color="#646464" offsetX="5.0" offsetY="5.0">
+                                            <input>
+                                                <Bloom />
+                                            </input>
+                                        </DropShadow>
+                                    </effect>
+                                    <image>
+                                        <Image url="@logo.png" preserveRatio="true" smooth="true" />
+                                    </image>
+                                </ImageView>-->
+                                <HBox>
+                                    <Label id="appName" text="BulletinBoard">
+
+                                        <HBox.margin>
+                                            <Insets left="10.0" top="12" bottom="10"/>
+                                        </HBox.margin>
+                                    </Label>
+                                    <VBox prefWidth="185" prefHeight="30" alignment="TOP_RIGHT">
+                                        <!--<ImageView onMousePressed="#close">-->
+                                        <!--<image>-->
+                                        <!--<Image fx:id="exit" requestedHeight="40" requestedWidth="40"-->
+                                        <!--url="@../images/close-button-large.png" preserveRatio="true"-->
+                                        <!--smooth="true"/>-->
+                                        <!--</image>-->
+                                        <!--</ImageView>-->
+                                        <Label onMouseReleased="#close" id="exitImage" prefWidth="40" prefHeight="40">
+
+                                        </Label>
+                                    </VBox>
+                                </HBox>
+
+                                <Label id="label1" text="Username">
+                                    <effect>
+                                        <Glow>
+                                            <input>
+                                                <DropShadow blurType="ONE_PASS_BOX" height="1.0" offsetY="1.0"
+                                                            radius="0.0" width="1.0">
+                                                    <color>
+                                                        <Color blue="0.000" green="0.000" opacity="0.600" red="0.000"
+                                                               fx:id="x1"/>
+                                                    </color>
+                                                </DropShadow>
+                                            </input>
+                                        </Glow>
+                                    </effect>
+                                    <VBox.margin>
+                                        <Insets left="50.0" fx:id="x2"/>
+                                    </VBox.margin>
+                                </Label>
+                                <TextField fx:id="login" id="textField1" prefWidth="200.0" promptText="Username">
+                                    <VBox.margin>
+                                        <Insets left="50.0" right="50.0"/>
+                                    </VBox.margin>
+                                </TextField>
+                                <Label id="label2" text="Password" VBox.margin="$x2">
+                                    <effect>
+                                        <Glow>
+                                            <input>
+                                                <DropShadow blurType="ONE_PASS_BOX" color="$x1" height="1.0"
+                                                            offsetY="1.0" radius="0.0" width="1.0"/>
+                                            </input>
+                                        </Glow>
+                                    </effect>
+                                </Label>
+                                <PasswordField fx:id="password" id="passwordField1" prefWidth="200.0"
+                                               promptText="Password">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" left="50.0" right="50.0"/>
+                                    </VBox.margin>
+                                </PasswordField>
+                            </children>
+
+                        </VBox>
+                        <VBox id="vBox2" layoutY="200.0" prefHeight="122.0" prefWidth="400.0">
+                            <children>
+                                <Label id="label3" prefHeight="17.0" prefWidth="306.0"/>
+                                <Button onAction="#login" id="button1" defaultButton="true" contentDisplay="CENTER"
+                                        prefHeight="50.0" prefWidth="258.0" text="Login" textAlignment="CENTER">
+                                    <VBox.margin>
+                                        <Insets left="70.0" right="10.0" top="20.0"/>
+                                    </VBox.margin>
+                                </Button>
+                            </children>
+                        </VBox>
+                    </children>
+                    <effect>
+                        <InnerShadow/>
+                    </effect>
+                </AnchorPane>
+            </children>
+        </HBox>
+    </children>
+    <stylesheets>
+        <URL value="@../styles/loginScreen.css"/>
+    </stylesheets>
+</AnchorPane>

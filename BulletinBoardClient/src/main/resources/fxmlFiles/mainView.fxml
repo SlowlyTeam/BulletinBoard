@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<AnchorPane id="AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.MainViewController"
+            onMousePressed="#mousePressed" onMouseDragged="#onMouseDragged" focusTraversable="true"
+            onKeyReleased="#onKeyReleased"
+            maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="455.0" prefWidth="600.0"
+            styleClass="background">
+    <HBox>
+        <VBox prefWidth="250">
+            <Label id="appName" text="BulletinBoard">
+                <VBox.margin>
+                    <Insets left="10.0" top="12" bottom="10"/>
+                </VBox.margin>
+            </Label>
+        </VBox>
+        <VBox prefWidth="350" prefHeight="30" alignment="TOP_RIGHT">
+            <Label onMouseReleased="#close" fx:id="exitImage" prefWidth="40" prefHeight="40">
+                <VBox.margin>
+                    <Insets top="3" right="3"/>
+                </VBox.margin>
+            </Label>
+        </VBox>
+    </HBox>
+    <HBox fx:id="hBox1" prefHeight="350.0" prefWidth="600.0"
+          styleClass="top-segment"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0"
+            >
+    </HBox>
+    <effect>
+        <InnerShadow/>
+    </effect>
+    <HBox AnchorPane.topAnchor="400" prefWidth="600" alignment="CENTER_RIGHT">
+        <VBox prefWidth="45" prefHeight="53" alignment="CENTER">
+            <Label alignment="CENTER_RIGHT" styleClass="changeCategory" onMouseReleased="#changeCategory" prefWidth="40"
+                   prefHeight="40">
+                <tooltip>
+                    <Tooltip text="Change category"/>
+                </tooltip>
+            </Label>
+        </VBox>
+        <VBox prefWidth="45" prefHeight="53" alignment="CENTER">
+            <Label alignment="CENTER_RIGHT" styleClass="addBulletin" onMouseReleased="#addNote" prefWidth="40"
+                   prefHeight="40">
+                <tooltip>
+                    <Tooltip text="Add note"/>
+                </tooltip>
+            </Label>
+        </VBox>
+    </HBox>
+    <stylesheets>
+        <URL value="@../styles/mainView.css"/>
+    </stylesheets>
+</AnchorPane>

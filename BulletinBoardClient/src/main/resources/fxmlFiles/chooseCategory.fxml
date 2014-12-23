@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.effect.InnerShadow?>
+<AnchorPane maxHeight="0" maxWidth="0" id="AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.ChooseCategoryScreenController" onKeyReleased="#keyPressed" onMousePressed="#mousePressed" onMouseDragged="#onMouseDragged">
+    <VBox id="hBox1" alignment="CENTER"  styleClass="pickupCategory">
+        <Label id="appName" text="Wybierz kategorię: ">
+            <VBox.margin>
+                <Insets top="3" bottom="3"/>
+            </VBox.margin>
+
+        </Label>
+        <HBox id="vBox1" prefWidth="400.0" spacing="5.0" styleClass="background"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ListView fx:id="list" id="list" maxHeight="200" prefHeight="200.0" prefWidth="350.0">
+                <HBox.margin>
+                    <Insets left="25.0" right="25.0" top="23.0" bottom="23"/>
+                </HBox.margin>
+            </ListView>
+        </HBox>
+        <Button onAction="#goToNextScreen" id="button1" prefWidth="100" prefHeight="25" defaultButton="true" contentDisplay="CENTER" text="Ok"
+                textAlignment="CENTER">
+            <VBox.margin>
+                <Insets top="7" bottom="7"/>
+            </VBox.margin>
+        </Button>
+    </VBox>
+    <effect>
+        <InnerShadow/>
+    </effect>
+    <stylesheets>
+        <URL value="@../styles/chooseCategory.css"/>
+    </stylesheets>
+</AnchorPane>

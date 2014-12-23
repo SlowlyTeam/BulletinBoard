@@ -1,0 +1,37 @@
+
+.hbox {
+    -fx-background-image: url("../images/CoarseGrid.png");
+    -fx-background-repeat: repeat;
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 6, 6);
+}
+
+/*.hbox:hover {*/
+/*-fx-scale-x: 115%;*/
+/*-fx-scale-y: 115%;*/
+/*-fx-rotate: 0deg !important;*/
+/*}*/
+
+.title {
+    -fx-font-family: "Arial";
+    -fx-text-fill: black;
+    -fx-font-size: 170%;
+    -fx-font-weight: bold;
+    -fx-padding: 7px 10px 0px 10px;
+    -fx-effect: null;
+}
+
+.contents {
+    -fx-font-family: "Reenie Beanie", arial, sans-serif;
+    -fx-font-size: 180%;
+    -fx-text-fill: black;
+    -fx-padding: 2px 12px 10px 12px;
+    -fx-alignment: top-left;
+    -fx-effect: null;
+}
+
+@font-face {
+    font-family: 'Reenie Beanie';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Reenie Beanie'), local('ReenieBeanie'), url(http://fonts.gstatic.com/s/reeniebeanie/v6/ljpKc6CdXusL1cnGUSamXybsRidxnYrfzLNRqJkHfFo.ttf) format('truetype');
+}
