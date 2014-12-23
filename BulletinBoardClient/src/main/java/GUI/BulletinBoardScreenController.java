@@ -1,6 +1,6 @@
 package GUI;
 
-import connection.Client;
+import connection.ClientController;
 
 /**
  * Created by Maxym on 2014-11-20.
@@ -8,12 +8,12 @@ import connection.Client;
 public class BulletinBoardScreenController implements ControlledScreen {
 
     ScreensController bulletinBoardScreensController;
-    private Client client;
+    private ClientController clientController;
 
     @Override
-    public void setScreenController(ScreensController screenPage, Client client) {
+    public void setScreenController(ScreensController screenPage, ClientController clientController) {
         this.bulletinBoardScreensController = screenPage;
-        this.client = client;
+        this.clientController = clientController;
     }
 
     @Override

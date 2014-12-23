@@ -4,7 +4,7 @@ package GUI;/*
  * and open the template in the editor.
  */
 
-import connection.Client;
+import connection.ClientController;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -43,13 +43,13 @@ public class ScreensController extends StackPane {
         return screens.get(name).getKey();
     }
 
-    public boolean loadScreen(String name, String resource, Client client) {
+    public boolean loadScreen(String name, String resource, ClientController clientController) {
         try {
             System.out.println(resource);
             FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
             Parent loadScreen = myLoader.load();
             ControlledScreen myScreenColector = myLoader.getController();
-            myScreenColector.setScreenController(this, client);
+            myScreenColector.setScreenController(this, clientController);
             addScreen(name, new Pair<>(loadScreen, myScreenColector));
             return true;
         } catch (IOException ioe) {

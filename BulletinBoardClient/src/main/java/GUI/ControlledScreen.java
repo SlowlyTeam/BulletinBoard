@@ -4,14 +4,14 @@ package GUI;/*
  * and open the template in the editor.
  */
 
-import connection.Client;
+import connection.ClientController;
 
 /**
  * @author Maxym
  */
 public interface ControlledScreen {
 
-    public void setScreenController(ScreensController screenPage, Client client);
+    public void setScreenController(ScreensController screenPage, ClientController clientController);
 
     public void load();
 

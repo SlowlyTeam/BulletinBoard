@@ -4,8 +4,7 @@ package GUI;/*
  * and open the template in the editor.
  */
 
-import View.RequestSender;
-import connection.Client;
+import connection.ClientController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -28,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginScreenController implements ControlledScreen {
 
     private ScreensController screensController;
-    private Client client;
+    private ClientController clientController;
 
     @FXML
     private TextField login;
@@ -41,7 +40,7 @@ public class LoginScreenController implements ControlledScreen {
 
     public void login() throws IOException {
         screensController.showProgressScreen();
-        client.logIn(login.getText(), password.getText());
+        clientController.logIn(login.getText(), password.getText());
     }
 
     public void logInResponse(Response logInResponse) {
@@ -55,9 +54,9 @@ public class LoginScreenController implements ControlledScreen {
     }
 
     @Override
-    public void setScreenController(ScreensController screenPage, Client client) {
+    public void setScreenController(ScreensController screenPage, ClientController clientController) {
         this.screensController = screenPage;
-        this.client = client;
+        this.clientController = clientController;
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
-public class Client {
+public class ClientController {
 
     private int port;
     private String host;
@@ -28,7 +28,7 @@ public class Client {
     private Thread serverResponseListener;
     private ScreensController screensController;
 
-    public Client(String host, int port, ScreensController screensController) throws IOException {
+    public ClientController(String host, int port, ScreensController screensController) throws IOException {
         this.port = port;
         this.host = host;
         this.screensController = screensController;
