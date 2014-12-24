@@ -44,13 +44,7 @@ public class LoginScreenController implements ControlledScreen {
     }
 
     public void logInResponse(Response logInResponse) {
-        if (logInResponse.getResponseStatus().equals(ResponseStatus.AUTHORIZED)) {
-            done(true);
-        }
-        else {
-            done(false);
-        }
-
+        done(logInResponse.getResponseStatus().equals(ResponseStatus.AUTHORIZED));
     }
 
     @Override

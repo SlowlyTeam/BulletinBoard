@@ -26,7 +26,7 @@ public class FakeModel implements IModel {
     @Override
     public List<Bulletin> getUserBulletins(String username) {
         List<Bulletin> l = new ArrayList<>();
-        l.add(new Bulletin("my own bulletin."));
+        l.add(new Bulletin("my own bulletin.", "test content"));
         return l;
     }
 
@@ -43,7 +43,7 @@ public class FakeModel implements IModel {
     @Override
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since) {
         List<Bulletin> l = new ArrayList<>();
-        l.add(new Bulletin("some bulletin"));
+        l.add(new Bulletin("some bulletin", "some content"));
         return l;
     }
 }

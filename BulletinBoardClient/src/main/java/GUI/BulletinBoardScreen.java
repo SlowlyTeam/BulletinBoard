@@ -28,15 +28,15 @@ public class BulletinBoardScreen extends GridPane {
         bulletinsNumber = 0;
     }
 
-    public void addBulletin(Bulletin bulletin) {
-        setHalignment(bulletin, HPos.CENTER);
+    public void addBulletin(BulletinGraphic bulletinGraphic) {
+        setHalignment(bulletinGraphic, HPos.CENTER);
         //int row = (bulletinsList.size() / 3) % 2;
         //int column = bulletinsList.size() % 3;
         //bulletinsList.add(bulletin);
         int row = (bulletinsNumber / 3);
         int column = bulletinsNumber % 3;
         bulletinsNumber++;
-        add(bulletin, column, row);
+        add(bulletinGraphic, column, row);
     }
 
     public void clear() {
@@ -46,8 +46,8 @@ public class BulletinBoardScreen extends GridPane {
 
     }
 
-    public void remove(Bulletin bulletin) {
-        getChildren().remove(bulletin);
+    public void remove(BulletinGraphic bulletinGraphic) {
+        getChildren().remove(bulletinGraphic);
     }
 
 //    public int getBulletinsNumber() {

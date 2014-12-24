@@ -38,6 +38,7 @@ public class GUI extends Application {
     public void start(Stage stage) throws Exception {
         ScreensController screensController = new ScreensController();
         ClientController clientController;
+
         try {
             clientController = new ClientController(null, 8081, screensController);
         } catch (IOException e) {

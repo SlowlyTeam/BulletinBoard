@@ -17,7 +17,7 @@ import java.util.Random;
 /**
  * Created by Maxym on 2014-11-21.
  */
-public class Bulletin extends AnchorPane {
+public class BulletinGraphic extends AnchorPane {
 
     final DoubleProperty scaleX = scaleXProperty();
     final DoubleProperty scaleY = scaleYProperty();
@@ -27,7 +27,7 @@ public class Bulletin extends AnchorPane {
     private final int bulletinNumber;
     private double rotate;
 
-    public Bulletin(int bulletinNumber) {
+    public BulletinGraphic(int bulletinNumber) {
         this.bulletinNumber = bulletinNumber;
         getStyleClass().add("bulletinBackground");
         getStylesheets().add(getClass().getResource("../styles/bulletin.css").toExternalForm());
@@ -117,7 +117,7 @@ public class Bulletin extends AnchorPane {
 //        });
 //    }
 
-    public Bulletin(int number, String title, String content) {
+    public BulletinGraphic(int number, String title, String content) {
         this(number);
         setTitle(title);
         setContent(content);

@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import pl.slowly.team.common.data.Bulletin;
 
 import java.net.URL;
 import java.util.Random;
@@ -27,7 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainViewController implements ControlledScreen, Initializable {
 
-    final private CopyOnWriteArrayList<Pair<Integer, String[]>> bulletinsList = new CopyOnWriteArrayList<>();
+    final private CopyOnWriteArrayList<Pair<Integer, Bulletin>> bulletinsList = new CopyOnWriteArrayList<>();
     private final EventHandler onNoteClick;
     private final EventHandler onEditAddNoteClick;
     private EditNewBulletin editNewBulletin;
@@ -46,17 +47,17 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     public MainViewController() {
         onNoteClick = event -> {
-            Bulletin bulletin = (Bulletin) event.getSource();
-            int bulletinNumber = bulletin.getBulletinNumber();
+            BulletinGraphic bulletinGraphic = (BulletinGraphic) event.getSource();
+            int bulletinNumber = bulletinGraphic.getBulletinNumber();
 
             if (event.getTarget().toString().contains("delete")) {
-                for (Pair<Integer, String[]> bul : bulletinsList) {
+                for (Pair<Integer, pl.slowly.team.common.data.Bulletin> bul : bulletinsList) {
                     if (bul.getKey() == bulletinNumber) {
                         bulletinsList.remove(bul);
                         break;
                     }
                 }
-                bulletinBoardScreen.remove(bulletin);
+                bulletinBoardScreen.remove(bulletinGraphic);
 
                 if ((curPage - 1) * 6 == bulletinsList.size() && curPage != 1)
                     setPage(--curPage);
@@ -64,43 +65,43 @@ public class MainViewController implements ControlledScreen, Initializable {
                     setPage(curPage);
                 }
             } else if (event.getTarget().toString().contains("edit")) {
-                bulletin.setVisible(false);
-                editNewBulletin.setBulletin(bulletin);
-                editNewBulletin.setStyle("-fx-background-color: " + bulletin.getBackground().getFills().get(0).getFill().toString().substring(2) + ";");
-                editNewBulletin.setTitle(bulletin.getTitle());
-                editNewBulletin.setContent(bulletin.getContent());
+                bulletinGraphic.setVisible(false);
+                editNewBulletin.setBulletinGraphic(bulletinGraphic);
+                editNewBulletin.setStyle("-fx-background-color: " + bulletinGraphic.getBackground().getFills().get(0).getFill().toString().substring(2) + ";");
+                editNewBulletin.setTitle(bulletinGraphic.getTitle());
+                editNewBulletin.setContent(bulletinGraphic.getContent());
                 screensController.showOnScreen(editNewBulletin);
             }
         };
 
         onEditAddNoteClick = ed -> {
             if (ed instanceof KeyEvent && ((KeyEvent) ed).getCode() == KeyCode.ESCAPE) {
-                if (editNewBulletin.getBulletin() != null) {
-                    editNewBulletin.getBulletin().setVisible(true);
+                if (editNewBulletin.getBulletinGraphic() != null) {
+                    editNewBulletin.getBulletinGraphic().setVisible(true);
                 }
                 screensController.hideOnScreen();
                 return;
             }
             if (ed.getTarget().toString().contains("delete")) {
-                if (editNewBulletin.getBulletin() != null) {
-                    editNewBulletin.getBulletin().setVisible(true);
+                if (editNewBulletin.getBulletinGraphic() != null) {
+                    editNewBulletin.getBulletinGraphic().setVisible(true);
                 }
                 screensController.hideOnScreen();
             } else if (ed.getTarget().toString().contains("accept")) {
-                Bulletin bulletin = editNewBulletin.getBulletin();
-                if (bulletin != null) {
-                    int bulletinNumber = bulletin.getBulletinNumber();
-                    for (Pair<Integer, String[]> bul : bulletinsList) {
+                BulletinGraphic bulletinGraphic = editNewBulletin.getBulletinGraphic();
+                if (bulletinGraphic != null) {
+                    int bulletinNumber = bulletinGraphic.getBulletinNumber();
+                    for (Pair<Integer, pl.slowly.team.common.data.Bulletin> bul : bulletinsList) {
                         if (bul.getKey() == bulletinNumber) {
-                            bul.getValue()[0] = editNewBulletin.getTitle();
-                            bul.getValue()[1] = editNewBulletin.getContent();
+                            bul.getValue().setBulletinTitle(editNewBulletin.getTitle());
+                            bul.getValue().setBulletinContent(editNewBulletin.getContent());
                             break;
                         }
                     }
-                    bulletin.setVisible(true);
+                    bulletinGraphic.setVisible(true);
                     setPage(curPage);
                 } else {
-                    bulletinsList.add(0, new Pair<>(new Random().nextInt(), new String[]{editNewBulletin.getTitle(), editNewBulletin.getContent()}));
+                    bulletinsList.add(0, new Pair<>(new Random().nextInt(), new Bulletin(editNewBulletin.getTitle(), editNewBulletin.getContent())));
                     setPage(curPage = 1);
                 }
                 screensController.hideOnScreen();
@@ -118,12 +119,12 @@ public class MainViewController implements ControlledScreen, Initializable {
     public void load() {
         new Thread(() -> {
             for (int i = 0; i < 100; ++i) {
-                bulletinsList.add(new Pair(i, new String[]{"Note #" + i, "content number #" + i}));
+                bulletinsList.add(new Pair(i, new Bulletin("Note #" + i, "content number #" + i)));
             }
             for (int k = 0; k < 6; ++k) {
-                Bulletin bulletin = new Bulletin(bulletinsList.get(k).getKey(), bulletinsList.get(k).getValue()[0], bulletinsList.get(k).getValue()[1]);
-                bulletin.setOnMouseClicked(onNoteClick);
-                Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletin));
+                BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(k).getKey(), bulletinsList.get(k).getValue().getBulletinTitle(), bulletinsList.get(k).getValue().getBulletinContent());
+                bulletinGraphic.setOnMouseClicked(onNoteClick);
+                Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletinGraphic));
             }
             Platform.runLater(() -> screensController.hideProgressScreen());
         }).start();
@@ -172,9 +173,9 @@ public class MainViewController implements ControlledScreen, Initializable {
             int fromBulleitn = (pageNumber - 1) * 6;
             int toBulletin = fromBulleitn + 6;
             for (; fromBulleitn != toBulletin && fromBulleitn != bulletinsList.size(); ++fromBulleitn) {
-                Bulletin bulletin = new Bulletin(bulletinsList.get(fromBulleitn).getKey(), bulletinsList.get(fromBulleitn).getValue()[0], bulletinsList.get(fromBulleitn).getValue()[1]);
-                bulletin.setOnMouseClicked(onNoteClick);
-                Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletin));
+                BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(fromBulleitn).getKey(), bulletinsList.get(fromBulleitn).getValue().getBulletinTitle(), bulletinsList.get(fromBulleitn).getValue().getBulletinContent());
+                bulletinGraphic.setOnMouseClicked(onNoteClick);
+                Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletinGraphic));
             }
             Platform.runLater(() -> screensController.hideProgressScreen());
         }).start();
@@ -210,7 +211,7 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     public void addNote(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-            editNewBulletin.setBulletin(null);
+            editNewBulletin.setBulletinGraphic(null);
             editNewBulletin.setStyle("-fx-background-color: white;");
             editNewBulletin.setTitle(null);
             editNewBulletin.setContent(null);

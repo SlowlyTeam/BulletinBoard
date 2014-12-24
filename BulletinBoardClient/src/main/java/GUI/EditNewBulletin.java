@@ -17,7 +17,7 @@ public class EditNewBulletin extends AnchorPane {
     final private Title title;
     final private Content content;
     final private Controls controls;
-    private Bulletin bulletin;
+    private BulletinGraphic bulletinGraphic;
 
     public EditNewBulletin() {
         getStyleClass().add("bulletinBackground");
@@ -55,12 +55,12 @@ public class EditNewBulletin extends AnchorPane {
         this.title.setText(title);
     }
 
-    public Bulletin getBulletin() {
-        return bulletin;
+    public BulletinGraphic getBulletinGraphic() {
+        return bulletinGraphic;
     }
 
-    public void setBulletin(Bulletin bulletin) {
-        this.bulletin = bulletin;
+    public void setBulletinGraphic(BulletinGraphic bulletinGraphic) {
+        this.bulletinGraphic = bulletinGraphic;
     }
 
     private class Title extends TextField {
