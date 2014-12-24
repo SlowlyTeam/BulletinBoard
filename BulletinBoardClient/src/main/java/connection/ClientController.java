@@ -1,13 +1,13 @@
 package connection;
 
-import GUI.*;
 import GUI.ScreensController;
+import connection.strategies.LogInResponseStrategy;
+import connection.strategies.Strategy;
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.helpers.Credentials;
 import pl.slowly.team.common.packets.request.Request;
 import pl.slowly.team.common.packets.request.authorization.LogInRequest;
-import pl.slowly.team.common.packets.request.broadcast.SendNewBulletinBroadcast;
 import pl.slowly.team.common.packets.request.connection.DisconnectFromServerRequest;
 import pl.slowly.team.common.packets.request.data.*;
 import pl.slowly.team.common.packets.response.Response;
@@ -16,10 +16,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.List;
 
 public class ClientController {
 
+    private final HashMap<Class<? extends Response>, Strategy> strategyMap = new HashMap<>();
     private int port;
     private String host;
     private Socket socket;
@@ -32,6 +34,11 @@ public class ClientController {
         this.port = port;
         this.host = host;
         this.screensController = screensController;
+        fillStrategyMap();
+    }
+
+    private void fillStrategyMap() {
+        strategyMap.put(Response.class, new LogInResponseStrategy(screensController));
     }
 
     public boolean connectToServer() throws IOException {
@@ -52,7 +59,7 @@ public class ClientController {
     }
 
     public void addBulletin() throws IOException {
-        sendRequest(new AddBulletinRequest(new Bulletin("my own bulletin?")));
+        sendRequest(new AddBulletinRequest(new Bulletin("Bulletin 1", "Content 1")));
     }
 
     public void deleteBulletin() throws IOException {
@@ -92,13 +99,17 @@ public class ClientController {
                     Packet serverResponse = getResponsePacket();
                     if (serverResponse == null)
                         return;
+
+                    Strategy strategy = strategyMap.get(serverResponse.getClass());
+                    strategy.execute(serverResponse);
+
                     // tutaj aktualizacja widoku
 //                    System.out.println(serverResponse.getResponseStatus().toString());
-                    if (serverResponse instanceof Response) {
-                        Response logInResponse = (Response) serverResponse;
-                        LoginScreenController loginScreenController = (LoginScreenController) screensController.getControlledScreen(GUI.loginScreenID);
-                        loginScreenController.logInResponse(logInResponse);
-                    }
+//                    if (serverResponse instanceof Response) {
+//                        Response logInResponse = (Response) serverResponse;
+//                        LoginScreenController loginScreenController = (LoginScreenController) screensController.getControlledScreen(GUI.loginScreenID);
+//                        loginScreenController.logInResponse(logInResponse);
+//                    }
 //                    List<? extends Entity> entities = serverResponse.getEntities();
 //                    if (entities != null) {
 //                        for (Entity entity : entities) {
@@ -107,9 +118,7 @@ public class ClientController {
 //                    }
 //                    System.out.println();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
