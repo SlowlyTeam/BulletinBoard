@@ -19,7 +19,8 @@ public class FakeModel implements IModel {
     @Override
     public List<Category> getCategories() {
         List<Category> l = new ArrayList<>();
-        l.add(new Category("kat. 1", null));
+        for(int i=0;i<20;++i)
+            l.add(new Category("kat. "+i, null));
         return l;
     }
 

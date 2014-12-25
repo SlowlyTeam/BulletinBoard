@@ -5,7 +5,7 @@ import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.authorization.LogInRequest;
 import pl.slowly.team.common.packets.request.connection.DisconnectFromServerRequest;
 import pl.slowly.team.common.packets.request.data.*;
-import pl.slowly.team.common.packets.response.Response;
+import pl.slowly.team.common.packets.response.NotAuthorizedResponse;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.controller.strategies.*;
 import pl.slowly.team.server.helpers.PacketWrapper;
@@ -90,7 +90,7 @@ public class Controller {
     }
 
     private void sendNotAuthorizedResponse(PacketWrapper wrappedPacket) throws IOException {
-        server.sendResponseToClient(new Response(ResponseStatus.NOT_AUTHORIZED), wrappedPacket.getUserID());
+        server.sendResponseToClient(new NotAuthorizedResponse(ResponseStatus.NOT_AUTHORIZED), wrappedPacket.getUserID());
     }
 
     private void executeStrategy(PacketWrapper wrappedPacket, Strategy strategy) throws IOException, InterruptedException {

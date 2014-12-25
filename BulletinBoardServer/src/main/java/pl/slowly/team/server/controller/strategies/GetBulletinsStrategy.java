@@ -3,6 +3,7 @@ package pl.slowly.team.server.controller.strategies;
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.data.GetBulletinsRequest;
+import pl.slowly.team.common.packets.response.GetBulletinsResponse;
 import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
@@ -27,6 +28,6 @@ public class GetBulletinsStrategy extends Strategy {
         GetBulletinsRequest getBulletins = (GetBulletinsRequest) packetWrapper.getPacket();
         int clientId = packetWrapper.getUserID();
         List<Bulletin> bulletins = model.getBulletins(getBulletins.getCategoriesIds(), getBulletins.getSince());
-        server.sendResponseToClient(new Response(ResponseStatus.OK, bulletins), clientId);
+        server.sendResponseToClient(new GetBulletinsResponse(ResponseStatus.OK, bulletins), clientId);
     }
 }

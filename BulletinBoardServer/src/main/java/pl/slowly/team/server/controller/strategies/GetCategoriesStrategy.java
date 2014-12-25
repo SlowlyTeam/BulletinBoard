@@ -3,6 +3,7 @@ package pl.slowly.team.server.controller.strategies;
 import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.data.GetCategoriesRequest;
+import pl.slowly.team.common.packets.response.GetCategoriesListResponse;
 import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
@@ -26,6 +27,6 @@ public class GetCategoriesStrategy extends Strategy {
     public void execute(final PacketWrapper packetWrapper) throws IOException {
         int userId = packetWrapper.getUserID();
         List<Category> categories = model.getCategories();
-        server.sendResponseToClient(new Response(ResponseStatus.OK, categories), userId);
+        server.sendResponseToClient(new GetCategoriesListResponse(ResponseStatus.OK, categories), userId);
     }
 }

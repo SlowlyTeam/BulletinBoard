@@ -3,6 +3,7 @@ package pl.slowly.team.server.controller.strategies;
 import pl.slowly.team.common.packets.helpers.Credentials;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.authorization.LogInRequest;
+import pl.slowly.team.common.packets.response.LogInResponse;
 import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
@@ -28,9 +29,9 @@ public class LogInStrategy extends Strategy {
         int userId = packetWrapper.getUserID();
         if (model.checkCredentials(credentials)) {
             server.authorizeClient(userId, credentials.getUsername());
-            server.sendResponseToClient(new Response(ResponseStatus.AUTHORIZED), userId);
+            server.sendResponseToClient(new LogInResponse(ResponseStatus.AUTHORIZED), userId);
         } else {
-            server.sendResponseToClient(new Response(ResponseStatus.NOT_AUTHORIZED), userId);
+            server.sendResponseToClient(new LogInResponse(ResponseStatus.NOT_AUTHORIZED), userId);
         }
     }
 }
