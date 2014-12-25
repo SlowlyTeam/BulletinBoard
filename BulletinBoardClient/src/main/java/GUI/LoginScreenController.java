@@ -14,6 +14,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
+import pl.slowly.team.common.packets.response.LogInResponse;
 import pl.slowly.team.common.packets.response.Response;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class LoginScreenController implements ControlledScreen {
         clientController.logIn(login.getText(), password.getText());
     }
 
-    public void logInResponse(Response logInResponse) {
+    public void logInResponse(LogInResponse logInResponse) {
         done(logInResponse.getResponseStatus().equals(ResponseStatus.AUTHORIZED));
     }
 
@@ -78,18 +79,17 @@ public class LoginScreenController implements ControlledScreen {
         stage.setY(event.getScreenY() - yOffset);
     }
 
-    private void doInBackground() throws Exception {
-        TimeUnit.SECONDS.sleep(1);
-        if (!login.getText().equals("Maxym") || !password.getText().equals("open13")) {
-            throw new Exception();
-        }
-    }
+//    private void doInBackground() throws Exception {
+//        TimeUnit.SECONDS.sleep(1);
+//        if (!login.getText().equals("Maxym") || !password.getText().equals("open13")) {
+//            throw new Exception();
+//        }
+//    }
 
     protected void done(boolean isLogged) {
         Platform.runLater(() -> {
             if (isLogged) {
-                screensController.hideProgressScreen();
-                screensController.setScreen(GUI.chooseCategoryID, false);
+                screensController.setScreen(GUI.chooseCategoryID, true);
             } else {
                 screensController.hideProgressScreen();
                 login.setStyle("-fx-background-color: rgba(230, 10, 10, 0.8)");

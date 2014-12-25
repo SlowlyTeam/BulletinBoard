@@ -2,6 +2,7 @@ package connection.strategies;
 
 import GUI.ScreensController;
 import pl.slowly.team.common.packets.Packet;
+import pl.slowly.team.common.packets.response.Response;
 
 /**
  * Created by Maxym on 2014-12-23.
@@ -14,5 +15,5 @@ public abstract class Strategy {
         this.screensController = screensController;
     }
 
-    public abstract void execute(final Packet packet);
+    public abstract void execute(final Response response);
 }

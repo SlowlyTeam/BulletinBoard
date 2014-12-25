@@ -1,16 +1,17 @@
 package connection;
 
 import GUI.ScreensController;
-import connection.strategies.LogInResponseStrategy;
-import connection.strategies.Strategy;
+import connection.strategies.*;
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.helpers.Credentials;
 import pl.slowly.team.common.packets.request.Request;
 import pl.slowly.team.common.packets.request.authorization.LogInRequest;
+import pl.slowly.team.common.packets.request.broadcast.DeleteBulletinBroadcast;
+import pl.slowly.team.common.packets.request.broadcast.SendNewBulletinBroadcast;
 import pl.slowly.team.common.packets.request.connection.DisconnectFromServerRequest;
 import pl.slowly.team.common.packets.request.data.*;
-import pl.slowly.team.common.packets.response.Response;
+import pl.slowly.team.common.packets.response.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class ClientController {
 
-    private final HashMap<Class<? extends Response>, Strategy> strategyMap = new HashMap<>();
+    private final HashMap<Class<? extends Packet>, Strategy> strategyMap = new HashMap<>();
     private int port;
     private String host;
     private Socket socket;
@@ -38,7 +39,14 @@ public class ClientController {
     }
 
     private void fillStrategyMap() {
-        strategyMap.put(Response.class, new LogInResponseStrategy(screensController));
+        strategyMap.put(AddBulletinResponse.class, new AddBulletinResponseStrategy(screensController));
+        strategyMap.put(DeleteBulletinBroadcast.class, new DeleteBulletinBroadcastStrategy(screensController));
+        strategyMap.put(GetBulletinsResponse.class, new GetBulletinsResponseStrategy(screensController));
+        strategyMap.put(GetCategoriesListResponse.class, new GetCategoriesResponseStrategy(screensController));
+        strategyMap.put(LogInResponse.class, new LogInResponseStrategy(screensController));
+        strategyMap.put(NotAuthorizedResponse.class, new NotAuthorizedResponseStrategy(screensController));
+        strategyMap.put(SendNewBulletinBroadcast.class, new SendNewBulletinBroadcastStrategy(screensController));
+        strategyMap.put(DeleteBulletinResponse.class, new DeleteBulletinResponseStrategy(screensController));
     }
 
     public boolean connectToServer() throws IOException {
@@ -96,12 +104,17 @@ public class ClientController {
         public void run() {
             try {
                 while (true) {
-                    Packet serverResponse = getResponsePacket();
+                    Response serverResponse = getResponse();
                     if (serverResponse == null)
                         return;
 
                     Strategy strategy = strategyMap.get(serverResponse.getClass());
-                    strategy.execute(serverResponse);
+
+                    if (!strategy.equals(null)) {
+                        strategy.execute(serverResponse);
+                    } else {
+                        System.out.println("Nieznana strategia");
+                    }
 
                     // tutaj aktualizacja widoku
 //                    System.out.println(serverResponse.getResponseStatus().toString());
@@ -123,10 +136,10 @@ public class ClientController {
             }
         }
 
-        private Packet getResponsePacket() throws IOException, ClassNotFoundException {
+        private Response getResponse() throws IOException, ClassNotFoundException {
             synchronized (socket) {
                 if (!socket.isClosed()) {
-                    return (Packet) inputStream.readObject();
+                    return (Response) inputStream.readObject();
                 }
                 return null;
             }
