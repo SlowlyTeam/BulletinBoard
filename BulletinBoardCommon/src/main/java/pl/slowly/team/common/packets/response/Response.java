@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Response from server to clients requests.
  */
-public class Response extends Packet {
+public abstract class Response extends Packet {
     private ResponseStatus responseStatus;
     private List<? extends Entity> entities;
 

@@ -8,6 +8,7 @@ import pl.slowly.team.common.packets.helpers.Credentials;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class FakeModel implements IModel {
 
@@ -19,15 +20,17 @@ public class FakeModel implements IModel {
     @Override
     public List<Category> getCategories() {
         List<Category> l = new ArrayList<>();
-        for(int i=0;i<20;++i)
-            l.add(new Category("kat. "+i, null));
+        for (int i = 0; i < 20; ++i)
+            l.add(new Category("kat. " + i, null));
         return l;
     }
 
     @Override
     public List<Bulletin> getUserBulletins(String username) {
         List<Bulletin> l = new ArrayList<>();
-        l.add(new Bulletin("my own bulletin.", "test content"));
+        for (int i = 0; i < 100; ++i) {
+            l.add(new Bulletin(new Random().nextInt(), "Note #" + i, "content number #" + i));
+        }
         return l;
     }
 
@@ -44,7 +47,9 @@ public class FakeModel implements IModel {
     @Override
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since) {
         List<Bulletin> l = new ArrayList<>();
-        l.add(new Bulletin("some bulletin", "some content"));
+        for (int i = 0; i < 100; ++i) {
+            l.add(new Bulletin(new Random().nextInt(), "Note #" + i, "content number #" + i));
+        }
         return l;
     }
 }

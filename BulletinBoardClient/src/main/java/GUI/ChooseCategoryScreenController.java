@@ -14,13 +14,18 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.junit.experimental.categories.Categories;
+import pl.slowly.team.common.data.Category;
+import pl.slowly.team.common.packets.response.GetCategoriesListResponse;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author Maxym
@@ -51,16 +56,17 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
 
     @Override
     public void load() {
-        new Thread(() -> {
-            try {
-                TimeUnit.SECONDS.sleep(4);
-                List<String> values = Arrays.asList("Antyki i Sztuka", "Bilety", "Biuro i Reklama", "Biżuteria i Zegarki", "Delikatesy", "Dla Dzieci", "Dom i Ogród", "Filmy", "Fotografia", "Gry", "Instrumenty", "Kolekcje", "Komputery", "Konsole i automaty", "Książki i Komiksy", "Motoryzacja", "Muzyka", "Nieruchomości", "Odzież, Obuwie, Dodatki", "Przemysł", "Rękodzieło", "RTV i AGD", "Sport i Turystyka", "Sprzęt estradowy, studyjny i DJ-ski", "Telefony i Akcesoria", "Uroda", "Usługi", "Wakacje", "Zdrowie");
-                list.setItems(FXCollections.observableList(values));
-                Platform.runLater(() -> screensController.hideProgressScreen());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+        try {
+            clientController.getCategories();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void fillCategories(List<Category> categories) {
+        List<String> values = categories.stream().map(Category::getCategoryName).collect(Collectors.toCollection(() -> new LinkedList<>()));
+        list.setItems(FXCollections.observableArrayList(values));
+        Platform.runLater(screensController::hideProgressScreen);
     }
 
     public void mousePressed(MouseEvent event) {

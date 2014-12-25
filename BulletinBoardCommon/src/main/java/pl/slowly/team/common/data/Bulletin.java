@@ -5,10 +5,25 @@ public class Bulletin extends Entity {
 
     private String bulletinTitle;
     private String bulletinContent;
+    private Integer bulletinId;
 
-    public Bulletin(String bulletinTitle, String bulletinContent) {
+//    public Bulletin(String bulletinTitle, String bulletinContent) {
+//        this.bulletinTitle = bulletinTitle;
+//        this.bulletinContent = bulletinContent;
+//    }
+
+    public Bulletin(Integer bulletinId, String bulletinTitle, String bulletinContent) {
+        this.bulletinId = bulletinId;
         this.bulletinTitle = bulletinTitle;
         this.bulletinContent = bulletinContent;
+    }
+
+    public int getBulletinId() {
+        return bulletinId;
+    }
+
+    public void setBulletinId(int bulletinId) {
+        this.bulletinId = bulletinId;
     }
 
     public String getBulletinTitle() {

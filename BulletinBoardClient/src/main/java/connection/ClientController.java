@@ -19,6 +19,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class ClientController {
 
@@ -67,7 +68,7 @@ public class ClientController {
     }
 
     public void addBulletin() throws IOException {
-        sendRequest(new AddBulletinRequest(new Bulletin("Bulletin 1", "Content 1")));
+        sendRequest(new AddBulletinRequest(new Bulletin(new Random().nextInt(), "Bulletin 1", "Content 1")));
     }
 
     public void deleteBulletin() throws IOException {

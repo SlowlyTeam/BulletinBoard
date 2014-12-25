@@ -18,19 +18,20 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import pl.slowly.team.common.data.Bulletin;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainViewController implements ControlledScreen, Initializable {
 
-    final private CopyOnWriteArrayList<Pair<Integer, Bulletin>> bulletinsList = new CopyOnWriteArrayList<>();
     private final EventHandler onNoteClick;
     private final EventHandler onEditAddNoteClick;
+    private CopyOnWriteArrayList<Bulletin> bulletinsList = new CopyOnWriteArrayList<>();
     private EditNewBulletin editNewBulletin;
     private ScreensController screensController;
     private BulletinBoardScreen bulletinBoardScreen;
@@ -51,8 +52,8 @@ public class MainViewController implements ControlledScreen, Initializable {
             int bulletinNumber = bulletinGraphic.getBulletinNumber();
 
             if (event.getTarget().toString().contains("delete")) {
-                for (Pair<Integer, pl.slowly.team.common.data.Bulletin> bul : bulletinsList) {
-                    if (bul.getKey() == bulletinNumber) {
+                for (Bulletin bul : bulletinsList) {
+                    if (bul.getBulletinId() == bulletinNumber) {
                         bulletinsList.remove(bul);
                         break;
                     }
@@ -91,17 +92,17 @@ public class MainViewController implements ControlledScreen, Initializable {
                 BulletinGraphic bulletinGraphic = editNewBulletin.getBulletinGraphic();
                 if (bulletinGraphic != null) {
                     int bulletinNumber = bulletinGraphic.getBulletinNumber();
-                    for (Pair<Integer, pl.slowly.team.common.data.Bulletin> bul : bulletinsList) {
-                        if (bul.getKey() == bulletinNumber) {
-                            bul.getValue().setBulletinTitle(editNewBulletin.getTitle());
-                            bul.getValue().setBulletinContent(editNewBulletin.getContent());
+                    for (Bulletin bul : bulletinsList) {
+                        if (bul.getBulletinId() == bulletinNumber) {
+                            bul.setBulletinTitle(editNewBulletin.getTitle());
+                            bul.setBulletinContent(editNewBulletin.getContent());
                             break;
                         }
                     }
                     bulletinGraphic.setVisible(true);
                     setPage(curPage);
                 } else {
-                    bulletinsList.add(0, new Pair<>(new Random().nextInt(), new Bulletin(editNewBulletin.getTitle(), editNewBulletin.getContent())));
+                    bulletinsList.add(0, new Bulletin(new Random().nextInt(), editNewBulletin.getTitle(), editNewBulletin.getContent()));
                     setPage(curPage = 1);
                 }
                 screensController.hideOnScreen();
@@ -117,17 +118,33 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     @Override
     public void load() {
-        new Thread(() -> {
-            for (int i = 0; i < 100; ++i) {
-                bulletinsList.add(new Pair(i, new Bulletin("Note #" + i, "content number #" + i)));
-            }
-            for (int k = 0; k < 6; ++k) {
-                BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(k).getKey(), bulletinsList.get(k).getValue().getBulletinTitle(), bulletinsList.get(k).getValue().getBulletinContent());
-                bulletinGraphic.setOnMouseClicked(onNoteClick);
-                Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletinGraphic));
-            }
-            Platform.runLater(() -> screensController.hideProgressScreen());
-        }).start();
+        try {
+            clientController.getUserBulletins();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        new Thread(() -> {
+//            for (int i = 0; i < 100; ++i) {
+//                bulletinsList.add(new Bulletin(i, "Note #" + i, "content number #" + i));
+//            }
+//            for (int k = 0; k < 6; ++k) {
+//                BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(k).getBulletinId(), bulletinsList.get(k).getBulletinTitle(), bulletinsList.get(k).getBulletinContent());
+//                bulletinGraphic.setOnMouseClicked(onNoteClick);
+//                Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletinGraphic));
+//            }
+//            Platform.runLater(() -> screensController.hideProgressScreen());
+//        }).start();
+
+    }
+
+    public void setBulletins(List<Bulletin> bulletinsList) {
+        this.bulletinsList = new CopyOnWriteArrayList<>(bulletinsList);
+        for (int k = 0; k < 6; ++k) {
+            BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(k).getBulletinId(), bulletinsList.get(k).getBulletinTitle(), bulletinsList.get(k).getBulletinContent());
+            bulletinGraphic.setOnMouseClicked(onNoteClick);
+            Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletinGraphic));
+        }
+        Platform.runLater(screensController::hideProgressScreen);
 
     }
 
@@ -169,15 +186,15 @@ public class MainViewController implements ControlledScreen, Initializable {
 
         screensController.showProgressScreen();
         new Thread(() -> {
-            Platform.runLater(() -> bulletinBoardScreen.clear());
+            Platform.runLater(bulletinBoardScreen::clear);
             int fromBulleitn = (pageNumber - 1) * 6;
             int toBulletin = fromBulleitn + 6;
             for (; fromBulleitn != toBulletin && fromBulleitn != bulletinsList.size(); ++fromBulleitn) {
-                BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(fromBulleitn).getKey(), bulletinsList.get(fromBulleitn).getValue().getBulletinTitle(), bulletinsList.get(fromBulleitn).getValue().getBulletinContent());
+                BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(fromBulleitn).getBulletinId(), bulletinsList.get(fromBulleitn).getBulletinTitle(), bulletinsList.get(fromBulleitn).getBulletinContent());
                 bulletinGraphic.setOnMouseClicked(onNoteClick);
                 Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletinGraphic));
             }
-            Platform.runLater(() -> screensController.hideProgressScreen());
+            Platform.runLater(screensController::hideProgressScreen);
         }).start();
     }
 

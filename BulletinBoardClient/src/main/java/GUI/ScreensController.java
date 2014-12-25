@@ -72,7 +72,7 @@ public class ScreensController extends StackPane {
     public boolean hideProgressScreen() {
         System.out.println("hide");
         if (!getChildren().isEmpty()) {
-            getChildren().remove(screens.get("progressScreen").getKey());
+            getChildren().remove(1);
             setOpacity(1.0f);
             //getChildren().get(0).setDisable(false);
             return true;
