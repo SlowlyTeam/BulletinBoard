@@ -9,22 +9,17 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import org.junit.experimental.categories.Categories;
 import pl.slowly.team.common.data.Category;
-import pl.slowly.team.common.packets.response.GetCategoriesListResponse;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -36,16 +31,18 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
     private ClientController clientController;
     private double xOffset;
     private double yOffset;
+    private Map<String, Category> categoriesMap;
 
     @FXML
-    private ListView list;
+    private ListView categoriesList;
+
+    @FXML
+    private Label warning;
 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //List<String> values = Arrays.asList("Antyki i Sztuka", "Bilety", "Biuro i Reklama", "Biżuteria i Zegarki", "Delikatesy", "Dla Dzieci", "Dom i Ogród", "Filmy", "Fotografia", "Gry", "Instrumenty", "Kolekcje", "Komputery", "Konsole i automaty", "Książki i Komiksy", "Motoryzacja", "Muzyka", "Nieruchomości", "Odzież, Obuwie, Dodatki", "Przemysł", "Rękodzieło", "RTV i AGD", "Sport i Turystyka", "Sprzęt estradowy, studyjny i DJ-ski", "Telefony i Akcesoria", "Uroda", "Usługi", "Wakacje", "Zdrowie");
-        list.setStyle("-fx-border-color: grey; -fx-border-style: solid; -fx-background-color:transparent;");
-        //list.setItems(FXCollections.observableList(values));
+        categoriesList.setStyle("-fx-border-color: grey; -fx-border-style: solid; -fx-background-color:transparent;");
     }
 
     @Override
@@ -62,10 +59,12 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
             e.printStackTrace();
         }
     }
-    
+
     public void fillCategories(List<Category> categories) {
-        List<String> values = categories.stream().map(Category::getCategoryName).collect(Collectors.toCollection(() -> new LinkedList<>()));
-        list.setItems(FXCollections.observableArrayList(values));
+        categoriesMap = categories.stream()
+                .collect(Collectors.toMap(Category::getCategoryName, p -> p));
+        categoriesList.setItems(FXCollections.observableArrayList(
+                categoriesMap.keySet().stream().sorted().collect(Collectors.toList())));
         Platform.runLater(screensController::hideProgressScreen);
     }
 
@@ -75,7 +74,7 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
     }
 
     public void onMouseDragged(MouseEvent event) {
-        Stage stage = (Stage) list.getScene().getWindow();
+        Stage stage = (Stage) categoriesList.getScene().getWindow();
         stage.setX(event.getScreenX() - xOffset);
         stage.setY(event.getScreenY() - yOffset);
     }
@@ -88,6 +87,15 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
 
     public void goToNextScreen() {
         screensController.showProgressScreen();
+        MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(GUI.mainScreenID);
+        Category category = categoriesMap.get(categoriesList.getSelectionModel().getSelectedItem());
+        if (category == null) {
+            screensController.hideProgressScreen();
+            warning.setVisible(true);
+            return;
+        }
+        mainViewController.setCategory(category.getCategoryId());
         screensController.setMainScreen(GUI.mainScreenID);
     }
+
 }

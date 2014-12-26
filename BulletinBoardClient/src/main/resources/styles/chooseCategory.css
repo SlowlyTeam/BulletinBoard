@@ -86,3 +86,8 @@
     -fx-font-weight: bold;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 10, 0.0, 0, 1);
 }
+
+.warning {
+    -fx-text-fill: red;
+    -fx-font-size: 12px;
+}

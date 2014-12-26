@@ -67,20 +67,20 @@ public class ClientController {
         sendRequest(new LogInRequest(new Credentials(userName, password)));
     }
 
-    public void addBulletin() throws IOException {
-        sendRequest(new AddBulletinRequest(new Bulletin(new Random().nextInt(), "Bulletin 1", "Content 1")));
+    public void addBulletin(String bulletinTitle, String bulletinContent) throws IOException {
+        sendRequest(new AddBulletinRequest(new Bulletin(bulletinTitle, bulletinContent)));
     }
 
-    public void deleteBulletin() throws IOException {
-        sendRequest(new DeleteBulletinRequest(1));
+    public void deleteBulletin(int bulletinId) throws IOException {
+        sendRequest(new DeleteBulletinRequest(bulletinId));
     }
 
     public void getCategories() throws IOException {
         sendRequest(new GetCategoriesRequest());
     }
 
-    public void getBulletins(List<Integer> bulletinsIds) throws IOException {
-        sendRequest(new GetBulletinsRequest(bulletinsIds, null));
+    public void getBulletins(List<Integer> categoriesId) throws IOException {
+        sendRequest(new GetBulletinsRequest(categoriesId, null));
     }
 
     public void getUserBulletins() throws IOException {

@@ -1,19 +1,19 @@
 package pl.slowly.team.common.data;
 
-import com.sun.istack.internal.Nullable;
-
-import java.util.List;
-
 public class Category extends Entity {
-    private String categoryName;
-    private List<Bulletin> bulletins;
+    private final String categoryName;
+    private final Integer categoryId;
 
-    public Category(String categoryName, @Nullable List<Bulletin> bulletins) {
+    public Category(String categoryName, int categoryId) {
         this.categoryName = categoryName;
-        this.bulletins = bulletins;
+        this.categoryId = categoryId;
     }
 
     public String getCategoryName() {
         return categoryName;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
     }
 }

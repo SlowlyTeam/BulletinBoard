@@ -11,6 +11,7 @@ import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Strategy executed when user wants to add new bulletin.
@@ -28,12 +29,12 @@ public class AddBulletinStrategy extends Strategy {
         AddBulletinRequest addBulletinReq = (AddBulletinRequest) packetWrapper.getPacket();
         Bulletin bulletin = addBulletinReq.getBulletin();
         int clientId = packetWrapper.getUserID();
-        boolean result = model.addBulletin(bulletin, server.getUsername(clientId));
-        if (result) {
-            server.sendResponseToClient(new AddBulletinResponse(ResponseStatus.OK), clientId);
+        int bulletinId = model.addBulletin(bulletin, server.getUsername(clientId));
+        if (bulletinId > 0) {
+            server.sendResponseToClient(new AddBulletinResponse(ResponseStatus.OK, bulletinId), clientId);
+            bulletin.setBulletinId(bulletinId);
             server.sendBroadcastPacket(new SendNewBulletinBroadcast(bulletin));
-        }
-        else {
+        } else {
             server.sendResponseToClient(new AddBulletinResponse(ResponseStatus.ERROR), clientId);
         }
     }

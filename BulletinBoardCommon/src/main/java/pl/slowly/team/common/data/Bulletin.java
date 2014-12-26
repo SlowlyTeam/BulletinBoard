@@ -2,20 +2,22 @@ package pl.slowly.team.common.data;
 
 public class Bulletin extends Entity {
 
-
+    private final boolean belongToUser;
     private String bulletinTitle;
     private String bulletinContent;
     private Integer bulletinId;
 
-//    public Bulletin(String bulletinTitle, String bulletinContent) {
-//        this.bulletinTitle = bulletinTitle;
-//        this.bulletinContent = bulletinContent;
-//    }
+    public Bulletin(String bulletinTitle, String bulletinContent) {
+        this.bulletinTitle = bulletinTitle;
+        this.bulletinContent = bulletinContent;
+        this.belongToUser = false;
+    }
 
-    public Bulletin(Integer bulletinId, String bulletinTitle, String bulletinContent) {
+    public Bulletin(Integer bulletinId, String bulletinTitle, String bulletinContent, boolean belongToUser) {
         this.bulletinId = bulletinId;
         this.bulletinTitle = bulletinTitle;
         this.bulletinContent = bulletinContent;
+        this.belongToUser = belongToUser;
     }
 
     public int getBulletinId() {
@@ -40,5 +42,9 @@ public class Bulletin extends Entity {
 
     public void setBulletinContent(String bulletinContent) {
         this.bulletinContent = bulletinContent;
+    }
+
+    public boolean isBelongToUser() {
+        return belongToUser;
     }
 }

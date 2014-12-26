@@ -20,8 +20,9 @@ public class FakeModel implements IModel {
     @Override
     public List<Category> getCategories() {
         List<Category> l = new ArrayList<>();
+        Random random = new Random();
         for (int i = 0; i < 20; ++i)
-            l.add(new Category("kat. " + i, null));
+            l.add(new Category("kat. " + i, random.nextInt()));
         return l;
     }
 
@@ -29,14 +30,14 @@ public class FakeModel implements IModel {
     public List<Bulletin> getUserBulletins(String username) {
         List<Bulletin> l = new ArrayList<>();
         for (int i = 0; i < 100; ++i) {
-            l.add(new Bulletin(new Random().nextInt(), "Note #" + i, "content number #" + i));
+            l.add(new Bulletin(new Random().nextInt(), "Note #" + i, "content number #" + i, true));
         }
         return l;
     }
 
     @Override
-    public boolean addBulletin(Bulletin bulletin, String username) {
-        return true;
+    public Integer addBulletin(Bulletin bulletin, String username) {
+        return new Random().nextInt();
     }
 
     @Override
@@ -45,10 +46,12 @@ public class FakeModel implements IModel {
     }
 
     @Override
-    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since) {
+    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, int clientID) {
+        System.out.println(categoriesIds);
+        Random random = new Random();
         List<Bulletin> l = new ArrayList<>();
         for (int i = 0; i < 100; ++i) {
-            l.add(new Bulletin(new Random().nextInt(), "Note #" + i, "content number #" + i));
+            l.add(new Bulletin(new Random().nextInt(), "Note #" + i, "content number #" + i, random.nextBoolean()));
         }
         return l;
     }

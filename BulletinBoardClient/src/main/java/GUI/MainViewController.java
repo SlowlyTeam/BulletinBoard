@@ -19,12 +19,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pl.slowly.team.common.data.Bulletin;
+import pl.slowly.team.common.data.Category;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainViewController implements ControlledScreen, Initializable {
@@ -39,6 +38,7 @@ public class MainViewController implements ControlledScreen, Initializable {
     private double xOffset;
     private double yOffset;
     private ClientController clientController;
+    private Integer categoryID;
 
     @FXML
     private Label exitImage;
@@ -102,7 +102,7 @@ public class MainViewController implements ControlledScreen, Initializable {
                     bulletinGraphic.setVisible(true);
                     setPage(curPage);
                 } else {
-                    bulletinsList.add(0, new Bulletin(new Random().nextInt(), editNewBulletin.getTitle(), editNewBulletin.getContent()));
+                    bulletinsList.add(0, new Bulletin(new Random().nextInt(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
                     setPage(curPage = 1);
                 }
                 screensController.hideOnScreen();
@@ -119,7 +119,7 @@ public class MainViewController implements ControlledScreen, Initializable {
     @Override
     public void load() {
         try {
-            clientController.getUserBulletins();
+            clientController.getBulletins(new ArrayList<>(Arrays.asList(categoryID)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -139,8 +139,10 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     public void setBulletins(List<Bulletin> bulletinsList) {
         this.bulletinsList = new CopyOnWriteArrayList<>(bulletinsList);
+
         for (int k = 0; k < 6; ++k) {
-            BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(k).getBulletinId(), bulletinsList.get(k).getBulletinTitle(), bulletinsList.get(k).getBulletinContent());
+            Bulletin bulletin = bulletinsList.get(k);
+            BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletin.getBulletinId(), bulletin.getBulletinTitle(), bulletin.getBulletinContent(), bulletin.isBelongToUser());
             bulletinGraphic.setOnMouseClicked(onNoteClick);
             Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletinGraphic));
         }
@@ -187,10 +189,11 @@ public class MainViewController implements ControlledScreen, Initializable {
         screensController.showProgressScreen();
         new Thread(() -> {
             Platform.runLater(bulletinBoardScreen::clear);
-            int fromBulleitn = (pageNumber - 1) * 6;
-            int toBulletin = fromBulleitn + 6;
-            for (; fromBulleitn != toBulletin && fromBulleitn != bulletinsList.size(); ++fromBulleitn) {
-                BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(fromBulleitn).getBulletinId(), bulletinsList.get(fromBulleitn).getBulletinTitle(), bulletinsList.get(fromBulleitn).getBulletinContent());
+            int fromBulletin = (pageNumber - 1) * 6;
+            int toBulletin = fromBulletin + 6;
+            for (; fromBulletin != toBulletin && fromBulletin != bulletinsList.size(); ++fromBulletin) {
+                Bulletin bulletin = bulletinsList.get(fromBulletin);
+                BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletin.getBulletinId(), bulletin.getBulletinTitle(), bulletin.getBulletinContent(), bulletin.isBelongToUser());
                 bulletinGraphic.setOnMouseClicked(onNoteClick);
                 Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletinGraphic));
             }
@@ -250,5 +253,9 @@ public class MainViewController implements ControlledScreen, Initializable {
             chooseCategoryScreen.setOnKeyReleased(hide -> screensController.hideOnScreen());
             screensController.showOnScreen(screensController.getScreen(GUI.chooseCategoryID));
         }
+    }
+
+    public void setCategory(Integer categoryID) {
+        this.categoryID = categoryID;
     }
 }

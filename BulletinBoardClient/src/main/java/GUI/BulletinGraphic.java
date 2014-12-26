@@ -27,7 +27,7 @@ public class BulletinGraphic extends AnchorPane {
     private final int bulletinNumber;
     private double rotate;
 
-    public BulletinGraphic(int bulletinNumber) {
+    public BulletinGraphic(int bulletinNumber, boolean isBelongToUser) {
         this.bulletinNumber = bulletinNumber;
         getStyleClass().add("bulletinBackground");
         getStylesheets().add(getClass().getResource("../styles/bulletin.css").toExternalForm());
@@ -52,7 +52,7 @@ public class BulletinGraphic extends AnchorPane {
         title = new Title();
 
         controls = new Controls();
-        //controls.setVisible(false);
+        controls.setVisible(isBelongToUser);
         setTopAnchor(controls, 135.0);
 
         getChildren().addAll(title, content, controls);
@@ -117,8 +117,8 @@ public class BulletinGraphic extends AnchorPane {
 //        });
 //    }
 
-    public BulletinGraphic(int number, String title, String content) {
-        this(number);
+    public BulletinGraphic(int number, String title, String content, boolean isBelongToUser) {
+        this(number, isBelongToUser);
         setTitle(title);
         setContent(content);
     }
