@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.effect.InnerShadow?>
-<AnchorPane maxHeight="0" maxWidth="0" id="AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.ChooseCategoryScreenController" onKeyReleased="#keyPressed" onMousePressed="#mousePressed" onMouseDragged="#onMouseDragged">
+<AnchorPane maxHeight="0" maxWidth="0" id="AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="pl.slowly.team.client.GUI.ChooseCategoryScreenController" onKeyReleased="#keyPressed" onMousePressed="#mousePressed" onMouseDragged="#onMouseDragged">
     <VBox id="hBox1" alignment="CENTER"  styleClass="pickupCategory">
         <Label id="appName" text="Wybierz kategorię: ">
             <VBox.margin>

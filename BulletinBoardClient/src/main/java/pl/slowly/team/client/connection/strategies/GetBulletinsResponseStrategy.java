@@ -1,8 +1,9 @@
-package connection.strategies;
+package pl.slowly.team.client.connection.strategies;
 
-import GUI.GUI;
-import GUI.MainViewController;
-import GUI.ScreensController;
+import pl.slowly.team.client.GUI.GUI;
+import pl.slowly.team.client.GUI.MainViewController;
+import pl.slowly.team.client.GUI.Screens;
+import pl.slowly.team.client.GUI.ScreensController;
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.response.Response;
 
@@ -18,7 +19,7 @@ public class GetBulletinsResponseStrategy extends Strategy {
 
     @Override
     public void execute(Response response) {
-        MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(GUI.mainScreenID);
+        MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         mainViewController.setBulletins((List<Bulletin>) response.getEntities());
     }
 }

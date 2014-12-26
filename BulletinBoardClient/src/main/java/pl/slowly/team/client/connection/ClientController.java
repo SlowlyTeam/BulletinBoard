@@ -1,7 +1,7 @@
-package connection;
+package pl.slowly.team.client.connection;
 
-import GUI.ScreensController;
-import connection.strategies.*;
+import pl.slowly.team.client.GUI.ScreensController;
+import pl.slowly.team.client.connection.strategies.*;
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.helpers.Credentials;
@@ -19,7 +19,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public class ClientController {
 

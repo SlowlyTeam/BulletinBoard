@@ -1,10 +1,10 @@
-package GUI;/*
+package pl.slowly.team.client.GUI;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-import connection.ClientController;
+import pl.slowly.team.client.connection.ClientController;
 
 /**
  * @author Maxym

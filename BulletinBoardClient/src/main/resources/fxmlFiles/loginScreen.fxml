@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import java.net.URL?>
-<AnchorPane id="AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.LoginScreenController"
+<AnchorPane id="AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="pl.slowly.team.client.GUI.LoginScreenController"
             onMousePressed="#mousePressed" onMouseDragged="#onMouseDragged" onKeyReleased="#keyPressed">
     <children>
         <HBox id="hBox1" alignment="CENTER">

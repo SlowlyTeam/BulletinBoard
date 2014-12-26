@@ -1,9 +1,9 @@
 /**
  * Created by Maxym on 2014-11-16.
  */
-package GUI;
+package pl.slowly.team.client.GUI;
 
-import connection.ClientController;
+import pl.slowly.team.client.connection.ClientController;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,7 +19,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pl.slowly.team.common.data.Bulletin;
-import pl.slowly.team.common.data.Category;
 
 import java.io.IOException;
 import java.net.URL;
@@ -241,7 +240,7 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     public void changeCategory(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-            AnchorPane chooseCategoryScreen = (AnchorPane) screensController.getScreen(GUI.chooseCategoryID);
+            AnchorPane chooseCategoryScreen = (AnchorPane) screensController.getScreen(Screens.changeCategoryScreen);
             Button ok = (Button) chooseCategoryScreen.lookup("#button1");
             ok.setOnAction(action -> {
                 bulletinBoardScreen.clear();
@@ -251,7 +250,7 @@ public class MainViewController implements ControlledScreen, Initializable {
                 load();
             });
             chooseCategoryScreen.setOnKeyReleased(hide -> screensController.hideOnScreen());
-            screensController.showOnScreen(screensController.getScreen(GUI.chooseCategoryID));
+            screensController.showOnScreen(screensController.getScreen(Screens.changeCategoryScreen));
         }
     }
 

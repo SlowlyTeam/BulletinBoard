@@ -1,4 +1,4 @@
-package GUI;
+package pl.slowly.team.client.GUI;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,7 +21,7 @@ public class EditNewBulletin extends AnchorPane {
 
     public EditNewBulletin() {
         getStyleClass().add("bulletinBackground");
-        getStylesheets().add(getClass().getResource("../styles/bulletin.css").toExternalForm());
+        getStylesheets().add(getClass().getResource("../../../../../styles/bulletin.css").toExternalForm());
         setPrefSize(300, 300);
         setMaxSize(300, 300);
 

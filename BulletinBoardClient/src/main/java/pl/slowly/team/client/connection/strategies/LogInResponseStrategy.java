@@ -1,8 +1,9 @@
-package connection.strategies;
+package pl.slowly.team.client.connection.strategies;
 
-import GUI.GUI;
-import GUI.ScreensController;
-import GUI.LoginScreenController;
+import pl.slowly.team.client.GUI.GUI;
+import pl.slowly.team.client.GUI.Screens;
+import pl.slowly.team.client.GUI.ScreensController;
+import pl.slowly.team.client.GUI.LoginScreenController;
 import pl.slowly.team.common.packets.response.LogInResponse;
 import pl.slowly.team.common.packets.response.Response;
 
@@ -18,7 +19,7 @@ public class LogInResponseStrategy extends Strategy{
 
     @Override
     public void execute(Response response) {
-        LoginScreenController loginScreenController = (LoginScreenController) screensController.getControlledScreen(GUI.loginScreenID);
+        LoginScreenController loginScreenController = (LoginScreenController) screensController.getControlledScreen(Screens.loginScreen);
         loginScreenController.logInResponse((LogInResponse)response);
     }
 }

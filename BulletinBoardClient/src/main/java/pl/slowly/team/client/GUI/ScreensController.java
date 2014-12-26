@@ -1,10 +1,10 @@
-package GUI;/*
+package pl.slowly.team.client.GUI;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-import connection.ClientController;
+import pl.slowly.team.client.connection.ClientController;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -31,26 +31,26 @@ public class ScreensController extends StackPane {
 
     private final HashMap<String, Pair<Parent, ControlledScreen>> screens = new HashMap<>();
 
-    public ControlledScreen getControlledScreen(String controlledScreenID) {
-        return screens.get(controlledScreenID).getValue();
+    public ControlledScreen getControlledScreen(final Screens screen) {
+        return screens.get(screen.ID).getValue();
     }
 
     public void addScreen(String name, Pair<Parent, ControlledScreen> screen) {
         screens.put(name, screen);
     }
 
-    public Node getScreen(String name) {
-        return screens.get(name).getKey();
+    public Node getScreen(Screens screen) {
+        return screens.get(screen.ID).getKey();
     }
 
-    public boolean loadScreen(String name, String resource, ClientController clientController) {
+    public boolean loadScreen(Screens screen, ClientController clientController) {
         try {
-            System.out.println(resource);
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource(resource));
+            FXMLLoader myLoader = new FXMLLoader(getClass().getResource(screen.RESOURCE));
             Parent loadScreen = myLoader.load();
             ControlledScreen myScreenColector = myLoader.getController();
             myScreenColector.setScreenController(this, clientController);
-            addScreen(name, new Pair<>(loadScreen, myScreenColector));
+            addScreen(screen.ID, new Pair<>(loadScreen, myScreenColector));
+            System.out.println(screen.ID + " laoded");
             return true;
         } catch (IOException ioe) {
             return false;
@@ -81,8 +81,8 @@ public class ScreensController extends StackPane {
         }
     }
 
-    public void setMainScreen(String name) {
-        if (screens.get(name) != null) {
+    public void setMainScreen(Screens mainScreen) {
+        if (screens.get(mainScreen.ID) != null) {
             final Stage stage = (Stage) getParent().getScene().getWindow();
 
             final DoubleProperty opacity = opacityProperty();
@@ -110,11 +110,11 @@ public class ScreensController extends StackPane {
                     new KeyFrame(Duration.millis(250),
                             width -> {
                                 getChildren().remove(0);
-                                getChildren().add(0, screens.get(name).getKey());
+                                getChildren().add(0, screens.get(mainScreen.ID).getKey());
                                 new Timeline(new KeyFrame(Duration.millis(750),
                                         height -> new Timeline(new KeyFrame(Duration.millis(500),
                                                 fadeIn -> new Timeline(new KeyFrame(Duration.millis(500),
-                                                        load -> screens.get(name).getValue().load(), new KeyValue(opacity, 1.0))).play(),
+                                                        load -> screens.get(mainScreen.ID).getValue().load(), new KeyValue(opacity, 1.0))).play(),
                                                 new KeyValue(stageHeightProperty, 455, Interpolator.EASE_BOTH))).play(),
                                         new KeyValue(stageWidthProperty, 600, Interpolator.EASE_BOTH))).play();
                             }, new KeyValue(opacity, 0.0))
@@ -123,10 +123,10 @@ public class ScreensController extends StackPane {
         }
     }
 
-    public boolean setScreen(final String name, boolean init) {
-        if (screens.get(name) != null) {
+    public boolean setScreen(final Screens screen, boolean init) {
+        if (screens.get(screen.ID) != null) {
             if (init) {
-                screens.get(name).getValue().load();
+                screens.get(screen.ID).getValue().load();
             }
             final DoubleProperty opacity = opacityProperty();
 
@@ -135,14 +135,14 @@ public class ScreensController extends StackPane {
                 new Timeline(
                         new KeyFrame(Duration.millis(250), (ActionEvent) -> {
                             getChildren().remove(0);
-                            getChildren().add(0, screens.get(name).getKey());
+                            getChildren().add(0, screens.get(screen.ID).getKey());
                             new Timeline(new KeyFrame(Duration.millis(250), new KeyValue(opacity, 1.0))).play();
                         }, new KeyValue(opacity, 0.0))
                 ).play();
 
             } else {
                 setOpacity(0.0);
-                getChildren().add(screens.get(name).getKey());
+                getChildren().add(screens.get(screen.ID).getKey());
                 Timeline fadeIn = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 0.0)),
                         new KeyFrame(Duration.millis(1500), new KeyValue(opacity, 1.0)));

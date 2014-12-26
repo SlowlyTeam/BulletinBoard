@@ -1,4 +1,4 @@
-package GUI;
+package pl.slowly.team.client.GUI;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -30,7 +30,7 @@ public class BulletinGraphic extends AnchorPane {
     public BulletinGraphic(int bulletinNumber, boolean isBelongToUser) {
         this.bulletinNumber = bulletinNumber;
         getStyleClass().add("bulletinBackground");
-        getStylesheets().add(getClass().getResource("../styles/bulletin.css").toExternalForm());
+        getStylesheets().add(getClass().getResource("../../../../../styles/bulletin.css").toExternalForm());
         setPrefSize(155, 155);
         setMaxSize(155, 155);
 

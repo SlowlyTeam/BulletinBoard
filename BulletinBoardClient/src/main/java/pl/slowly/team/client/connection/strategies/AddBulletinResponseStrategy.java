@@ -1,6 +1,6 @@
-package connection.strategies;
+package pl.slowly.team.client.connection.strategies;
 
-import GUI.ScreensController;
+import pl.slowly.team.client.GUI.ScreensController;
 import pl.slowly.team.common.packets.response.Response;
 
 /**

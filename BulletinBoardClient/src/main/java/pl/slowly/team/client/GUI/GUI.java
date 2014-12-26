@@ -1,10 +1,10 @@
-package GUI;/*
+package pl.slowly.team.client.GUI;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-import connection.ClientController;
+import pl.slowly.team.client.connection.ClientController;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -19,13 +19,6 @@ import java.io.IOException;
  * @author Maxym
  */
 public class GUI extends Application {
-
-    public static final String loginScreenID = "loginScreen";
-    public static final String loginScreenFile = "../fxmlFiles/loginScreen.fxml";
-    public static final String chooseCategoryID = "chooseCategory";
-    public static final String chooseCategoryFile = "../fxmlFiles/chooseCategory.fxml";
-    public static final String mainScreenID = "mainScreen";
-    public static final String mainScreenFile = "../fxmlFiles/mainView.fxml";
 
     /**
      * @param args the command line arguments
@@ -47,12 +40,12 @@ public class GUI extends Application {
         }
         clientController.connectToServer();
 
-        screensController.loadScreen(GUI.loginScreenID, GUI.loginScreenFile, clientController);
-        screensController.loadScreen(GUI.chooseCategoryID, GUI.chooseCategoryFile, clientController);
-        screensController.loadScreen(GUI.mainScreenID, GUI.mainScreenFile, clientController);
+        screensController.loadScreen(Screens.loginScreen, clientController);
+        screensController.loadScreen(Screens.changeCategoryScreen, clientController);
+        screensController.loadScreen(Screens.mainScreen, clientController);
         screensController.addProgressScreen(new ProgressPanel());
 
-        screensController.setScreen(GUI.loginScreenID, false);
+        screensController.setScreen(Screens.loginScreen, false);
 
         Group root = new Group(screensController);
         Scene scene = new Scene(root);
@@ -62,7 +55,7 @@ public class GUI extends Application {
         root.setStyle("-fx-border-radius: 7; -fx-background-radius: 7;");
 
         stage.initStyle(StageStyle.UNDECORATED);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("../images/icon.png")));
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("../../../../../images/icon.png")));
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

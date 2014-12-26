@@ -1,10 +1,10 @@
-package GUI;/*
+package pl.slowly.team.client.GUI;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-import connection.ClientController;
+import pl.slowly.team.client.connection.ClientController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -81,13 +81,13 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
 
     public void keyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ESCAPE) {
-            screensController.setScreen(GUI.loginScreenID, true);
+            screensController.setScreen(Screens.loginScreen, true);
         }
     }
 
     public void goToNextScreen() {
         screensController.showProgressScreen();
-        MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(GUI.mainScreenID);
+        MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         Category category = categoriesMap.get(categoriesList.getSelectionModel().getSelectedItem());
         if (category == null) {
             screensController.hideProgressScreen();
@@ -95,7 +95,7 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
             return;
         }
         mainViewController.setCategory(category.getCategoryId());
-        screensController.setMainScreen(GUI.mainScreenID);
+        screensController.setMainScreen(Screens.mainScreen);
     }
 
 }

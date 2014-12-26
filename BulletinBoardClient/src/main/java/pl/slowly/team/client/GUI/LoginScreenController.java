@@ -1,10 +1,10 @@
-package GUI;/*
+package pl.slowly.team.client.GUI;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-import connection.ClientController;
+import pl.slowly.team.client.connection.ClientController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -15,10 +15,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.response.LogInResponse;
-import pl.slowly.team.common.packets.response.Response;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * FXML Controller class
@@ -89,7 +87,7 @@ public class LoginScreenController implements ControlledScreen {
     protected void done(boolean isLogged) {
         Platform.runLater(() -> {
             if (isLogged) {
-                screensController.setScreen(GUI.chooseCategoryID, true);
+                screensController.setScreen(Screens.changeCategoryScreen, true);
             } else {
                 screensController.hideProgressScreen();
                 login.setStyle("-fx-background-color: rgba(230, 10, 10, 0.8)");

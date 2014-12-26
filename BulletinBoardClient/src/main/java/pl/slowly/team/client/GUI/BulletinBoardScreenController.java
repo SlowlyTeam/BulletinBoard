@@ -1,6 +1,6 @@
-package GUI;
+package pl.slowly.team.client.GUI;
 
-import connection.ClientController;
+import pl.slowly.team.client.connection.ClientController;
 
 /**
  * Created by Maxym on 2014-11-20.

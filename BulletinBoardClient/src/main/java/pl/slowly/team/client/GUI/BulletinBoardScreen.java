@@ -1,4 +1,4 @@
-package GUI;
+package pl.slowly.team.client.GUI;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
