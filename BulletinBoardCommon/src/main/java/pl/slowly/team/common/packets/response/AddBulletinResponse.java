@@ -18,6 +18,6 @@ public class AddBulletinResponse extends Response {
     }
 
     public int getBulletinId() {
-        return getBulletinId();
+        return bulletinId;
     }
 }

@@ -1,7 +1,10 @@
 package pl.slowly.team.client.connection;
 
 import pl.slowly.team.client.GUI.ScreensController;
-import pl.slowly.team.client.connection.strategies.*;
+import pl.slowly.team.client.connection.Strategies.Strategy;
+import pl.slowly.team.client.connection.Strategies.responseStrategies.*;
+import pl.slowly.team.client.connection.Strategies.packetStrategies.DeleteBulletinBroadcastStrategy;
+import pl.slowly.team.client.connection.Strategies.packetStrategies.SendNewBulletinBroadcastStrategy;
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.helpers.Credentials;
@@ -104,26 +107,26 @@ public class ClientController {
         public void run() {
             try {
                 while (true) {
-                    Response serverResponse = getResponse();
-                    if (serverResponse == null)
+                    Packet serverPacket = getResponse();
+                    if (serverPacket == null)
                         return;
 
-                    Strategy strategy = strategyMap.get(serverResponse.getClass());
+                    Strategy strategy = strategyMap.get(serverPacket.getClass());
 
                     if (!strategy.equals(null)) {
-                        strategy.execute(serverResponse);
+                        strategy.execute(serverPacket);
                     } else {
                         System.out.println("Nieznana strategia");
                     }
 
                     // tutaj aktualizacja widoku
-//                    System.out.println(serverResponse.getResponseStatus().toString());
-//                    if (serverResponse instanceof Response) {
-//                        Response logInResponse = (Response) serverResponse;
+//                    System.out.println(serverPacket.getResponseStatus().toString());
+//                    if (serverPacket instanceof Response) {
+//                        Response logInResponse = (Response) serverPacket;
 //                        LoginScreenController loginScreenController = (LoginScreenController) screensController.getControlledScreen(GUI.loginScreenID);
 //                        loginScreenController.logInResponse(logInResponse);
 //                    }
-//                    List<? extends Entity> entities = serverResponse.getEntities();
+//                    List<? extends Entity> entities = serverPacket.getEntities();
 //                    if (entities != null) {
 //                        for (Entity entity : entities) {
 //                            System.out.print(entity);
@@ -136,10 +139,10 @@ public class ClientController {
             }
         }
 
-        private Response getResponse() throws IOException, ClassNotFoundException {
+        private Packet getResponse() throws IOException, ClassNotFoundException {
             synchronized (socket) {
                 if (!socket.isClosed()) {
-                    return (Response) inputStream.readObject();
+                    return (Packet) inputStream.readObject();
                 }
                 return null;
             }

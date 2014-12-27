@@ -1,6 +1,7 @@
-package pl.slowly.team.client.connection.strategies;
+package pl.slowly.team.client.connection.Strategies;
 
 import pl.slowly.team.client.GUI.ScreensController;
+import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.response.Response;
 
 /**
@@ -14,5 +15,5 @@ public abstract class Strategy {
         this.screensController = screensController;
     }
 
-    public abstract void execute(final Response response);
+    public abstract void execute(Packet responsePacket);
 }

@@ -61,7 +61,7 @@ public class ScreensController extends StackPane {
         System.out.println("show");
         if (!getChildren().isEmpty()) {
             //getChildren().get(0).setDisable(true);
-            getChildren().add(1, screens.get("progressScreen").getKey());
+            getChildren().add(screens.get("progressScreen").getKey());
             setOpacity(0.5f);
             return true;
         } else {
@@ -72,7 +72,7 @@ public class ScreensController extends StackPane {
     public boolean hideProgressScreen() {
         System.out.println("hide");
         if (!getChildren().isEmpty()) {
-            getChildren().remove(1);
+            getChildren().remove(screens.get("progressScreen").getKey());
             setOpacity(1.0f);
             //getChildren().get(0).setDisable(false);
             return true;

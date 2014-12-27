@@ -66,6 +66,7 @@ public class MainViewController implements ControlledScreen, Initializable {
                 }
             } else if (event.getTarget().toString().contains("edit")) {
                 bulletinGraphic.setVisible(false);
+                editNewBulletin.getStyleClass().remove("failure");
                 editNewBulletin.setBulletinGraphic(bulletinGraphic);
                 editNewBulletin.setStyle("-fx-background-color: " + bulletinGraphic.getBackground().getFills().get(0).getFill().toString().substring(2) + ";");
                 editNewBulletin.setTitle(bulletinGraphic.getTitle());
@@ -90,23 +91,46 @@ public class MainViewController implements ControlledScreen, Initializable {
             } else if (ed.getTarget().toString().contains("accept")) {
                 BulletinGraphic bulletinGraphic = editNewBulletin.getBulletinGraphic();
                 if (bulletinGraphic != null) {
-                    int bulletinNumber = bulletinGraphic.getBulletinNumber();
-                    for (Bulletin bul : bulletinsList) {
-                        if (bul.getBulletinId() == bulletinNumber) {
-                            bul.setBulletinTitle(editNewBulletin.getTitle());
-                            bul.setBulletinContent(editNewBulletin.getContent());
-                            break;
-                        }
-                    }
-                    bulletinGraphic.setVisible(true);
-                    setPage(curPage);
+                    //TODO polaczyc dodawanie ogloszenia z serwerwem
+//                    int bulletinNumber = bulletinGraphic.getBulletinNumber();
+//                    for (Bulletin bul : bulletinsList) {
+//                        if (bul.getBulletinId() == bulletinNumber) {
+//                            bul.setBulletinTitle(editNewBulletin.getTitle());
+//                            bul.setBulletinContent(editNewBulletin.getContent());
+//                            break;
+//                        }
+//                    }
+//                    bulletinGraphic.setVisible(true);
+//                    setPage(curPage);
+//                    screensController.hideOnScreen();
                 } else {
-                    bulletinsList.add(0, new Bulletin(new Random().nextInt(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
-                    setPage(curPage = 1);
+                    try {
+                        editNewBulletin.setDisable(true);
+                        screensController.showProgressScreen();
+                        clientController.addBulletin(editNewBulletin.getTitle(), editNewBulletin.getContent());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //bulletinsList.add(0, new Bulletin(new Random().nextInt(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
+                    //setPage(curPage = 1);
                 }
-                screensController.hideOnScreen();
             }
         };
+    }
+
+    public void addBulletinToView(int bulletinID) {
+        editNewBulletin.setDisable(false);
+        Platform.runLater(screensController::hideProgressScreen);
+        if (bulletinID > 0) {
+            bulletinsList.add(0, new Bulletin(bulletinID, editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
+            Platform.runLater(() -> {
+                setPage(curPage = 1);
+                screensController.hideOnScreen();
+            });
+        } else {
+            editNewBulletin.getStyleClass().add("failure");
+        }
+
     }
 
     @Override
@@ -230,6 +254,7 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     public void addNote(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
+            editNewBulletin.getStyleClass().remove("failure");
             editNewBulletin.setBulletinGraphic(null);
             editNewBulletin.setStyle("-fx-background-color: white;");
             editNewBulletin.setTitle(null);

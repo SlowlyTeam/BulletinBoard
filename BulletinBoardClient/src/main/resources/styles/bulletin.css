@@ -32,12 +32,15 @@
     /*-fx-border-color: black;*/
     /*-fx-border-style: solid;*/
 }
+
 .accept {
     -fx-background-image: url("../images/accept.png");
 }
+
 .delete {
     -fx-background-image: url("../images/cancel.png");
 }
+
 .delete, .accept {
     -fx-background-repeat: no-repeat;
     -fx-background-size: 75%;
@@ -64,4 +67,10 @@
     font-style: normal;
     font-weight: 400;
     src: url('../fonts/ReenieBeanie.ttf');
+}
+
+.failure {
+    -fx-border-color: red;
+    -fx-border-style: solid;
+    -fx-border-width: 3px;
 }

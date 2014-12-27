@@ -39,7 +39,11 @@ public class LoginScreenController implements ControlledScreen {
 
     public void login() throws IOException {
         screensController.showProgressScreen();
-        clientController.logIn(login.getText(), password.getText());
+        if (login.getText().isEmpty() || password.getText().isEmpty()) {
+            done(false);
+        } else {
+            clientController.logIn(login.getText(), password.getText());
+        }
     }
 
     public void logInResponse(LogInResponse logInResponse) {

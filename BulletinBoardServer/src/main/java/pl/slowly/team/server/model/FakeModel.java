@@ -12,6 +12,20 @@ import java.util.Random;
 
 public class FakeModel implements IModel {
 
+    private final List<Bulletin> bulletinList;
+    private final List<Category> categoryList;
+    private final Random random;
+
+    public FakeModel() {
+        bulletinList = new ArrayList<>();
+        categoryList = new ArrayList<>();
+        random = new Random();
+        for (int i = 0; i < 100; ++i)
+            bulletinList.add(new Bulletin(random.nextInt(), "Note #" + i, "content number #" + i, random.nextBoolean()));
+        for (int i = 0; i < 20; ++i)
+            categoryList.add(new Category("kat. " + i, random.nextInt()));
+    }
+
     @Override
     public boolean checkCredentials(Credentials credentials) {
         return true;
@@ -19,11 +33,7 @@ public class FakeModel implements IModel {
 
     @Override
     public List<Category> getCategories() {
-        List<Category> l = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < 20; ++i)
-            l.add(new Category("kat. " + i, random.nextInt()));
-        return l;
+        return categoryList;
     }
 
     @Override
@@ -37,7 +47,8 @@ public class FakeModel implements IModel {
 
     @Override
     public Integer addBulletin(Bulletin bulletin, String username) {
-        return new Random().nextInt();
+        int randomInt = random.nextInt();
+        return randomInt < 0 ? -1 : randomInt;
     }
 
     @Override
@@ -47,12 +58,6 @@ public class FakeModel implements IModel {
 
     @Override
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, int clientID) {
-        System.out.println(categoriesIds);
-        Random random = new Random();
-        List<Bulletin> l = new ArrayList<>();
-        for (int i = 0; i < 100; ++i) {
-            l.add(new Bulletin(new Random().nextInt(), "Note #" + i, "content number #" + i, random.nextBoolean()));
-        }
-        return l;
+        return bulletinList;
     }
 }
