@@ -22,4 +22,6 @@ public interface IModel {
     public boolean deleteBulletin(int bulletinId, String username);
     /** Returns bulletins from specified categories, from optional date since. */
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, int clientID);
+    /** Returns success or failure as boolean. */
+    public boolean editBulletin(Bulletin bulletin, String username);
 }

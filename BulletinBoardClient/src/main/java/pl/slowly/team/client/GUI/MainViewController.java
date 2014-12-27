@@ -51,14 +51,6 @@ public class MainViewController implements ControlledScreen, Initializable {
             int bulletinNumber = bulletinGraphic.getBulletinNumber();
 
             if (event.getTarget().toString().contains("delete")) {
-//                for (Bulletin bul : bulletinsList) {
-//                    if (bul.getBulletinId() == bulletinNumber) {
-//                        bulletinsList.remove(bul);
-//                        break;
-//                    }
-//                }
-//                bulletinBoardScreen.remove(bulletinGraphic);
-//                Platform.runLater(() -> screensController.showProgressScreen());
                 try {
                     clientController.deleteBulletin(bulletinNumber);
                 } catch (IOException e) {
@@ -98,7 +90,9 @@ public class MainViewController implements ControlledScreen, Initializable {
                 BulletinGraphic bulletinGraphic = editNewBulletin.getBulletinGraphic();
                 if (bulletinGraphic != null) {
                     try {
-                        clientController.addBulletin(bulletinGraphic.getTitle(), bulletinGraphic.getContent());
+                        System.out.println("Editing bulletin...");
+                        clientController.editBulletin(
+                                new Bulletin(bulletinGraphic.getBulletinNumber(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -145,6 +139,34 @@ public class MainViewController implements ControlledScreen, Initializable {
         else {
 //            Platform.runLater(() -> screensController.hideProgressScreen());
             // info dla usera
+        }
+    }
+
+    public void editUserBulletinInView(Bulletin bulletin) {
+        if (bulletin == null) {
+            // show info ze nie udalo sie dokonac edycji bulletinu
+            return;
+        }
+        for (int i = 0; i < bulletinsList.size(); i++) {
+            if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
+                System.out.println("Editing bulletin.");
+                bulletinsList.set(i, bulletin);
+                Platform.runLater(() -> {
+                    setPage(curPage = 1);
+                    screensController.hideOnScreen();
+                });
+                break;
+            }
+        }
+    }
+
+    public void editBulletinInView(Bulletin bulletin) {
+        for (int i = 0; i < bulletinsList.size(); i++) {
+            if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
+                System.out.println("Editing bulletin.");
+                bulletinsList.set(i, bulletin);
+                break;
+            }
         }
     }
 
@@ -328,4 +350,5 @@ public class MainViewController implements ControlledScreen, Initializable {
     public void setCategory(Integer categoryID) {
         this.categoryID = categoryID;
     }
+
 }

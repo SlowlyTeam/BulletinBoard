@@ -63,4 +63,9 @@ public class FakeModel implements IModel {
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, int clientID) {
         return bulletinList;
     }
+
+    @Override
+    public boolean editBulletin(Bulletin bulletin, String username) {
+        return true;
+    }
 }

@@ -3,6 +3,7 @@ package pl.slowly.team.client.connection;
 import pl.slowly.team.client.GUI.ScreensController;
 import pl.slowly.team.client.connection.strategies.Strategy;
 import pl.slowly.team.client.connection.strategies.packetStrategies.DeleteBulletinBroadcastStrategy;
+import pl.slowly.team.client.connection.strategies.packetStrategies.EditBulletinBroadcastStrategy;
 import pl.slowly.team.client.connection.strategies.packetStrategies.SendNewBulletinBroadcastStrategy;
 import pl.slowly.team.client.connection.strategies.responseStrategies.*;
 import pl.slowly.team.common.data.Bulletin;
@@ -11,6 +12,7 @@ import pl.slowly.team.common.packets.helpers.Credentials;
 import pl.slowly.team.common.packets.request.Request;
 import pl.slowly.team.common.packets.request.authorization.LogInRequest;
 import pl.slowly.team.common.packets.request.broadcast.DeleteBulletinBroadcast;
+import pl.slowly.team.common.packets.request.broadcast.EditBulletinBroadcast;
 import pl.slowly.team.common.packets.request.broadcast.SendNewBulletinBroadcast;
 import pl.slowly.team.common.packets.request.connection.DisconnectFromServerRequest;
 import pl.slowly.team.common.packets.request.data.*;
@@ -50,6 +52,8 @@ public class ClientController {
         strategyMap.put(NotAuthorizedResponse.class, new NotAuthorizedResponseStrategy(screensController));
         strategyMap.put(SendNewBulletinBroadcast.class, new SendNewBulletinBroadcastStrategy(screensController));
         strategyMap.put(DeleteBulletinResponse.class, new DeleteBulletinResponseStrategy(screensController));
+        strategyMap.put(EditBulletinResponse.class, new EditBulletinResponseStrategy(screensController));
+        strategyMap.put(EditBulletinBroadcast.class, new EditBulletinBroadcastStrategy(screensController));
     }
 
     public boolean connectToServer() throws IOException {
@@ -76,6 +80,10 @@ public class ClientController {
 
     public void deleteBulletin(int bulletinId) throws IOException {
         sendRequest(new DeleteBulletinRequest(bulletinId));
+    }
+
+    public void editBulletin(Bulletin bulletin) throws IOException {
+        sendRequest(new EditBulletinRequest(bulletin));
     }
 
     public void getCategories() throws IOException {

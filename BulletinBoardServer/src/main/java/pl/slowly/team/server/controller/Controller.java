@@ -45,6 +45,7 @@ public class Controller {
         strategyMap.put(GetUserBulletinsRequest.class, new GetUserBulletinsStrategy(server, model));
         strategyMap.put(GetBulletinsRequest.class, new GetBulletinsStrategy(server, model));
         strategyMap.put(DisconnectFromServerRequest.class, new DisconnectFromServerStrategy(server, model));
+        strategyMap.put(EditBulletinRequest.class, new EditBulletinStrategy(server, model));
     }
 
     /**
