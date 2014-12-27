@@ -47,4 +47,6 @@ public interface IServer {
      * Checks if user is authorized, so the controller can execute the strategy.
      */
     public boolean isAuthorized(int userId);
+
+    public void disconnectClient(int clientId) throws IOException;
 }

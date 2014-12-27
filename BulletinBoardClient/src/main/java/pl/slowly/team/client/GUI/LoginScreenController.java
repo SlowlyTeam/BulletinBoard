@@ -66,6 +66,13 @@ public class LoginScreenController implements ControlledScreen {
 
     public void close(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
+            try {
+                clientController.disconnectFromServer();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             ((Stage) login.getScene().getWindow()).close();
         }
     }

@@ -102,23 +102,14 @@ public class MultiThreadedServer implements IServer, Runnable {
         return test;
     }
 
-    // TODO dodać sensowne rozłączanie z klientem jeżeli on wyśle taką prośbę.
-    // TODO spojrzeć na wątki które trzeba będzie zamknąć.
-//    public boolean endConnectionWithClient(int clientId) {
-//        synchronized (clientMap) {
-//            ClientInfo clientInfo = clientMap.get(clientId);
-//        }
-//    }
-
     /**
      * Remove client's socket info from the map.
      *
      * @param id identifier of the client who is now on the list
      * @return True when removed client from the map
      */
-    public boolean removeClientFromMap(final Integer id) {
+    public boolean removeClientFromMap(final int id) {
         boolean test = false;
-        //Prevent from removing client from the map when sth is sending directly to him
         synchronized (clientMap) {
             if (clientMap.get(id) != null) {
                 if (clientMap.remove(id) != null) {
@@ -199,6 +190,19 @@ public class MultiThreadedServer implements IServer, Runnable {
         }
     }
 
+    @Override
+    public void disconnectClient(int clientId) throws IOException {
+        synchronized (clientMap) {
+            Socket socket = clientMap.get(clientId).getClientSocket();
+            if (!socket.isClosed()) {
+                clientMap.get(clientId).getClientSocket().close();
+                System.out.println("Connection with client closed");
+            }
+            System.out.println("Connection with client closed by one of sides.");
+            clientMap.remove(clientId);
+        }
+    }
+
     /**
      * Increments client dynamic Id, so each client can be uniquely identified.
      */
@@ -207,10 +211,6 @@ public class MultiThreadedServer implements IServer, Runnable {
             currentClientId++;
         }
     }
-
-    //TODO - Add service for user verification by login and/or password and comparing it with database's data
-    //Send some information packets between client and server about that.
-    //In case of failed log into system user should be informed by sending appropriate statement
 
     /**
      * New connection for a client in separate thread.
@@ -233,12 +233,13 @@ public class MultiThreadedServer implements IServer, Runnable {
             }
         }
 
-        void closeClientsConnection() {
-            //TODO remove client with specified id
+        public void closeClientConnection() {
             removeClientFromMap(clientId);
             try {
-                oin.close();
-                clientSocket.close();
+                if (!clientSocket.isClosed()) {
+                    System.out.println("Connection closed with " + clientId);
+                    clientSocket.close();
+                }
             } catch (final IOException e1) {
                 e1.printStackTrace();
             }
@@ -257,7 +258,7 @@ public class MultiThreadedServer implements IServer, Runnable {
             } catch (IOException | ClassNotFoundException e) {
                 // Broken connection
                 //TODO - event connection broken for specified client - optional
-                closeClientsConnection();
+                closeClientConnection();
             }
         }
     }

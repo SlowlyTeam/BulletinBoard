@@ -58,6 +58,7 @@ public class MainViewController implements ControlledScreen, Initializable {
 //                    }
 //                }
 //                bulletinBoardScreen.remove(bulletinGraphic);
+//                Platform.runLater(() -> screensController.showProgressScreen());
                 try {
                     clientController.deleteBulletin(bulletinNumber);
                 } catch (IOException e) {
@@ -133,21 +134,31 @@ public class MainViewController implements ControlledScreen, Initializable {
         }
     }
 
-    public void deleteBulletinFromView(int bulletinId) {
-        editNewBulletin.setDisable(false);
-        Platform.runLater(screensController::hideProgressScreen);
-        if (bulletinId > 0) {
-            for (Bulletin bul : bulletinsList) {
-                if (bul.getBulletinId() == bulletinId) {
-                    System.out.println("Usunalem bulletin.");
-                    bulletinsList.remove(bul);
-                    break;
-                }
-            }
-        } else {
-            editNewBulletin.getStyleClass().add("failure");
+    /**
+     * Call method after trying to delete bulletin and getting response.
+     */
+    public void deletedBulletinInfo(boolean success) {
+        if (success) {
+//            Platform.runLater(() -> screensController.hideProgressScreen());
+            // info dla usera
         }
-//        bulletinBoardScreen.remove(bulletinGraphic);
+        else {
+//            Platform.runLater(() -> screensController.hideProgressScreen());
+            // info dla usera
+        }
+    }
+
+    /**
+     * Delete bulletin after broadcast message.
+     */
+    public void deleteBulletinFromView(int bulletinId) {
+        for (Bulletin bul : bulletinsList) {
+            if (bul.getBulletinId() == bulletinId) {
+                if (bulletinsList.remove(bul))
+                    System.out.println("Usunalem bulletin.");
+                break;
+            }
+        }
     }
 
     /**
@@ -203,6 +214,13 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     public void close(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
+            try {
+                clientController.disconnectFromServer();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             ((Stage) exitImage.getScene().getWindow()).close();
         }
     }

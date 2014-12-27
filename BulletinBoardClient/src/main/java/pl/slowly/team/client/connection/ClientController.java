@@ -61,7 +61,7 @@ public class ClientController {
         return true;
     }
 
-    private void disconnectFromServer() throws IOException, InterruptedException {
+    public void disconnectFromServer() throws IOException, InterruptedException {
         sendRequest(new DisconnectFromServerRequest());
     }
 
@@ -95,13 +95,6 @@ public class ClientController {
         System.out.println("Wysłano żądanie...");
     }
 
-    public void close() throws IOException, InterruptedException {
-//        inputStream.close();
-//        outputStream.close();
-//        socket.close();
-//        serverResponseListener.join();
-    }
-
     public class ServerResponseListener extends Thread {
 
         @Override
@@ -118,19 +111,23 @@ public class ClientController {
                         strategy.execute(serverPacket);
                     } else {
                         System.out.println("Nieznana strategia");
-                    }}
+                    }
+                }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
+                // TODO dodać w widoku jakaś informację, która po kliknieciu okej zamknie aplikację.
+                System.exit(0);
             }
         }
 
         private Packet getResponse() throws IOException, ClassNotFoundException {
-            synchronized (socket) {
-                if (!socket.isClosed()) {
-                    return (Packet) inputStream.readObject();
-                }
-                return null;
+            if (!socket.isClosed()) {
+                return (Packet) inputStream.readObject();
             }
+            else {
+                System.out.println("gniazdo zostało zamkniete.");
+            }
+            return null;
         }
     }
 }
