@@ -51,13 +51,18 @@ public class MainViewController implements ControlledScreen, Initializable {
             int bulletinNumber = bulletinGraphic.getBulletinNumber();
 
             if (event.getTarget().toString().contains("delete")) {
-                for (Bulletin bul : bulletinsList) {
-                    if (bul.getBulletinId() == bulletinNumber) {
-                        bulletinsList.remove(bul);
-                        break;
-                    }
+//                for (Bulletin bul : bulletinsList) {
+//                    if (bul.getBulletinId() == bulletinNumber) {
+//                        bulletinsList.remove(bul);
+//                        break;
+//                    }
+//                }
+//                bulletinBoardScreen.remove(bulletinGraphic);
+                try {
+                    clientController.deleteBulletin(bulletinNumber);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                bulletinBoardScreen.remove(bulletinGraphic);
 
                 if ((curPage - 1) * 6 == bulletinsList.size() && curPage != 1)
                     setPage(--curPage);
@@ -91,18 +96,11 @@ public class MainViewController implements ControlledScreen, Initializable {
             } else if (ed.getTarget().toString().contains("accept")) {
                 BulletinGraphic bulletinGraphic = editNewBulletin.getBulletinGraphic();
                 if (bulletinGraphic != null) {
-                    //TODO polaczyc dodawanie ogloszenia z serwerwem
-//                    int bulletinNumber = bulletinGraphic.getBulletinNumber();
-//                    for (Bulletin bul : bulletinsList) {
-//                        if (bul.getBulletinId() == bulletinNumber) {
-//                            bul.setBulletinTitle(editNewBulletin.getTitle());
-//                            bul.setBulletinContent(editNewBulletin.getContent());
-//                            break;
-//                        }
-//                    }
-//                    bulletinGraphic.setVisible(true);
-//                    setPage(curPage);
-//                    screensController.hideOnScreen();
+                    try {
+                        clientController.addBulletin(bulletinGraphic.getTitle(), bulletinGraphic.getContent());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     try {
                         editNewBulletin.setDisable(true);
@@ -118,7 +116,10 @@ public class MainViewController implements ControlledScreen, Initializable {
         };
     }
 
-    public void addBulletinToView(int bulletinID) {
+    /**
+     * Add bulletin after successfully processed request to add new bulletin.
+     */
+    public void addUserBulletinToView(int bulletinID) {
         editNewBulletin.setDisable(false);
         Platform.runLater(screensController::hideProgressScreen);
         if (bulletinID > 0) {
@@ -130,7 +131,17 @@ public class MainViewController implements ControlledScreen, Initializable {
         } else {
             editNewBulletin.getStyleClass().add("failure");
         }
+    }
 
+    /**
+     * Adding bulletin after broadcast message.
+     */
+    public void addBulletinToView(int bulletinID, String bulletinTitle, String bulletinContent) {
+        bulletinsList.add(0, new Bulletin(bulletinID, bulletinTitle, bulletinContent, false));
+        Platform.runLater(() -> {
+            setPage(curPage = 1);
+            screensController.hideOnScreen();
+        });
     }
 
     @Override

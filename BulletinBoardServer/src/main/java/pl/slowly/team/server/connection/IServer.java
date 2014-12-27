@@ -36,7 +36,7 @@ public interface IServer {
      * @param pack Packet to send to clients.
      * @return True when correctly sended broadcast.
      */
-    public boolean sendBroadcastPacket(Packet pack);
+    public boolean sendBroadcastPacket(Packet pack, int clientOwnerId);
 
     /**
      * Returns username for specified client id.

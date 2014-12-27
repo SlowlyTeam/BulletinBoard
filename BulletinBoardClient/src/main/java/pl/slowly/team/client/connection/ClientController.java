@@ -70,6 +70,7 @@ public class ClientController {
     }
 
     public void addBulletin(String bulletinTitle, String bulletinContent) throws IOException {
+        System.out.println("Żądanie: dodaj nowy bulletin.");
         sendRequest(new AddBulletinRequest(new Bulletin(bulletinTitle, bulletinContent)));
     }
 
@@ -91,7 +92,7 @@ public class ClientController {
 
     public void sendRequest(Request request) throws IOException {
         outputStream.writeObject(request);
-        System.out.println("wysyłanie żądania...");
+        System.out.println("Wysłano żądanie...");
     }
 
     public void close() throws IOException, InterruptedException {
@@ -117,23 +118,7 @@ public class ClientController {
                         strategy.execute(serverPacket);
                     } else {
                         System.out.println("Nieznana strategia");
-                    }
-
-                    // tutaj aktualizacja widoku
-//                    System.out.println(serverPacket.getResponseStatus().toString());
-//                    if (serverPacket instanceof Response) {
-//                        Response logInResponse = (Response) serverPacket;
-//                        LoginScreenController loginScreenController = (LoginScreenController) screensController.getControlledScreen(GUI.loginScreenID);
-//                        loginScreenController.logInResponse(logInResponse);
-//                    }
-//                    List<? extends Entity> entities = serverPacket.getEntities();
-//                    if (entities != null) {
-//                        for (Entity entity : entities) {
-//                            System.out.print(entity);
-//                        }
-//                    }
-//                    System.out.println();
-                }
+                    }}
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }

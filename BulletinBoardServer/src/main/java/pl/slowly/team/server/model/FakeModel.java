@@ -15,6 +15,7 @@ public class FakeModel implements IModel {
     private final List<Bulletin> bulletinList;
     private final List<Category> categoryList;
     private final Random random;
+    private int test_i;
 
     public FakeModel() {
         bulletinList = new ArrayList<>();
@@ -24,6 +25,7 @@ public class FakeModel implements IModel {
             bulletinList.add(new Bulletin(random.nextInt(), "Note #" + i, "content number #" + i, random.nextBoolean()));
         for (int i = 0; i < 20; ++i)
             categoryList.add(new Category("kat. " + i, random.nextInt()));
+        test_i = 0;
     }
 
     @Override
@@ -47,8 +49,9 @@ public class FakeModel implements IModel {
 
     @Override
     public Integer addBulletin(Bulletin bulletin, String username) {
-        int randomInt = random.nextInt();
-        return randomInt < 0 ? -1 : randomInt;
+//        int randomInt = random.nextInt();
+//        return randomInt < 0 ? -1 : randomInt;
+        return ++test_i;
     }
 
     @Override

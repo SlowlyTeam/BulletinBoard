@@ -33,7 +33,7 @@ public class AddBulletinStrategy extends Strategy {
         if (bulletinId > 0) {
             server.sendResponseToClient(new AddBulletinResponse(ResponseStatus.OK, bulletinId), clientId);
             bulletin.setBulletinId(bulletinId);
-            server.sendBroadcastPacket(new SendNewBulletinBroadcast(bulletin));
+            server.sendBroadcastPacket(new SendNewBulletinBroadcast(bulletin), clientId);
         } else {
             server.sendResponseToClient(new AddBulletinResponse(ResponseStatus.ERROR), clientId);
         }

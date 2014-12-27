@@ -164,15 +164,17 @@ public class MultiThreadedServer implements IServer, Runnable {
      * @return True when correctly sent packets to all the clients.
      */
     @Override
-    public boolean sendBroadcastPacket(Packet packet) {
+    public boolean sendBroadcastPacket(Packet packet, int clientOwnerId) {
+        ClientInfo clientOwnerInfo = clientMap.get(clientOwnerId);
         for (ClientInfo clientInfo : clientMap.values()) {
-
             if (clientInfo == null) {
                 return false;
             }
 
             try {
-                clientInfo.getOout().writeObject(packet);
+                if (clientInfo != clientOwnerInfo) {
+                    clientInfo.getOout().writeObject(packet);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 LOGGER.error(e);

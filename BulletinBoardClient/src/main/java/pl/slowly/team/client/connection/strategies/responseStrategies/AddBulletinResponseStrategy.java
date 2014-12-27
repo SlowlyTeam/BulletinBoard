@@ -18,10 +18,11 @@ public class AddBulletinResponseStrategy extends Strategy {
 
     @Override
     public void execute(Packet responsePacket) {
+        System.out.println("Odpowiedz po probie dodania bulletinu.");
         AddBulletinResponse addBulletinResponse = (AddBulletinResponse) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         if (addBulletinResponse.getResponseStatus() != ResponseStatus.ERROR)
-            mainViewController.addBulletinToView(addBulletinResponse.getBulletinId());
-        else mainViewController.addBulletinToView(-1);
+            mainViewController.addUserBulletinToView(addBulletinResponse.getBulletinId());
+        else mainViewController.addUserBulletinToView(-1);
     }
 }
