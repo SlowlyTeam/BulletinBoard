@@ -4,7 +4,6 @@ import pl.slowly.team.common.packets.helpers.Credentials;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.authorization.LogInRequest;
 import pl.slowly.team.common.packets.response.LogInResponse;
-import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;

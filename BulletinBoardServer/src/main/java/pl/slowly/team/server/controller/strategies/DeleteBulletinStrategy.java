@@ -1,10 +1,7 @@
 package pl.slowly.team.server.controller.strategies;
 
-import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.broadcast.DeleteBulletinBroadcast;
 import pl.slowly.team.common.packets.request.data.DeleteBulletinRequest;
-import pl.slowly.team.common.packets.response.DeleteBulletinResponse;
-import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
@@ -29,11 +26,12 @@ public class DeleteBulletinStrategy extends Strategy {
         int bulletinId = deleteBulletin.getBulletinId();
         boolean result = model.deleteBulletin(bulletinId, server.getUsername(clientId));
         if (result) {
-            server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.OK), clientId);
-//            server.sendBroadcastPacket(new DeleteBulletinBroadcast(bulletinId));
+            // TODO dodać odpowiedź do klienta
+//            server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.OK), clientId);
+            server.sendBroadcastPacket(new DeleteBulletinBroadcast(bulletinId), -1);
         }
-        else {
-            server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.ERROR), clientId);
-        }
+//        else {
+//            server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.ERROR), clientId);
+//        }
     }
 }

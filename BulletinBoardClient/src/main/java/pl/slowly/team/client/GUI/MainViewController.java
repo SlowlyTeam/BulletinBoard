@@ -133,6 +133,23 @@ public class MainViewController implements ControlledScreen, Initializable {
         }
     }
 
+    public void deleteBulletinFromView(int bulletinId) {
+        editNewBulletin.setDisable(false);
+        Platform.runLater(screensController::hideProgressScreen);
+        if (bulletinId > 0) {
+            for (Bulletin bul : bulletinsList) {
+                if (bul.getBulletinId() == bulletinId) {
+                    System.out.println("Usunalem bulletin.");
+                    bulletinsList.remove(bul);
+                    break;
+                }
+            }
+        } else {
+            editNewBulletin.getStyleClass().add("failure");
+        }
+//        bulletinBoardScreen.remove(bulletinGraphic);
+    }
+
     /**
      * Adding bulletin after broadcast message.
      */

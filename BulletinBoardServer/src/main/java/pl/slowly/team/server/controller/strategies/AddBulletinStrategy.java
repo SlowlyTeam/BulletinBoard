@@ -5,13 +5,11 @@ import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.broadcast.SendNewBulletinBroadcast;
 import pl.slowly.team.common.packets.request.data.AddBulletinRequest;
 import pl.slowly.team.common.packets.response.AddBulletinResponse;
-import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
 
 import java.io.IOException;
-import java.util.Random;
 
 /**
  * Strategy executed when user wants to add new bulletin.

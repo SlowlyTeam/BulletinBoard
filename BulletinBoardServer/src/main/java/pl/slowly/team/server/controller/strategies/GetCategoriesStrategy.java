@@ -4,7 +4,6 @@ import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.data.GetCategoriesRequest;
 import pl.slowly.team.common.packets.response.GetCategoriesListResponse;
-import pl.slowly.team.common.packets.response.Response;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
