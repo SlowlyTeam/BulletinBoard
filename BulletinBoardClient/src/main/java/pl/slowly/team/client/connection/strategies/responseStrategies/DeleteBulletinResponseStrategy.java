@@ -14,6 +14,5 @@ public class DeleteBulletinResponseStrategy extends Strategy {
 
     @Override
     public void execute(Packet responsePacket) {
-        //TODO
     }
 }
