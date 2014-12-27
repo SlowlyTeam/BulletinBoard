@@ -1,8 +1,7 @@
-package pl.slowly.team.client.connection.Strategies;
+package pl.slowly.team.client.connection.strategies;
 
 import pl.slowly.team.client.GUI.ScreensController;
 import pl.slowly.team.common.packets.Packet;
-import pl.slowly.team.common.packets.response.Response;
 
 /**
  * Created by Maxym on 2014-12-23.

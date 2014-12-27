@@ -1,7 +1,7 @@
-package pl.slowly.team.client.connection.Strategies.packetStrategies;
+package pl.slowly.team.client.connection.strategies.packetStrategies;
 
 import pl.slowly.team.client.GUI.ScreensController;
-import pl.slowly.team.client.connection.Strategies.Strategy;
+import pl.slowly.team.client.connection.strategies.Strategy;
 import pl.slowly.team.common.packets.Packet;
 
 /**

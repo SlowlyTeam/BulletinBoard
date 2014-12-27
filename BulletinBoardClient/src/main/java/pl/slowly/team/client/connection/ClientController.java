@@ -1,10 +1,10 @@
 package pl.slowly.team.client.connection;
 
 import pl.slowly.team.client.GUI.ScreensController;
-import pl.slowly.team.client.connection.Strategies.Strategy;
-import pl.slowly.team.client.connection.Strategies.responseStrategies.*;
-import pl.slowly.team.client.connection.Strategies.packetStrategies.DeleteBulletinBroadcastStrategy;
-import pl.slowly.team.client.connection.Strategies.packetStrategies.SendNewBulletinBroadcastStrategy;
+import pl.slowly.team.client.connection.strategies.Strategy;
+import pl.slowly.team.client.connection.strategies.packetStrategies.DeleteBulletinBroadcastStrategy;
+import pl.slowly.team.client.connection.strategies.packetStrategies.SendNewBulletinBroadcastStrategy;
+import pl.slowly.team.client.connection.strategies.responseStrategies.*;
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.helpers.Credentials;
