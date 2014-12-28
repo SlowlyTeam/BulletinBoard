@@ -15,14 +15,8 @@ public class Credentials implements Serializable {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             byte[] bytesOfPassword = password.getBytes("UTF-8");
-            messageDigest.update(bytesOfPassword);
-            byte[] digest = messageDigest.digest();
-            BigInteger bigInt = new BigInteger(1, digest);
-            String passwordHash = bigInt.toString(16);
-            while (passwordHash.length() < 32) {
-                passwordHash = "0" + passwordHash;
-            }
-            this.passwordHash = passwordHash;
+            byte[] digest = messageDigest.digest(bytesOfPassword);
+            this.passwordHash = new BigInteger(1, digest).toString(16);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
