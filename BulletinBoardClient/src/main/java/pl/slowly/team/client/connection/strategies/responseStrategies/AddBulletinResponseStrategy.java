@@ -5,7 +5,6 @@ import pl.slowly.team.client.GUI.Screens;
 import pl.slowly.team.client.GUI.ScreensController;
 import pl.slowly.team.client.connection.strategies.Strategy;
 import pl.slowly.team.common.packets.Packet;
-import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.response.AddBulletinResponse;
 
 /**
@@ -21,8 +20,6 @@ public class AddBulletinResponseStrategy extends Strategy {
         System.out.println("Odpowiedz po probie dodania bulletinu.");
         AddBulletinResponse addBulletinResponse = (AddBulletinResponse) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
-        if (addBulletinResponse.getResponseStatus() != ResponseStatus.ERROR)
-            mainViewController.addUserBulletinToView(addBulletinResponse.getBulletinId());
-        else mainViewController.addUserBulletinToView(-1);
+        mainViewController.addUserBulletinToView(addBulletinResponse);
     }
 }

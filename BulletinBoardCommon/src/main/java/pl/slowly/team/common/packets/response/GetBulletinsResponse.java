@@ -13,4 +13,8 @@ public class GetBulletinsResponse extends Response {
     public GetBulletinsResponse(ResponseStatus responseStatus, @Nullable List<Bulletin> bulletins) {
         super(responseStatus, bulletins);
     }
+
+    public List<Bulletin> getBulletins() {
+        return (List<Bulletin>) getEntities();
+    }
 }

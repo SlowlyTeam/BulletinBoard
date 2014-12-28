@@ -14,6 +14,7 @@ public class ClientInfo {
     private final Socket clientSocket;
     private boolean authorized;
     private String username;
+    private int categoryID;
 
     public ClientInfo(ObjectOutputStream oout, Socket clientSocket) {
         this.oout = oout;
@@ -43,5 +44,13 @@ public class ClientInfo {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public int getCategoryID() {
+        return categoryID;
     }
 }

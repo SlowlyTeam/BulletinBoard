@@ -28,11 +28,10 @@ public class DeleteBulletinStrategy extends Strategy {
         int bulletinId = deleteBulletin.getBulletinId();
         boolean result = model.deleteBulletin(bulletinId, server.getUsername(clientId));
         if (result) {
-            server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.OK), clientId);
-            server.sendBroadcastPacket(new DeleteBulletinBroadcast(bulletinId), -1);
-        }
-        else {
-            server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.ERROR), clientId);
+            server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.OK, bulletinId), clientId);
+            server.sendBroadcastPacket(new DeleteBulletinBroadcast(bulletinId), clientId);
+        } else {
+            server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.ERROR, bulletinId), clientId);
         }
     }
 }

@@ -25,7 +25,7 @@ public interface IServer {
      * Sending package to specified client.
      *
      * @param response Packet to send to client.
-     * @param id   Identifier of the client.
+     * @param id       Identifier of the client.
      * @return True when correctly sended package.
      */
     public boolean sendResponseToClient(final Response response, Integer id) throws IOException;
@@ -49,4 +49,14 @@ public interface IServer {
     public boolean isAuthorized(int userId);
 
     public void disconnectClient(int clientId) throws IOException;
+
+    /**
+     * Set category for user.
+     */
+    public void setCategory(int clientID, int categoryID);
+
+    /**
+     * Get category assigned to user.
+     */
+    public int getCategory(int clientID);
 }

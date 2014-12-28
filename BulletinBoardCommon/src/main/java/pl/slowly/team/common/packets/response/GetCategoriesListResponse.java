@@ -13,4 +13,8 @@ public class GetCategoriesListResponse extends Response {
     public GetCategoriesListResponse(ResponseStatus responseStatus, @Nullable List<Category> categories) {
         super(responseStatus, categories);
     }
+
+    public List<Category> getCategories() {
+        return (List<Category>) getEntities();
+    }
 }

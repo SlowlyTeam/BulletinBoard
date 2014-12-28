@@ -3,7 +3,6 @@
  */
 package pl.slowly.team.client.GUI;
 
-import pl.slowly.team.client.connection.ClientController;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,11 +17,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import pl.slowly.team.client.connection.ClientController;
 import pl.slowly.team.common.data.Bulletin;
+import pl.slowly.team.common.packets.helpers.ResponseStatus;
+import pl.slowly.team.common.packets.response.AddBulletinResponse;
+import pl.slowly.team.common.packets.response.DeleteBulletinResponse;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainViewController implements ControlledScreen, Initializable {
@@ -56,12 +62,6 @@ public class MainViewController implements ControlledScreen, Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                if ((curPage - 1) * 6 == bulletinsList.size() && curPage != 1)
-                    setPage(--curPage);
-                else {
-                    setPage(curPage);
-                }
             } else if (event.getTarget().toString().contains("edit")) {
                 bulletinGraphic.setVisible(false);
                 editNewBulletin.getStyleClass().remove("failure");
@@ -74,20 +74,18 @@ public class MainViewController implements ControlledScreen, Initializable {
         };
 
         onEditAddNoteClick = ed -> {
-            if (ed instanceof KeyEvent && ((KeyEvent) ed).getCode() == KeyCode.ESCAPE) {
+            if ((ed instanceof KeyEvent && ((KeyEvent) ed).getCode() == KeyCode.ESCAPE) || ed.getTarget().toString().contains("delete")) {
                 if (editNewBulletin.getBulletinGraphic() != null) {
                     editNewBulletin.getBulletinGraphic().setVisible(true);
                 }
                 screensController.hideOnScreen();
                 return;
             }
-            if (ed.getTarget().toString().contains("delete")) {
-                if (editNewBulletin.getBulletinGraphic() != null) {
-                    editNewBulletin.getBulletinGraphic().setVisible(true);
-                }
-                screensController.hideOnScreen();
-            } else if (ed.getTarget().toString().contains("accept")) {
+            if (ed.getTarget().toString().contains("accept")) {
                 BulletinGraphic bulletinGraphic = editNewBulletin.getBulletinGraphic();
+                editNewBulletin.setDisable(true);
+                screensController.showProgressScreen();
+
                 if (bulletinGraphic != null) {
                     try {
                         System.out.println("Editing bulletin...");
@@ -98,88 +96,20 @@ public class MainViewController implements ControlledScreen, Initializable {
                     }
                 } else {
                     try {
-                        editNewBulletin.setDisable(true);
-                        screensController.showProgressScreen();
                         clientController.addBulletin(editNewBulletin.getTitle(), editNewBulletin.getContent());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    //bulletinsList.add(0, new Bulletin(new Random().nextInt(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
-                    //setPage(curPage = 1);
                 }
             }
         };
     }
 
-    /**
-     * Add bulletin after successfully processed request to add new bulletin.
-     */
-    public void addUserBulletinToView(int bulletinID) {
-        editNewBulletin.setDisable(false);
-        Platform.runLater(screensController::hideProgressScreen);
-        if (bulletinID > 0) {
-            bulletinsList.add(0, new Bulletin(bulletinID, editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
-            Platform.runLater(() -> {
-                setPage(curPage = 1);
-                screensController.hideOnScreen();
-            });
-        } else {
-            editNewBulletin.getStyleClass().add("failure");
-        }
-    }
-
-    /**
-     * Call method after trying to delete bulletin and getting response.
-     */
-    public void deletedBulletinInfo(boolean success) {
-        if (success) {
-//            Platform.runLater(() -> screensController.hideProgressScreen());
-            // info dla usera
-        }
+    public void refresh() {
+        if ((curPage - 1) * 6 == bulletinsList.size() && curPage != 1)
+            Platform.runLater(() -> setPage(--curPage));
         else {
-//            Platform.runLater(() -> screensController.hideProgressScreen());
-            // info dla usera
-        }
-    }
-
-    public void editUserBulletinInView(Bulletin bulletin) {
-        if (bulletin == null) {
-            // show info ze nie udalo sie dokonac edycji bulletinu
-            return;
-        }
-        for (int i = 0; i < bulletinsList.size(); i++) {
-            if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
-                System.out.println("Editing bulletin.");
-                bulletinsList.set(i, bulletin);
-                Platform.runLater(() -> {
-                    setPage(curPage = 1);
-                    screensController.hideOnScreen();
-                });
-                break;
-            }
-        }
-    }
-
-    public void editBulletinInView(Bulletin bulletin) {
-        for (int i = 0; i < bulletinsList.size(); i++) {
-            if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
-                System.out.println("Editing bulletin.");
-                bulletinsList.set(i, bulletin);
-                break;
-            }
-        }
-    }
-
-    /**
-     * Delete bulletin after broadcast message.
-     */
-    public void deleteBulletinFromView(int bulletinId) {
-        for (Bulletin bul : bulletinsList) {
-            if (bul.getBulletinId() == bulletinId) {
-                if (bulletinsList.remove(bul))
-                    System.out.println("Usunalem bulletin.");
-                break;
-            }
+            Platform.runLater(() -> setPage(curPage));
         }
     }
 
@@ -194,6 +124,86 @@ public class MainViewController implements ControlledScreen, Initializable {
         });
     }
 
+    /**
+     * Add bulletin after successfully processed request to add new bulletin and getting response;
+     */
+    public void addUserBulletinToView(AddBulletinResponse deleteBulletinResponse) {
+        Platform.runLater(() -> {
+            editNewBulletin.setDisable(false);
+            screensController.hideProgressScreen();
+            if (deleteBulletinResponse.getResponseStatus() == ResponseStatus.OK) {
+                bulletinsList.add(0, new Bulletin(deleteBulletinResponse.getBulletinId(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
+                setPage(curPage = 1);
+                screensController.hideOnScreen();
+            } else {
+                editNewBulletin.getStyleClass().add("failure");
+            }
+        });
+    }
+
+    /**
+     * Call method after trying to delete bulletin and getting response.
+     */
+    public void deletedBulletinInfo(DeleteBulletinResponse deleteBulletinResponse) {
+        if (deleteBulletinResponse.getResponseStatus() == ResponseStatus.OK) {
+            deleteBulletinFromView(deleteBulletinResponse.getBulletinId());
+        } else {
+            //TODO dialog o nie niepowodzeniu usuniecia ogloszenia
+        }
+    }
+
+
+    /**
+     * Delete bulletin after broadcast message.
+     */
+    public void deleteBulletinFromView(int bulletinId) {
+        Bulletin bul = bulletinsList.stream().filter(bulletin -> bulletin.getBulletinId() == bulletinId).findFirst().get();
+        if (bulletinsList.remove(bul)) {
+            System.out.println("Usunalem bulletin");
+            Platform.runLater(this::refresh);
+        }
+    }
+
+    /**
+     * Edit bulletin after trying to edit bulletin and getting response from server;
+     */
+    public void editUserBulletinInView(Bulletin bulletin) {
+        editNewBulletin.setDisable(false);
+        Platform.runLater(screensController::hideProgressScreen);
+        if (bulletin == null) {
+            editNewBulletin.getStyleClass().add("failure");
+            return;
+        }
+
+        for (int i = 0; i < bulletinsList.size(); i++) {
+            if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
+
+                bulletinsList.set(i, bulletin);
+                System.out.println("Editing bulletin.");
+                Platform.runLater(() -> {
+                    setPage(curPage);
+                    screensController.hideOnScreen();
+                });
+                break;
+            }
+        }
+    }
+
+    /**
+     * Edit bulletin after broadcast message.
+     */
+    public void editBulletinInView(Bulletin bulletin) {
+        for (int i = 0; i < bulletinsList.size(); i++) {
+            if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
+                System.out.println("Editing bulletin.");
+                bulletinsList.set(i, bulletin);
+                break;
+            }
+            //TODO odswiezenie widoku jesli edytowane ogloszenie znajduje sie na aktualnie przegladanej stronie
+        }
+    }
+
+
     @Override
     public void setScreenController(ScreensController screenPage, ClientController clientController) {
         screensController = screenPage;
@@ -207,18 +217,6 @@ public class MainViewController implements ControlledScreen, Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        new Thread(() -> {
-//            for (int i = 0; i < 100; ++i) {
-//                bulletinsList.add(new Bulletin(i, "Note #" + i, "content number #" + i));
-//            }
-//            for (int k = 0; k < 6; ++k) {
-//                BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletinsList.get(k).getBulletinId(), bulletinsList.get(k).getBulletinTitle(), bulletinsList.get(k).getBulletinContent());
-//                bulletinGraphic.setOnMouseClicked(onNoteClick);
-//                Platform.runLater(() -> bulletinBoardScreen.addBulletin(bulletinGraphic));
-//            }
-//            Platform.runLater(() -> screensController.hideProgressScreen());
-//        }).start();
-
     }
 
     public void setBulletins(List<Bulletin> bulletinsList) {

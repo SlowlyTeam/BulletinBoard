@@ -22,7 +22,7 @@ public class GetBulletinsResponseStrategy extends Strategy {
     public void execute(Packet responsePacket) {
         GetBulletinsResponse getBulletinsResponse = (GetBulletinsResponse) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
-        List<Bulletin> bulletinList = (List<Bulletin>) getBulletinsResponse.getEntities();
+        List<Bulletin> bulletinList = getBulletinsResponse.getBulletins();
         mainViewController.setBulletins(bulletinList);
     }
 }

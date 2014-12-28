@@ -28,11 +28,17 @@ public class MultiThreadedServer implements IServer, Runnable {
     private ExecutorService threadPool = Executors.newFixedThreadPool(20);
     private ServerSocket serverSocket;
     private final int port;
-    /** Defines current client Id to be assigned for new client. 0 is reserved for server. */
+    /**
+     * Defines current client Id to be assigned for new client. 0 is reserved for server.
+     */
     private Integer currentClientId;
-    /** Map where key is unique client id and element is reference to clientSocket. */
+    /**
+     * Map where key is unique client id and element is reference to clientSocket.
+     */
     private final Map<Integer, ClientInfo> clientMap;
-    /** Reference to the event's queue which is transfer to a controller. */
+    /**
+     * Reference to the event's queue which is transfer to a controller.
+     */
     private final BlockingQueue<PacketWrapper> packetsQueue;
 
 
@@ -135,7 +141,7 @@ public class MultiThreadedServer implements IServer, Runnable {
      * Sending package to specified client.
      *
      * @param response Packet to send to client.
-     * @param clientId   Identifier of the client.
+     * @param clientId Identifier of the client.
      * @return True when correctly sent package.
      */
     @Override
@@ -163,7 +169,7 @@ public class MultiThreadedServer implements IServer, Runnable {
             }
 
             try {
-                if (clientInfo != clientOwnerInfo) {
+                if (clientInfo != clientOwnerInfo && clientOwnerInfo.getCategoryID() == clientInfo.getCategoryID()) {
                     clientInfo.getOout().writeObject(packet);
                 }
             } catch (IOException e) {
@@ -201,6 +207,16 @@ public class MultiThreadedServer implements IServer, Runnable {
             System.out.println("Connection with client closed by one of sides.");
             clientMap.remove(clientId);
         }
+    }
+
+    @Override
+    public void setCategory(int clientID, int categoryID) {
+        clientMap.get(clientID).setCategoryID(categoryID);
+    }
+
+    @Override
+    public int getCategory(int clientID) {
+        return clientMap.get(clientID).getCategoryID();
     }
 
     /**
