@@ -131,14 +131,16 @@ public class MainViewController implements ControlledScreen, Initializable {
         Platform.runLater(() -> {
             editNewBulletin.setDisable(false);
             screensController.hideProgressScreen();
-            if (deleteBulletinResponse.getResponseStatus() == ResponseStatus.OK) {
-                bulletinsList.add(0, new Bulletin(deleteBulletinResponse.getBulletinId(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
+        });
+        if (deleteBulletinResponse.getResponseStatus() == ResponseStatus.OK) {
+            bulletinsList.add(0, new Bulletin(deleteBulletinResponse.getBulletinId(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
+            Platform.runLater(() -> {
                 setPage(curPage = 1);
                 screensController.hideOnScreen();
-            } else {
-                editNewBulletin.getStyleClass().add("failure");
-            }
-        });
+            });
+        } else {
+            editNewBulletin.getStyleClass().add("failure");
+        }
     }
 
     /**
@@ -168,8 +170,12 @@ public class MainViewController implements ControlledScreen, Initializable {
      * Edit bulletin after trying to edit bulletin and getting response from server;
      */
     public void editUserBulletinInView(Bulletin bulletin) {
-        editNewBulletin.setDisable(false);
-        Platform.runLater(screensController::hideProgressScreen);
+
+        Platform.runLater(() -> {
+            editNewBulletin.setDisable(false);
+            screensController.hideProgressScreen();
+        });
+
         if (bulletin == null) {
             editNewBulletin.getStyleClass().add("failure");
             return;

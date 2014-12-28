@@ -61,6 +61,7 @@ public class FakeModel implements IModel {
 
     @Override
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, int clientID) {
+        //Aktualizacja aktualnie przegladanej kategorii przez uzytkownika w bazie danych
         return bulletinList;
     }
 
