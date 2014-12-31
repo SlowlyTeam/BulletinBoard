@@ -4,7 +4,6 @@ package pl.slowly.team.client.GUI;/*
  * and open the template in the editor.
  */
 
-import pl.slowly.team.client.connection.ClientController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -15,11 +14,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import pl.slowly.team.client.connection.ClientController;
 import pl.slowly.team.common.data.Category;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 /**
@@ -85,13 +87,21 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
         }
     }
 
+    public Category getCategory() {
+        return categoriesMap.get(categoriesList.getSelectionModel().getSelectedItem());
+    }
+
+    public void showWarning() {
+        warning.setVisible(true);
+    }
+
     public void goToNextScreen() {
         screensController.showProgressScreen();
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
-        Category category = categoriesMap.get(categoriesList.getSelectionModel().getSelectedItem());
+        Category category = getCategory();
         if (category == null) {
             screensController.hideProgressScreen();
-            warning.setVisible(true);
+            showWarning();
             return;
         }
         mainViewController.setCategory(category.getCategoryId());

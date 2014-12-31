@@ -17,11 +17,11 @@ public interface IModel {
     /** Returns bulletins for specified user. */
     public List<Bulletin> getUserBulletins(String username);
     /** Adds a bulletin to database for specified user. */
-    public Integer addBulletin(Bulletin bulletin, String username);
+    public Integer addBulletin(Bulletin bulletin, String username, int categoryID);
     /** Deletes the bulletin from database for specified user. */
     public boolean deleteBulletin(int bulletinId, String username);
     /** Returns bulletins from specified categories, from optional date since. */
-    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, int clientID);
+    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, String user);
     /** Returns success or failure as boolean. */
     public boolean editBulletin(Bulletin bulletin, String username);
 }

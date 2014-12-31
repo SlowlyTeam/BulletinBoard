@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pl.slowly.team.client.connection.ClientController;
 import pl.slowly.team.common.data.Bulletin;
+import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.response.AddBulletinResponse;
 import pl.slowly.team.common.packets.response.DeleteBulletinResponse;
@@ -228,7 +229,7 @@ public class MainViewController implements ControlledScreen, Initializable {
     public void setBulletins(List<Bulletin> bulletinsList) {
         this.bulletinsList = new CopyOnWriteArrayList<>(bulletinsList);
 
-        for (int k = 0; k < 6; ++k) {
+        for (int k = 0; k < 6 && k < bulletinsList.size(); ++k) {
             Bulletin bulletin = bulletinsList.get(k);
             BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletin.getBulletinId(), bulletin.getBulletinTitle(), bulletin.getBulletinContent(), bulletin.isBelongToUser());
             bulletinGraphic.setOnMouseClicked(onNoteClick);
@@ -344,7 +345,18 @@ public class MainViewController implements ControlledScreen, Initializable {
                 bulletinsList.clear();
                 screensController.hideOnScreen();
                 screensController.showProgressScreen();
-                load();
+                ChooseCategoryScreenController chooseCategoryScreenController = (ChooseCategoryScreenController) screensController.getControlledScreen(Screens.changeCategoryScreen);
+                Category category = chooseCategoryScreenController.getCategory();
+
+                if (category == null) {
+                    screensController.hideProgressScreen();
+                    chooseCategoryScreenController.showWarning();
+                    return;
+                } else {
+                    setCategory(category.getCategoryId());
+                    load();
+                }
+
             });
             chooseCategoryScreen.setOnKeyReleased(hide -> screensController.hideOnScreen());
             screensController.showOnScreen(screensController.getScreen(Screens.changeCategoryScreen));

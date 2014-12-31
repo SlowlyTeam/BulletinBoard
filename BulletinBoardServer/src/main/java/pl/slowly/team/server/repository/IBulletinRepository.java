@@ -14,5 +14,5 @@ public interface IBulletinRepository {
     public abstract List<DAOBulletin> getUsersBulletins(String userName);
     public abstract boolean deleteBulletin(int bulletinId, String username);
     public abstract boolean editBulletin(DAOBulletin bulletin, String username);
-    public abstract List<DAOBulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, int clientID);
+    public abstract List<DAOBulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since);
 }

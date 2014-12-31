@@ -11,6 +11,7 @@ public class Bulletin extends Entity {
         this.bulletinTitle = bulletinTitle;
         this.bulletinContent = bulletinContent;
         this.belongToUser = false;
+        this.bulletinId = -1;
     }
 
     public Bulletin(Integer bulletinId, String bulletinTitle, String bulletinContent, boolean belongToUser) {
