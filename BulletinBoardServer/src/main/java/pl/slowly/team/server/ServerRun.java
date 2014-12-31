@@ -4,7 +4,7 @@ import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.connection.MultiThreadedServer;
 import pl.slowly.team.server.controller.Controller;
 import pl.slowly.team.server.helpers.PacketWrapper;
-import pl.slowly.team.server.model.FakeModel;
+import pl.slowly.team.server.model.Model;
 import pl.slowly.team.server.model.IModel;
 
 import java.util.concurrent.BlockingQueue;
@@ -18,7 +18,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ServerRun {
     public static void main(String[] args) {
         final BlockingQueue<PacketWrapper> blockingQueue = new LinkedBlockingQueue<>();
-        final IModel model = new FakeModel();
+        final IModel model = new Model();
         final IServer server;
 
         if (args.length >= 1) {
