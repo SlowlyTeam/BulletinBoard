@@ -28,9 +28,10 @@ public class LogInStrategy extends Strategy {
         int userId = packetWrapper.getUserID();
         if (model.checkCredentials(credentials)) {
             server.authorizeClient(userId, credentials.getUsername());
-            server.sendResponseToClient(new LogInResponse(ResponseStatus.AUTHORIZED), userId);
+            Integer categoryID = model.getUserCategory(credentials.getUsername());
+            server.sendResponseToClient(new LogInResponse(ResponseStatus.AUTHORIZED, categoryID), userId);
         } else {
-            server.sendResponseToClient(new LogInResponse(ResponseStatus.NOT_AUTHORIZED), userId);
+            server.sendResponseToClient(new LogInResponse(ResponseStatus.NOT_AUTHORIZED, null), userId);
         }
     }
 }

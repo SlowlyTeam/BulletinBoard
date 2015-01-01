@@ -340,12 +340,16 @@ public class MainViewController implements ControlledScreen, Initializable {
         if (event.getButton() == MouseButton.PRIMARY) {
             AnchorPane chooseCategoryScreen = (AnchorPane) screensController.getScreen(Screens.changeCategoryScreen);
             Button ok = (Button) chooseCategoryScreen.lookup("#button1");
+            ChooseCategoryScreenController chooseCategoryScreenController = (ChooseCategoryScreenController) screensController.getControlledScreen(Screens.changeCategoryScreen);
+
+            if (chooseCategoryScreenController.categoriesListIsEmpty())
+                chooseCategoryScreenController.load();
+
             ok.setOnAction(action -> {
                 bulletinBoardScreen.clear();
                 bulletinsList.clear();
                 screensController.hideOnScreen();
                 screensController.showProgressScreen();
-                ChooseCategoryScreenController chooseCategoryScreenController = (ChooseCategoryScreenController) screensController.getControlledScreen(Screens.changeCategoryScreen);
                 Category category = chooseCategoryScreenController.getCategory();
 
                 if (category == null) {

@@ -12,35 +12,26 @@ import pl.slowly.team.server.repository.dao.DAOCategory;
 import pl.slowly.team.server.repository.dao.DAOUser;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Model implements IModel {
 
-    private final List<Bulletin> bulletinList;
-    private final List<Category> categoryList;
-    private int test_i;
-    private BulletinRepository bulletinRepository;
-    private CategoryRepository categoryRepository;
-    private UserRepository userRepository;
+    private final BulletinRepository bulletinRepository;
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     public Model() {
         bulletinRepository = new BulletinRepository();
         categoryRepository = new CategoryRepository();
         userRepository = new UserRepository();
-        bulletinList = new ArrayList<>();
-        categoryList = new ArrayList<>();
     }
 
     @Override
     public boolean checkCredentials(Credentials credentials) {
         DAOUser client = userRepository.getUser(credentials.getUsername());
-        if (client.getPassword().equals(credentials.getPasswordHash()))
-            return true;
-        else
-            return false;
+        return client == null ? false : client.getPassword().equals(credentials.getPasswordHash());
     }
 
     @Override
@@ -70,6 +61,7 @@ public class Model implements IModel {
 
     @Override
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, String username) {
+        setUserCategory(username, categoriesIds.get(0));
         return bulletinRepository.getBulletins(categoriesIds, since)
                 .stream().map(bulletin -> DaoToDto(bulletin, bulletin.getAuthor().equals(username))).collect(Collectors.toList());
     }
@@ -80,6 +72,16 @@ public class Model implements IModel {
         daoBulletin.setAuthor(username);
         daoBulletin.setCreationDate(new Date());
         return bulletinRepository.editBulletin(daoBulletin, username);
+    }
+
+    @Override
+    public Integer getUserCategory(String username) {
+        return userRepository.getUser(username).getCategoryID();
+    }
+
+    @Override
+    public void setUserCategory(String username, int newCategoryID) {
+        userRepository.setNewCategory(username, newCategoryID);
     }
 
     private Bulletin DaoToDto(DAOBulletin daoBulletin, Boolean isBelongToUser) {

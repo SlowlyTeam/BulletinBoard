@@ -62,6 +62,10 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
         }
     }
 
+    public boolean categoriesListIsEmpty() {
+        return categoriesMap == null;
+    }
+
     public void fillCategories(List<Category> categories) {
         categoriesMap = categories.stream()
                 .collect(Collectors.toMap(Category::getCategoryName, p -> p));

@@ -110,7 +110,7 @@ public class BulletinRepository implements IBulletinRepository {
             Transaction tx = null;
             try {
                 tx = session.beginTransaction();
-                Query query = session.createQuery("FROM DAOBulletin WHERE categoryID = :category ORDER BY creationDate");
+                Query query = session.createQuery("FROM DAOBulletin WHERE categoryID = :category ORDER BY creationDate DESC");
                 query.setParameter("category", categoriesIds.get(0));
                 result = (List<DAOBulletin>) query.list();
                 tx.commit();
