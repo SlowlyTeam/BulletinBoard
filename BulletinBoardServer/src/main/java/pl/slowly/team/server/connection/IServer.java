@@ -53,10 +53,10 @@ public interface IServer {
     /**
      * Set category for user.
      */
-    public void setCategory(int clientID, int categoryID);
+    public void setUserCategory(int clientID, int categoryID);
 
     /**
      * Get category assigned to user.
      */
-    public int getCategory(int clientID);
+    public int getUserCategory(int clientID);
 }

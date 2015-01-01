@@ -89,7 +89,8 @@ public class BulletinRepository implements IBulletinRepository {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.merge(bulletin);
+            System.out.println("Category id - " + bulletin.getCategoryID());
+            session.update(bulletin);
             tx.commit();
             result = true;
         } catch (HibernateException e) {

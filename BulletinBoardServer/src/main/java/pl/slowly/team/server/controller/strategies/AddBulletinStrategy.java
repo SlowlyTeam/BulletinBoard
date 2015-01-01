@@ -27,7 +27,7 @@ public class AddBulletinStrategy extends Strategy {
         AddBulletinRequest addBulletinReq = (AddBulletinRequest) packetWrapper.getPacket();
         Bulletin bulletin = addBulletinReq.getBulletin();
         int clientId = packetWrapper.getUserID();
-        int bulletinId = model.addBulletin(bulletin, server.getUsername(clientId), server.getCategory(clientId));
+        int bulletinId = model.addBulletin(bulletin, server.getUsername(clientId), server.getUserCategory(clientId));
         if (bulletinId > 0) {
             server.sendResponseToClient(new AddBulletinResponse(ResponseStatus.OK, bulletinId), clientId);
             bulletin.setBulletinId(bulletinId);

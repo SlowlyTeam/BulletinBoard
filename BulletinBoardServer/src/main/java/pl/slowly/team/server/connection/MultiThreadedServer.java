@@ -210,12 +210,12 @@ public class MultiThreadedServer implements IServer, Runnable {
     }
 
     @Override
-    public void setCategory(int clientID, int categoryID) {
+    public void setUserCategory(int clientID, int categoryID) {
         clientMap.get(clientID).setCategoryID(categoryID);
     }
 
     @Override
-    public int getCategory(int clientID) {
+    public int getUserCategory(int clientID) {
         return clientMap.get(clientID).getCategoryID();
     }
 

@@ -26,7 +26,7 @@ public class GetBulletinsStrategy extends Strategy {
     public void execute(final PacketWrapper packetWrapper) throws IOException {
         GetBulletinsRequest getBulletins = (GetBulletinsRequest) packetWrapper.getPacket();
         int clientId = packetWrapper.getUserID();
-        server.setCategory(clientId, getBulletins.getCategoriesIds().get(0));
+        server.setUserCategory(clientId, getBulletins.getCategoriesIds().get(0));
         List<Bulletin> bulletins = model.getBulletins(getBulletins.getCategoriesIds(), getBulletins.getSince(), server.getUsername(clientId));
         server.sendResponseToClient(new GetBulletinsResponse(ResponseStatus.OK, bulletins), clientId);
     }

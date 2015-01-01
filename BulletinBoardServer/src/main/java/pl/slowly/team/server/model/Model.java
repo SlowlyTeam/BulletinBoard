@@ -67,9 +67,10 @@ public class Model implements IModel {
     }
 
     @Override
-    public boolean editBulletin(Bulletin bulletin, String username) {
+    public boolean editBulletin(Bulletin bulletin, String username, int categoryID) {
         DAOBulletin daoBulletin = DtoToDao(bulletin);
         daoBulletin.setAuthor(username);
+        daoBulletin.setCategoryID(categoryID);
         daoBulletin.setCreationDate(new Date());
         return bulletinRepository.editBulletin(daoBulletin, username);
     }

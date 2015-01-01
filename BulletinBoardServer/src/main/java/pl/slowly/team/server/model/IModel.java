@@ -23,7 +23,7 @@ public interface IModel {
     /** Returns bulletins from specified categories, from optional date since. */
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, String user);
     /** Returns success or failure as boolean. */
-    public boolean editBulletin(Bulletin bulletin, String username);
+    public boolean editBulletin(Bulletin bulletin, String username, int categoryID);
     /** Returns category asigned to User - the last one */
     public Integer getUserCategory(String username);
     /** Asign new category to User */
