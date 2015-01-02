@@ -1,5 +1,6 @@
 package pl.slowly.team.client.connection;
 
+import javafx.application.Platform;
 import pl.slowly.team.client.GUI.ScreensController;
 import pl.slowly.team.client.connection.strategies.Strategy;
 import pl.slowly.team.client.connection.strategies.packetStrategies.DeleteBulletinBroadcastStrategy;
@@ -57,6 +58,8 @@ public class ClientController {
     }
 
     public boolean connectToServer() throws IOException {
+        if (socket != null)
+            return true;
         socket = new Socket(host, port);
         outputStream = new ObjectOutputStream(socket.getOutputStream());
         inputStream = new ObjectInputStream(socket.getInputStream());
@@ -66,6 +69,9 @@ public class ClientController {
     }
 
     public void disconnectFromServer() throws IOException, InterruptedException {
+        if (socket == null)
+            return;
+        serverResponseListener.stop();
         sendRequest(new DisconnectFromServerRequest());
     }
 
@@ -122,17 +128,14 @@ public class ClientController {
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                // TODO dodać w widoku jakaś informację, która po kliknieciu okej zamknie aplikację.
-                System.exit(0);
+                Platform.runLater(() -> screensController.showExitDialog("Błąd połaczenia z serwerem. Aplikacja zostanie zamknięta", e));
             }
         }
 
         private Packet getResponse() throws IOException, ClassNotFoundException {
             if (!socket.isClosed()) {
                 return (Packet) inputStream.readObject();
-            }
-            else {
+            } else {
                 System.out.println("gniazdo zostało zamkniete.");
             }
             return null;

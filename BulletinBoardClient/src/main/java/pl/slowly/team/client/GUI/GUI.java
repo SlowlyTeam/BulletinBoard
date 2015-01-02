@@ -4,7 +4,6 @@ package pl.slowly.team.client.GUI;/*
  * and open the template in the editor.
  */
 
-import pl.slowly.team.client.connection.ClientController;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -12,6 +11,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
+import pl.slowly.team.client.connection.ClientController;
 
 import java.io.IOException;
 
@@ -34,15 +36,17 @@ public class GUI extends Application {
 
         try {
             clientController = new ClientController(null, 8081, screensController);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
+            screensController.loadScreen(Screens.loginScreen, clientController);
+            screensController.loadScreen(Screens.changeCategoryScreen, clientController);
+            screensController.loadScreen(Screens.mainScreen, clientController);
+        } catch (IOException exception) {
+            Dialogs.create()
+                    .title("Error")
+                    .masthead("Nie można otworzyć portu nasłuchującego")
+                    .actions(Dialog.Actions.OK)
+                    .showException(exception);
+            System.exit(-1);
         }
-        clientController.connectToServer();
-
-        screensController.loadScreen(Screens.loginScreen, clientController);
-        screensController.loadScreen(Screens.changeCategoryScreen, clientController);
-        screensController.loadScreen(Screens.mainScreen, clientController);
         screensController.addProgressScreen(new ProgressPanel());
 
         screensController.setScreen(Screens.loginScreen, false);

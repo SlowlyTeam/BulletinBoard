@@ -55,6 +55,7 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
 
     @Override
     public void load() {
+        screensController.showProgressScreen();
         try {
             clientController.getCategories();
         } catch (IOException e) {

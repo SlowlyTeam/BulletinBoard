@@ -18,5 +18,11 @@
             <artifactId>bulletin-board-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.0.2</version>
+        </dependency>
     </dependencies>
 </project>

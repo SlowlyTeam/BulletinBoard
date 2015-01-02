@@ -18,8 +18,8 @@ public interface IModel {
     public List<Bulletin> getUserBulletins(String username);
     /** Adds a bulletin to database for specified user. */
     public Integer addBulletin(Bulletin bulletin, String username, int categoryID);
-    /** Deletes the bulletin from database for specified user. */
-    public boolean deleteBulletin(int bulletinId, String username);
+    /** Deletes the bulletin from database */
+    public boolean deleteBulletin(int bulletinId);
     /** Returns bulletins from specified categories, from optional date since. */
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, String user);
     /** Returns success or failure as boolean. */

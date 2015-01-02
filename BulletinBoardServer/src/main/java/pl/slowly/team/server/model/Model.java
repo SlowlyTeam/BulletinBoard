@@ -55,8 +55,8 @@ public class Model implements IModel {
     }
 
     @Override
-    public boolean deleteBulletin(int bulletinId, String username) {
-        return bulletinRepository.deleteBulletin(bulletinId, username);
+    public boolean deleteBulletin(int bulletinId) {
+        return bulletinRepository.deleteBulletin(bulletinId);
     }
 
     @Override

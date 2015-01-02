@@ -37,14 +37,30 @@ public class LoginScreenController implements ControlledScreen {
     private double xOffset;
     private double yOffset;
 
-    public void login() throws IOException {
+
+    public void connectAndLogin() {
         screensController.showProgressScreen();
+        new Thread(() -> {
+            try {
+                clientController.connectToServer();
+                login();
+            } catch (IOException e) {
+                Platform.runLater(() -> {
+                    screensController.hideProgressScreen();
+                    screensController.showWarning("Nie można połączyć z serwerem");
+                });
+            }
+        }).start();
+    }
+
+    public void login() throws IOException {
         if (login.getText().isEmpty() || password.getText().isEmpty()) {
             done(false, null);
         } else {
             clientController.logIn(login.getText(), password.getText());
         }
     }
+
 
     public void logInResponse(LogInResponse logInResponse) {
         done(logInResponse.getResponseStatus().equals(ResponseStatus.AUTHORIZED), logInResponse.getCategory());

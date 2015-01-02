@@ -1,7 +1,5 @@
 package pl.slowly.team.server.controller.strategies;
 
-import pl.slowly.team.common.packets.request.connection.DisconnectFromServerRequest;
-import pl.slowly.team.common.packets.request.data.DeleteBulletinRequest;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;

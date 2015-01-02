@@ -17,12 +17,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
 import pl.slowly.team.client.connection.ClientController;
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.response.AddBulletinResponse;
 import pl.slowly.team.common.packets.response.DeleteBulletinResponse;
+import pl.slowly.team.common.packets.response.EditBulletinResponse;
 
 import java.io.IOException;
 import java.net.URL;
@@ -91,7 +94,7 @@ public class MainViewController implements ControlledScreen, Initializable {
                     try {
                         System.out.println("Editing bulletin...");
                         clientController.editBulletin(
-                                new Bulletin(bulletinGraphic.getBulletinNumber(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
+                                new Bulletin(bulletinGraphic.getBulletinNumber(), editNewBulletin.getTitle(), editNewBulletin.getContent(), false));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -151,7 +154,7 @@ public class MainViewController implements ControlledScreen, Initializable {
         if (deleteBulletinResponse.getResponseStatus() == ResponseStatus.OK) {
             deleteBulletinFromView(deleteBulletinResponse.getBulletinId());
         } else {
-            //TODO dialog o nie niepowodzeniu usuniecia ogloszenia
+            Platform.runLater(() -> screensController.showWarning("Nie można usunąć ogłoszenia. Spróboj ponownie."));
         }
     }
 
@@ -170,30 +173,27 @@ public class MainViewController implements ControlledScreen, Initializable {
     /**
      * Edit bulletin after trying to edit bulletin and getting response from server;
      */
-    public void editUserBulletinInView(Bulletin bulletin) {
+    public void editUserBulletinInView(EditBulletinResponse editBulletinResponse) {
 
         Platform.runLater(() -> {
             editNewBulletin.setDisable(false);
             screensController.hideProgressScreen();
         });
 
-        if (bulletin == null) {
+        if (editBulletinResponse.getResponseStatus() == ResponseStatus.ERROR) {
             editNewBulletin.getStyleClass().add("failure");
             return;
         }
 
-        for (int i = 0; i < bulletinsList.size(); i++) {
-            if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
+        Bulletin bulletin = bulletinsList.stream().filter(bul -> bul.getBulletinId() == editBulletinResponse.getBulletin().getBulletinId())
+                .findFirst().get();
+        bulletin.setBulletinContent(editBulletinResponse.getBulletin().getBulletinContent());
+        bulletin.setBulletinTitle(editBulletinResponse.getBulletin().getBulletinTitle());
 
-                bulletinsList.set(i, bulletin);
-                System.out.println("Editing bulletin.");
-                Platform.runLater(() -> {
-                    setPage(curPage);
-                    screensController.hideOnScreen();
-                });
-                break;
-            }
-        }
+        Platform.runLater(() -> {
+            setPage(curPage);
+            screensController.hideOnScreen();
+        });
     }
 
     /**
@@ -204,10 +204,12 @@ public class MainViewController implements ControlledScreen, Initializable {
             if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
                 System.out.println("Editing bulletin.");
                 bulletinsList.set(i, bulletin);
+                if (i + 1 < curPage * 6 && i + 1 > (curPage - 1) * 6)
+                    refresh();
                 break;
             }
-            //TODO odswiezenie widoku jesli edytowane ogloszenie znajduje sie na aktualnie przegladanej stronie
         }
+
     }
 
 
@@ -241,6 +243,11 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     public void close(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
+            Action action = screensController.showConfirmDialog("Czy na pewno chcesz wyjść?");
+
+            if (action == Dialog.Actions.NO)
+                return;
+
             try {
                 clientController.disconnectFromServer();
             } catch (IOException e) {

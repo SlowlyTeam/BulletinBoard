@@ -20,7 +20,7 @@ public class EditBulletinResponseStrategy extends Strategy {
         EditBulletinResponse editBulletinResponse = (EditBulletinResponse) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         if (editBulletinResponse.getResponseStatus() != ResponseStatus.ERROR)
-            mainViewController.editUserBulletinInView(editBulletinResponse.getBulletin());
+            mainViewController.editUserBulletinInView(editBulletinResponse);
         else mainViewController.editUserBulletinInView(null);
     }
 }

@@ -12,10 +12,10 @@ import javax.persistence.*;
 )
 
 public class DAOUser {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private int userID;
+    @Id
     @Column(name = "name")
     private String userName;
     @Column(name = "password", length = 64)

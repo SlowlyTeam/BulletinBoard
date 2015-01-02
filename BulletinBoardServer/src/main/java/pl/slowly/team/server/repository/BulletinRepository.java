@@ -62,7 +62,7 @@ public class BulletinRepository implements IBulletinRepository {
     }
 
     @Override
-    public boolean deleteBulletin(int bulletinId, String username) {
+    public boolean deleteBulletin(int bulletinId) {
         boolean result = false;
         Session session = factory.openSession();
         Transaction tx = null;

@@ -26,7 +26,7 @@ public class DeleteBulletinStrategy extends Strategy {
         DeleteBulletinRequest deleteBulletin = (DeleteBulletinRequest) packetWrapper.getPacket();
         int clientId = packetWrapper.getUserID();
         int bulletinId = deleteBulletin.getBulletinId();
-        boolean result = model.deleteBulletin(bulletinId, server.getUsername(clientId));
+        boolean result = model.deleteBulletin(bulletinId);
         if (result) {
             server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.OK, bulletinId), clientId);
             server.sendBroadcastPacket(new DeleteBulletinBroadcast(bulletinId), clientId);
