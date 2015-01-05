@@ -64,9 +64,10 @@ public class ScreensController extends StackPane {
     public boolean showProgressScreen() {
         System.out.println("show");
         if (!getChildren().isEmpty()) {
-            //getChildren().get(0).setDisable(true);
             getChildren().add(screens.get("progressScreen").getKey());
+            screens.get("progressScreen").getKey().requestFocus();
             setOpacity(0.5f);
+            getChildren().get(0).setDisable(true);
             return true;
         } else {
             return false;
@@ -78,7 +79,8 @@ public class ScreensController extends StackPane {
         if (!getChildren().isEmpty()) {
             getChildren().remove(screens.get("progressScreen").getKey());
             setOpacity(1.0f);
-            //getChildren().get(0).setDisable(false);
+            getChildren().get(0).setDisable(false);
+            getChildren().get(0).requestFocus();
             return true;
         } else {
             return false;
@@ -178,6 +180,7 @@ public class ScreensController extends StackPane {
         getChildren().add(1, screen);
         new Timeline(new KeyFrame(Duration.millis(200), new KeyValue(getChildren().get(0).opacityProperty(), 0.1, Interpolator.EASE_IN))).play();
         getChildren().get(0).setDisable(true);
+        screen.requestFocus();
 
     }
 
@@ -185,6 +188,7 @@ public class ScreensController extends StackPane {
         getChildren().remove(1);
         getChildren().get(0).setDisable(false);
         getChildren().get(0).setOpacity(1);
+        getChildren().get(0).requestFocus();
     }
 
     public void showExitDialog(String message, @Nullable Exception exception) {
@@ -212,7 +216,7 @@ public class ScreensController extends StackPane {
         Dialogs.create()
                 .owner(getParent().getScene().getWindow())
                 .title("Warning")
-                .message(message)
+                .masthead(message)
                 .showWarning();
     }
 

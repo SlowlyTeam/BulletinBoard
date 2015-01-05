@@ -11,11 +11,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.controlsfx.dialog.Dialog;
-import org.controlsfx.dialog.Dialogs;
 import pl.slowly.team.client.connection.ClientController;
 
-import java.io.IOException;
+import java.net.InetAddress;
 
 /**
  * @author Maxym
@@ -32,21 +30,11 @@ public class GUI extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         ScreensController screensController = new ScreensController();
-        ClientController clientController;
+        ClientController clientController = new ClientController(InetAddress.getLocalHost().getHostAddress(), 8081, screensController);
 
-        try {
-            clientController = new ClientController(null, 8081, screensController);
-            screensController.loadScreen(Screens.loginScreen, clientController);
-            screensController.loadScreen(Screens.changeCategoryScreen, clientController);
-            screensController.loadScreen(Screens.mainScreen, clientController);
-        } catch (IOException exception) {
-            Dialogs.create()
-                    .title("Error")
-                    .masthead("Nie można otworzyć portu nasłuchującego")
-                    .actions(Dialog.Actions.OK)
-                    .showException(exception);
-            System.exit(-1);
-        }
+        screensController.loadScreen(Screens.loginScreen, clientController);
+        screensController.loadScreen(Screens.changeCategoryScreen, clientController);
+        screensController.loadScreen(Screens.mainScreen, clientController);
         screensController.addProgressScreen(new ProgressPanel());
 
         screensController.setScreen(Screens.loginScreen, false);

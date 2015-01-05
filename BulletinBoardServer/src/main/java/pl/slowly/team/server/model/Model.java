@@ -63,7 +63,7 @@ public class Model implements IModel {
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, String username) {
         setUserCategory(username, categoriesIds.get(0));
         return bulletinRepository.getBulletins(categoriesIds, since)
-                .stream().map(bulletin -> DaoToDto(bulletin, bulletin.getAuthor().equals(username))).collect(Collectors.toList());
+                .stream().map(bulletin -> DaoToDto(bulletin, bulletin.getAuthor().equalsIgnoreCase(username))).collect(Collectors.toList());
     }
 
     @Override
@@ -76,8 +76,9 @@ public class Model implements IModel {
     }
 
     @Override
-    public Integer getUserCategory(String username) {
-        return userRepository.getUser(username).getCategoryID();
+    public Category getUserCategory(String username) {
+        int categoryId = userRepository.getUser(username).getCategoryID();
+        return DaoToDto(categoryRepository.getCategory(categoryId));
     }
 
     @Override

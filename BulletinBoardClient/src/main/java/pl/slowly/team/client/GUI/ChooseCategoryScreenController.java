@@ -1,8 +1,4 @@
-package pl.slowly.team.client.GUI;/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package pl.slowly.team.client.GUI;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -55,7 +51,6 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
 
     @Override
     public void load() {
-        screensController.showProgressScreen();
         try {
             clientController.getCategories();
         } catch (IOException e) {
@@ -75,12 +70,14 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
         Platform.runLater(screensController::hideProgressScreen);
     }
 
-    public void mousePressed(MouseEvent event) {
+    @FXML
+    private void mousePressed(MouseEvent event) {
         xOffset = event.getSceneX();
         yOffset = event.getSceneY();
     }
 
-    public void onMouseDragged(MouseEvent event) {
+    @FXML
+    private void onMouseDragged(MouseEvent event) {
         Stage stage = (Stage) categoriesList.getScene().getWindow();
         stage.setX(event.getScreenX() - xOffset);
         stage.setY(event.getScreenY() - yOffset);
@@ -96,8 +93,8 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
         return categoriesMap.get(categoriesList.getSelectionModel().getSelectedItem());
     }
 
-    public void showWarning() {
-        warning.setVisible(true);
+    public void showWarning(boolean show) {
+        warning.setVisible(show);
     }
 
     public void goToNextScreen() {
@@ -106,10 +103,11 @@ public class ChooseCategoryScreenController implements Initializable, Controlled
         Category category = getCategory();
         if (category == null) {
             screensController.hideProgressScreen();
-            showWarning();
+            showWarning(true);
             return;
         }
-        mainViewController.setCategory(category.getCategoryId());
+        showWarning(false);
+        mainViewController.setCategory(category);
         screensController.setMainScreen(Screens.mainScreen);
     }
 

@@ -13,6 +13,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import pl.slowly.team.client.connection.ClientController;
+import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.response.LogInResponse;
 
@@ -40,6 +41,7 @@ public class LoginScreenController implements ControlledScreen {
 
     public void connectAndLogin() {
         screensController.showProgressScreen();
+
         new Thread(() -> {
             try {
                 clientController.connectToServer();
@@ -60,7 +62,6 @@ public class LoginScreenController implements ControlledScreen {
             clientController.logIn(login.getText(), password.getText());
         }
     }
-
 
     public void logInResponse(LogInResponse logInResponse) {
         done(logInResponse.getResponseStatus().equals(ResponseStatus.AUTHORIZED), logInResponse.getCategory());
@@ -104,12 +105,12 @@ public class LoginScreenController implements ControlledScreen {
         stage.setY(event.getScreenY() - yOffset);
     }
 
-    protected void done(boolean isLogged, Integer categoryID) {
+    protected void done(boolean isLogged, Category category) {
         Platform.runLater(() -> {
             if (isLogged) {
-                if (categoryID != null) {
+                if (category != null) {
                     MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
-                    mainViewController.setCategory(categoryID);
+                    mainViewController.setCategory(category);
                     screensController.setMainScreen(Screens.mainScreen);
                 } else {
                     screensController.setScreen(Screens.changeCategoryScreen, true);
@@ -119,7 +120,6 @@ public class LoginScreenController implements ControlledScreen {
                 login.setStyle("-fx-background-color: rgba(230, 10, 10, 0.8)");
                 password.setStyle("-fx-background-color: rgba(230, 10, 10, 0.8)");
             }
-            // login.getParent().setDisable(false);
         });
     }
 

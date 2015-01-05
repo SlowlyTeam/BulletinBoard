@@ -1,5 +1,6 @@
 package pl.slowly.team.server.controller.strategies;
 
+import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.Credentials;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.authorization.LogInRequest;
@@ -28,7 +29,7 @@ public class LogInStrategy extends Strategy {
         int userId = packetWrapper.getUserID();
         if (model.checkCredentials(credentials)) {
             server.authorizeClient(userId, credentials.getUsername());
-            Integer categoryID = model.getUserCategory(credentials.getUsername());
+            Category categoryID = model.getUserCategory(credentials.getUsername());
             server.sendResponseToClient(new LogInResponse(ResponseStatus.AUTHORIZED, categoryID), userId);
         } else {
             server.sendResponseToClient(new LogInResponse(ResponseStatus.NOT_AUTHORIZED, null), userId);

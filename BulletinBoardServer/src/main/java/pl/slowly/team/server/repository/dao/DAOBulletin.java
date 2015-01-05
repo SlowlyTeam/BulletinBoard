@@ -25,8 +25,6 @@ public class DAOBulletin {
     @Column(name = "date")
     private Date creationDate;
 
-    public DAOBulletin () {}
-
     public Date getCreationDate() {
         return creationDate;
     }

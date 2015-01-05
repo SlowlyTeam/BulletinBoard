@@ -37,7 +37,7 @@ public class ClientController {
     private Thread serverResponseListener;
     private ScreensController screensController;
 
-    public ClientController(String host, int port, ScreensController screensController) throws IOException {
+    public ClientController(String host, int port, ScreensController screensController) {
         this.port = port;
         this.host = host;
         this.screensController = screensController;
@@ -128,7 +128,7 @@ public class ClientController {
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
-                Platform.runLater(() -> screensController.showExitDialog("Błąd połaczenia z serwerem. Aplikacja zostanie zamknięta", e));
+                Platform.runLater(() -> screensController.showExitDialog("Błąd połączenia z serwerem", e));
             }
         }
 

@@ -15,7 +15,7 @@
     -fx-border-insets: -1, 0;
 }
 
-.label {
+#label1, #label2 {
     -fx-font-family: "Arial";
     -fx-font-size: 14;
     -fx-text-fill: rgb(255, 255, 255, 0.4);
@@ -129,8 +129,10 @@
 }
 
 #appName {
+    -fx-padding: 5px 0px 0px 0px;
+    -fx-font-family: "Arial";
     -fx-font-size: 30 !important;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 30, 0.0, 0, 1);
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 4, 4);
 }

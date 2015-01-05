@@ -24,8 +24,8 @@ public interface IModel {
     public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, String user);
     /** Returns success or failure as boolean. */
     public boolean editBulletin(Bulletin bulletin, String username, int categoryID);
-    /** Returns category asigned to User - the last one */
-    public Integer getUserCategory(String username);
-    /** Asign new category to User */
+    /** Returns category assigned to User - the last one */
+    public Category getUserCategory(String username);
+    /** Assign new category to User */
     public void setUserCategory(String username, int newCategoryID);
 }
