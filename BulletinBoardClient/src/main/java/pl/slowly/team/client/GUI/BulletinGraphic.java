@@ -14,13 +14,10 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
-/**
- * Created by Maxym on 2014-11-21.
- */
 public class BulletinGraphic extends AnchorPane {
 
-    final DoubleProperty scaleX = scaleXProperty();
-    final DoubleProperty scaleY = scaleYProperty();
+    final private DoubleProperty scaleX = scaleXProperty();
+    final private DoubleProperty scaleY = scaleYProperty();
     final private Title title;
     final private Content content;
     final private Controls controls;
@@ -30,7 +27,7 @@ public class BulletinGraphic extends AnchorPane {
     public BulletinGraphic(int bulletinNumber, boolean isBelongToUser) {
         this.bulletinNumber = bulletinNumber;
         getStyleClass().add("bulletinBackground");
-        getStylesheets().add(getClass().getResource("../../../../../styles/bulletin.css").toExternalForm());
+        getStylesheets().add(ClassLoader.getSystemResource("styles/bulletin.css").toExternalForm());
         setPrefSize(155, 155);
         setMaxSize(155, 155);
 
@@ -74,12 +71,10 @@ public class BulletinGraphic extends AnchorPane {
             toFront();
         });
 
-        setOnMouseExited(mouseExited -> {
-            new Timeline(new KeyFrame(Duration.millis(150), new KeyValue(scaleX, 1f)),
-                    new KeyFrame(Duration.millis(150), new KeyValue(scaleY, 1f)),
-                    new KeyFrame(Duration.millis(150), new KeyValue(rotateProperty(), rotate))
-            ).play();
-        });
+        setOnMouseExited(mouseExited -> new Timeline(new KeyFrame(Duration.millis(150), new KeyValue(scaleX, 1f)),
+                new KeyFrame(Duration.millis(150), new KeyValue(scaleY, 1f)),
+                new KeyFrame(Duration.millis(150), new KeyValue(rotateProperty(), rotate))
+        ).play());
     }
 
     public BulletinGraphic(int number, String title, String content, boolean isBelongToUser) {

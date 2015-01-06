@@ -10,17 +10,13 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
-/**
- * Created by Maxym on 2014-11-21.
- */
 public class EditNewBulletin extends AnchorPane {
 
     final private Title title;
     final private Content content;
     final private Controls controls;
+    final private EditNewBulletin editNewBulletin;
     private BulletinGraphic bulletinGraphic;
-    private EditNewBulletin editNewBulletin;
-    private final Label resizeButton;
 
     public EditNewBulletin(BulletinGraphic bulletinGraphic) {
         this();
@@ -30,7 +26,7 @@ public class EditNewBulletin extends AnchorPane {
 
     public EditNewBulletin() {
         getStyleClass().add("bulletinBackground");
-        getStylesheets().add(getClass().getResource("../../../../../styles/bulletin.css").toExternalForm());
+        getStylesheets().add(ClassLoader.getSystemResource("styles/bulletin.css").toExternalForm());
         setPrefSize(300, 300);
         setMaxSize(300, 300);
 
@@ -53,7 +49,7 @@ public class EditNewBulletin extends AnchorPane {
         setLeftAnchor(controls, 0.0);
         setRightAnchor(controls, 0.0);
 
-        resizeButton = new Label();
+        Label resizeButton = new Label();
         resizeButton.setPrefSize(30, 30);
         resizeButton.setMaxSize(30, 30);
         resizeButton.getStyleClass().add("resizeButton");

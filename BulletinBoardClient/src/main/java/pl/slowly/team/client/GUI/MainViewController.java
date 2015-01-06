@@ -1,6 +1,3 @@
-/**
- * Created by Maxym on 2014-11-16.
- */
 package pl.slowly.team.client.GUI;
 
 import javafx.application.Platform;
@@ -38,7 +35,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class MainViewController implements ControlledScreen, Initializable {
 
     private final EventHandler<MouseEvent> onNoteClick;
-    private final EventHandler onEditAddNoteClick;
     private CopyOnWriteArrayList<Bulletin> bulletinsList = new CopyOnWriteArrayList<>();
     private EditNewBulletin editNewBulletin;
     private ScreensController screensController;
@@ -60,7 +56,7 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     public MainViewController() {
 
-        onEditAddNoteClick = ed -> {
+        EventHandler onEditAddNoteClick = ed -> {
             if ((ed instanceof KeyEvent && ((KeyEvent) ed).getCode() == KeyCode.ESCAPE) || ed.getTarget().toString().contains("delete")) {
                 if (editNewBulletin.getBulletinGraphic() != null) {
                     editNewBulletin.getBulletinGraphic().setVisible(true);
@@ -128,6 +124,13 @@ public class MainViewController implements ControlledScreen, Initializable {
                 }
             }
         };
+
+        editNewBulletin = new EditNewBulletin();
+        editNewBulletin.setOnMouseClicked(onEditAddNoteClick);
+        editNewBulletin.setOnKeyReleased(onEditAddNoteClick);
+
+        bulletinBoardScreen = new BulletinBoardScreen();
+        curPage = 1;
     }
 
     public void refresh() {
@@ -295,18 +298,6 @@ public class MainViewController implements ControlledScreen, Initializable {
         stage.setY(event.getScreenY() - yOffset);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        bulletinBoardScreen = new BulletinBoardScreen();
-        editNewBulletin = new EditNewBulletin();
-        editNewBulletin.setOnMouseClicked(onEditAddNoteClick);
-        editNewBulletin.setOnKeyReleased(onEditAddNoteClick);
-
-        hBox1.getChildren().add(bulletinBoardScreen);
-        curPage = 1;
-
-    }
-
     public void setPage(int pageNumber) {
 
         screensController.showProgressScreen();
@@ -409,4 +400,8 @@ public class MainViewController implements ControlledScreen, Initializable {
         this.category = category;
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        hBox1.getChildren().add(bulletinBoardScreen);
+    }
 }

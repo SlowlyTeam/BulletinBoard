@@ -47,7 +47,7 @@ public class GUI extends Application {
         root.setStyle("-fx-border-radius: 7; -fx-background-radius: 7;");
 
         stage.initStyle(StageStyle.UNDECORATED);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("../../../../../images/icon.png")));
+        stage.getIcons().add(new Image(ClassLoader.getSystemResourceAsStream("images/icon.png")));
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
