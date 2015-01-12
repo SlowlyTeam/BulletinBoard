@@ -8,6 +8,11 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "BULLETIN")
+@org.hibernate.annotations.Entity(
+        dynamicUpdate = true,
+        dynamicInsert = true
+
+)
 public class DAOBulletin {
 
     @Column(name = "title")
@@ -24,6 +29,9 @@ public class DAOBulletin {
     private String author;
     @Column(name = "date")
     private Date creationDate;
+    @Column(name = "isvalid")
+    private Boolean isValid;
+
 
     public Date getCreationDate() {
         return creationDate;
@@ -73,4 +81,11 @@ public class DAOBulletin {
         this.author = author;
     }
 
+    public Boolean getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(Boolean isValid) {
+        this.isValid = isValid;
+    }
 }

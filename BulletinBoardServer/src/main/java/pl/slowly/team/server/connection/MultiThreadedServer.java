@@ -53,11 +53,12 @@ public class MultiThreadedServer implements IServer, Runnable {
      * Start listening for new clients in loop.
      */
     @Override
-    public void listen() {
+    public void listen() throws RuntimeException{
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             LOGGER.error("Could not listen on port: " + port, e);
+            throw new RuntimeException();
         }
         new Thread(this).start();
     }

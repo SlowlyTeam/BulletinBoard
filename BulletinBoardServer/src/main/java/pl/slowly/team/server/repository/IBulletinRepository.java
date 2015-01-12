@@ -3,7 +3,7 @@ package pl.slowly.team.server.repository;
 import com.sun.istack.internal.Nullable;
 import pl.slowly.team.server.repository.dao.DAOBulletin;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,5 +14,5 @@ public interface IBulletinRepository {
     public abstract List<DAOBulletin> getUsersBulletins(String userName);
     public abstract boolean deleteBulletin(int bulletinID);
     public abstract boolean editBulletin(DAOBulletin bulletin, String username);
-    public abstract List<DAOBulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since);
+    public abstract List<DAOBulletin> getBulletins(List<Integer> categoriesIds, @Nullable Date since);
 }

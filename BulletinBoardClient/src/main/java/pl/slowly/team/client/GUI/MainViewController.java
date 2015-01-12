@@ -70,6 +70,7 @@ public class MainViewController implements ControlledScreen, Initializable {
                 screensController.showProgressScreen();
 
                 if (bulletinGraphic != null) {
+                    System.out.println("Edytuje");
                     try {
                         System.out.println("Editing bulletin...");
                         clientController.editBulletin(
@@ -78,6 +79,7 @@ public class MainViewController implements ControlledScreen, Initializable {
                         e.printStackTrace();
                     }
                 } else {
+                    System.out.println("Dodaje");
                     try {
                         clientController.addBulletin(editNewBulletin.getTitle(), editNewBulletin.getContent());
                     } catch (IOException e) {
@@ -349,6 +351,7 @@ public class MainViewController implements ControlledScreen, Initializable {
             editNewBulletin.setStyle("-fx-background-color: white;");
             editNewBulletin.setTitle(null);
             editNewBulletin.setContent(null);
+            editNewBulletin.setBulletinGraphic(null);
             screensController.showOnScreen(editNewBulletin);
         }
     }

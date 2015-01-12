@@ -100,11 +100,13 @@ public class EditNewBulletin extends AnchorPane {
     }
 
     public void setBulletinGraphic(BulletinGraphic bulletinGraphic) {
+        this.bulletinGraphic = bulletinGraphic;
+        if (bulletinGraphic == null)
+            return;
         setContent(bulletinGraphic.getContent());
         setTitle(bulletinGraphic.getTitle());
         setStyle("-fx-background-color: " + bulletinGraphic.getBackground().getFills().get(0).getFill().toString().substring(2) + ";");
         getStyleClass().remove("failure");
-        this.bulletinGraphic = bulletinGraphic;
     }
 
     private class Title extends TextField {
