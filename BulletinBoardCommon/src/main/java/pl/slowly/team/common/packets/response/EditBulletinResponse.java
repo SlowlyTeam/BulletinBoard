@@ -1,10 +1,8 @@
 package pl.slowly.team.common.packets.response;
 
 import pl.slowly.team.common.data.Bulletin;
-import pl.slowly.team.common.data.Entity;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 
-import java.util.ArrayList;
 
 public class EditBulletinResponse extends Response {
 

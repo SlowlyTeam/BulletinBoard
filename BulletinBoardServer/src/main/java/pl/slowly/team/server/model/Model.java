@@ -11,7 +11,6 @@ import pl.slowly.team.server.repository.dao.DAOBulletin;
 import pl.slowly.team.server.repository.dao.DAOCategory;
 import pl.slowly.team.server.repository.dao.DAOUser;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +30,7 @@ public class Model implements IModel {
     @Override
     public boolean checkCredentials(Credentials credentials) {
         DAOUser client = userRepository.getUser(credentials.getUsername());
-        return client == null ? false : client.getPassword().equals(credentials.getPasswordHash());
+        return client != null && client.getPassword().equals(credentials.getPasswordHash());
     }
 
     @Override
@@ -60,7 +59,7 @@ public class Model implements IModel {
     }
 
     @Override
-    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, String username) {
+    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable Date since, String username) {
         setUserCategory(username, categoriesIds.get(0));
         return bulletinRepository.getBulletins(categoriesIds, since)
                 .stream().map(bulletin -> DaoToDto(bulletin, bulletin.getAuthor().equalsIgnoreCase(username))).collect(Collectors.toList());

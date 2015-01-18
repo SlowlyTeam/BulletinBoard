@@ -263,7 +263,7 @@ public class MultiThreadedServer implements IServer, Runnable {
         }
 
         /**
-         * Reciving packets from specified client in a loop.
+         * Receiving packets from specified client in a loop.
          */
         @Override
         public void run() {

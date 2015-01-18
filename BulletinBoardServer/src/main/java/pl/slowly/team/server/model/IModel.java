@@ -6,7 +6,7 @@ import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.Credentials;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public interface IModel {
@@ -21,7 +21,7 @@ public interface IModel {
     /** Deletes the bulletin from database */
     public boolean deleteBulletin(int bulletinId);
     /** Returns bulletins from specified categories, from optional date since. */
-    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, String user);
+    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable Date since, String user);
     /** Returns success or failure as boolean. */
     public boolean editBulletin(Bulletin bulletin, String username, int categoryID);
     /** Returns category assigned to User - the last one */

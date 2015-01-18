@@ -143,7 +143,7 @@ public class BulletinRepository implements IBulletinRepository {
         }
     }
 
-    public boolean ValidateBulletins() {
+    public boolean validateBulletins() {
         boolean result;
         Session session = factory.openSession();
         Transaction tx = null;

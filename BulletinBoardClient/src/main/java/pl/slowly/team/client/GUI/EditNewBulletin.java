@@ -159,7 +159,6 @@ public class EditNewBulletin extends AnchorPane {
             accept.setPrefSize(35, 35);
             accept.getStyleClass().add("accept");
 
-
             Label delete = new Label();
             delete.setPrefSize(35, 35);
             delete.getStyleClass().add("delete");

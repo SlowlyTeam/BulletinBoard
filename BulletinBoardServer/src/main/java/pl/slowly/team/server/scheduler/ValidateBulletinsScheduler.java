@@ -15,7 +15,7 @@ public class ValidateBulletinsScheduler implements Job {
 
         System.out.println("Validating bulletins!");
         BulletinRepository bulletinRepository = new BulletinRepository();
-        if (bulletinRepository.ValidateBulletins())
+        if (bulletinRepository.validateBulletins())
             System.out.println("Bulletins validated");
         else System.out.println("Error while validating bulletins!");
     }
