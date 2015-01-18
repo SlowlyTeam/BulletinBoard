@@ -1,6 +1,3 @@
-/**
- * Created by Maxym on 2014-11-16.
- */
 package pl.slowly.team.client.GUI;
 
 import javafx.application.Platform;
@@ -17,11 +14,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
 import pl.slowly.team.client.connection.ClientController;
 import pl.slowly.team.common.data.Bulletin;
+import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.response.AddBulletinResponse;
 import pl.slowly.team.common.packets.response.DeleteBulletinResponse;
+import pl.slowly.team.common.packets.response.EditBulletinResponse;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,8 +34,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainViewController implements ControlledScreen, Initializable {
 
-    private final EventHandler onNoteClick;
-    private final EventHandler onEditAddNoteClick;
+    private final EventHandler<MouseEvent> onNoteClick;
     private CopyOnWriteArrayList<Bulletin> bulletinsList = new CopyOnWriteArrayList<>();
     private EditNewBulletin editNewBulletin;
     private ScreensController screensController;
@@ -43,7 +43,7 @@ public class MainViewController implements ControlledScreen, Initializable {
     private double xOffset;
     private double yOffset;
     private ClientController clientController;
-    private Integer categoryID;
+    private Category category;
 
     @FXML
     private Label exitImage;
@@ -51,29 +51,12 @@ public class MainViewController implements ControlledScreen, Initializable {
     @FXML
     private HBox hBox1;
 
+    @FXML
+    private Label categoryName;
+
     public MainViewController() {
-        onNoteClick = event -> {
-            BulletinGraphic bulletinGraphic = (BulletinGraphic) event.getSource();
-            int bulletinNumber = bulletinGraphic.getBulletinNumber();
 
-            if (event.getTarget().toString().contains("delete")) {
-                try {
-                    clientController.deleteBulletin(bulletinNumber);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (event.getTarget().toString().contains("edit")) {
-                bulletinGraphic.setVisible(false);
-                editNewBulletin.getStyleClass().remove("failure");
-                editNewBulletin.setBulletinGraphic(bulletinGraphic);
-                editNewBulletin.setStyle("-fx-background-color: " + bulletinGraphic.getBackground().getFills().get(0).getFill().toString().substring(2) + ";");
-                editNewBulletin.setTitle(bulletinGraphic.getTitle());
-                editNewBulletin.setContent(bulletinGraphic.getContent());
-                screensController.showOnScreen(editNewBulletin);
-            }
-        };
-
-        onEditAddNoteClick = ed -> {
+        EventHandler onEditAddNoteClick = ed -> {
             if ((ed instanceof KeyEvent && ((KeyEvent) ed).getCode() == KeyCode.ESCAPE) || ed.getTarget().toString().contains("delete")) {
                 if (editNewBulletin.getBulletinGraphic() != null) {
                     editNewBulletin.getBulletinGraphic().setVisible(true);
@@ -87,14 +70,16 @@ public class MainViewController implements ControlledScreen, Initializable {
                 screensController.showProgressScreen();
 
                 if (bulletinGraphic != null) {
+                    System.out.println("Edytuje");
                     try {
                         System.out.println("Editing bulletin...");
                         clientController.editBulletin(
-                                new Bulletin(bulletinGraphic.getBulletinNumber(), editNewBulletin.getTitle(), editNewBulletin.getContent(), true));
+                                new Bulletin(bulletinGraphic.getBulletinID(), editNewBulletin.getTitle(), editNewBulletin.getContent(), false));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else {
+                    System.out.println("Dodaje");
                     try {
                         clientController.addBulletin(editNewBulletin.getTitle(), editNewBulletin.getContent());
                     } catch (IOException e) {
@@ -103,6 +88,51 @@ public class MainViewController implements ControlledScreen, Initializable {
                 }
             }
         };
+
+        onNoteClick = event -> {
+            BulletinGraphic bulletinGraphic = (BulletinGraphic) event.getSource();
+            int bulletinNumber = bulletinGraphic.getBulletinID();
+
+            if (event.getTarget().toString().contains("delete")) {
+                try {
+                    clientController.deleteBulletin(bulletinNumber);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                bulletinGraphic.setVisible(false);
+
+                if (event.getTarget().toString().contains("edit")) {
+                    editNewBulletin.setBulletinGraphic(bulletinGraphic);
+                    screensController.showOnScreen(editNewBulletin);
+                    editNewBulletin.requestFocus();
+                } else {
+                    EditNewBulletin showBulletin = new EditNewBulletin(bulletinGraphic);
+                    showBulletin.setBulletinGraphic(bulletinGraphic);
+                    screensController.showOnScreen(showBulletin);
+                    showBulletin.requestFocus();
+
+                    showBulletin.setOnKeyReleased(key -> {
+                        switch (key.getCode()) {
+                            case ESCAPE:
+                                bulletinGraphic.setVisible(true);
+                                screensController.hideOnScreen();
+                                break;
+                            case ENTER:
+                                showBulletin.resize();
+                                break;
+                        }
+                    });
+                }
+            }
+        };
+
+        editNewBulletin = new EditNewBulletin();
+        editNewBulletin.setOnMouseClicked(onEditAddNoteClick);
+        editNewBulletin.setOnKeyReleased(onEditAddNoteClick);
+
+        bulletinBoardScreen = new BulletinBoardScreen();
+        curPage = 1;
     }
 
     public void refresh() {
@@ -150,7 +180,7 @@ public class MainViewController implements ControlledScreen, Initializable {
         if (deleteBulletinResponse.getResponseStatus() == ResponseStatus.OK) {
             deleteBulletinFromView(deleteBulletinResponse.getBulletinId());
         } else {
-            //TODO dialog o nie niepowodzeniu usuniecia ogloszenia
+            Platform.runLater(() -> screensController.showWarning("Nie można usunąć ogłoszenia. Spróboj ponownie."));
         }
     }
 
@@ -169,30 +199,27 @@ public class MainViewController implements ControlledScreen, Initializable {
     /**
      * Edit bulletin after trying to edit bulletin and getting response from server;
      */
-    public void editUserBulletinInView(Bulletin bulletin) {
+    public void editUserBulletinInView(EditBulletinResponse editBulletinResponse) {
 
         Platform.runLater(() -> {
             editNewBulletin.setDisable(false);
             screensController.hideProgressScreen();
         });
 
-        if (bulletin == null) {
+        if (editBulletinResponse.getResponseStatus() == ResponseStatus.ERROR) {
             editNewBulletin.getStyleClass().add("failure");
             return;
         }
 
-        for (int i = 0; i < bulletinsList.size(); i++) {
-            if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
+        Bulletin bulletin = bulletinsList.stream().filter(bul -> bul.getBulletinId() == editBulletinResponse.getBulletin().getBulletinId())
+                .findFirst().get();
+        bulletin.setBulletinContent(editBulletinResponse.getBulletin().getBulletinContent());
+        bulletin.setBulletinTitle(editBulletinResponse.getBulletin().getBulletinTitle());
 
-                bulletinsList.set(i, bulletin);
-                System.out.println("Editing bulletin.");
-                Platform.runLater(() -> {
-                    setPage(curPage);
-                    screensController.hideOnScreen();
-                });
-                break;
-            }
-        }
+        Platform.runLater(() -> {
+            setPage(curPage);
+            screensController.hideOnScreen();
+        });
     }
 
     /**
@@ -203,10 +230,12 @@ public class MainViewController implements ControlledScreen, Initializable {
             if (bulletinsList.get(i).getBulletinId() == bulletin.getBulletinId()) {
                 System.out.println("Editing bulletin.");
                 bulletinsList.set(i, bulletin);
+                if (i + 1 < curPage * 6 && i + 1 > (curPage - 1) * 6)
+                    refresh();
                 break;
             }
-            //TODO odswiezenie widoku jesli edytowane ogloszenie znajduje sie na aktualnie przegladanej stronie
         }
+
     }
 
 
@@ -219,7 +248,7 @@ public class MainViewController implements ControlledScreen, Initializable {
     @Override
     public void load() {
         try {
-            clientController.getBulletins(new ArrayList<>(Arrays.asList(categoryID)));
+            clientController.getBulletins(new ArrayList<>(Arrays.asList(category.getCategoryId())));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -228,7 +257,7 @@ public class MainViewController implements ControlledScreen, Initializable {
     public void setBulletins(List<Bulletin> bulletinsList) {
         this.bulletinsList = new CopyOnWriteArrayList<>(bulletinsList);
 
-        for (int k = 0; k < 6; ++k) {
+        for (int k = 0; k < 6 && k < bulletinsList.size(); ++k) {
             Bulletin bulletin = bulletinsList.get(k);
             BulletinGraphic bulletinGraphic = new BulletinGraphic(bulletin.getBulletinId(), bulletin.getBulletinTitle(), bulletin.getBulletinContent(), bulletin.isBelongToUser());
             bulletinGraphic.setOnMouseClicked(onNoteClick);
@@ -240,13 +269,17 @@ public class MainViewController implements ControlledScreen, Initializable {
 
     public void close(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
+            Action action = screensController.showConfirmDialog("Czy na pewno chcesz wyjść?");
+
+            if (action == Dialog.Actions.NO)
+                return;
+
             try {
                 clientController.disconnectFromServer();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
+
             ((Stage) exitImage.getScene().getWindow()).close();
         }
     }
@@ -265,18 +298,6 @@ public class MainViewController implements ControlledScreen, Initializable {
             return;
         stage.setX(event.getScreenX() - xOffset);
         stage.setY(event.getScreenY() - yOffset);
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        bulletinBoardScreen = new BulletinBoardScreen();
-        editNewBulletin = new EditNewBulletin();
-        editNewBulletin.setOnMouseClicked(onEditAddNoteClick);
-        editNewBulletin.setOnKeyReleased(onEditAddNoteClick);
-
-        hBox1.getChildren().add(bulletinBoardScreen);
-        curPage = 1;
-
     }
 
     public void setPage(int pageNumber) {
@@ -327,10 +348,10 @@ public class MainViewController implements ControlledScreen, Initializable {
     public void addNote(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             editNewBulletin.getStyleClass().remove("failure");
-            editNewBulletin.setBulletinGraphic(null);
             editNewBulletin.setStyle("-fx-background-color: white;");
             editNewBulletin.setTitle(null);
             editNewBulletin.setContent(null);
+            editNewBulletin.setBulletinGraphic(null);
             screensController.showOnScreen(editNewBulletin);
         }
     }
@@ -338,21 +359,52 @@ public class MainViewController implements ControlledScreen, Initializable {
     public void changeCategory(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             AnchorPane chooseCategoryScreen = (AnchorPane) screensController.getScreen(Screens.changeCategoryScreen);
+            chooseCategoryScreen.setDisable(false);
             Button ok = (Button) chooseCategoryScreen.lookup("#button1");
-            ok.setOnAction(action -> {
-                bulletinBoardScreen.clear();
-                bulletinsList.clear();
-                screensController.hideOnScreen();
+            ChooseCategoryScreenController chooseCategoryScreenController = (ChooseCategoryScreenController) screensController.getControlledScreen(Screens.changeCategoryScreen);
+
+            if (chooseCategoryScreenController.categoriesListIsEmpty()) {
                 screensController.showProgressScreen();
-                load();
+                chooseCategoryScreenController.load();
+            }
+
+            ok.setOnAction(action -> {
+                Category category = chooseCategoryScreenController.getCategory();
+                if (category == null) {
+                    screensController.hideProgressScreen();
+                    chooseCategoryScreenController.showWarning(true);
+                } else {
+                    bulletinBoardScreen.clear();
+                    bulletinsList.clear();
+                    screensController.hideOnScreen();
+                    chooseCategoryScreenController.showWarning(false);
+                    screensController.showProgressScreen();
+                    setCategory(category);
+                    load();
+                }
             });
-            chooseCategoryScreen.setOnKeyReleased(hide -> screensController.hideOnScreen());
+
+            chooseCategoryScreen.setOnKeyReleased(key -> {
+                switch (key.getCode()) {
+                    case ESCAPE:
+                        screensController.hideOnScreen();
+                        break;
+                    case ENTER:
+                        ok.fire();
+                        break;
+                }
+            });
             screensController.showOnScreen(screensController.getScreen(Screens.changeCategoryScreen));
         }
     }
 
-    public void setCategory(Integer categoryID) {
-        this.categoryID = categoryID;
+    public void setCategory(Category category) {
+        categoryName.setText(category.getCategoryName());
+        this.category = category;
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        hBox1.getChildren().add(bulletinBoardScreen);
+    }
 }

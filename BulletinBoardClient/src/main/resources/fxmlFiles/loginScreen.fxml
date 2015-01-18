@@ -6,7 +6,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.Color?>
 <?import java.net.URL?>
-<AnchorPane id="AnchorPane" xmlns:fx="http://javafx.com/fxml" fx:controller="pl.slowly.team.client.GUI.LoginScreenController"
+<AnchorPane id="AnchorPane" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="pl.slowly.team.client.GUI.LoginScreenController"
             onMousePressed="#mousePressed" onMouseDragged="#onMouseDragged" onKeyReleased="#keyPressed">
     <children>
         <HBox id="hBox1" alignment="CENTER">
@@ -34,7 +35,7 @@
                                     <Label id="appName" text="BulletinBoard">
 
                                         <HBox.margin>
-                                            <Insets left="10.0" top="12" bottom="10"/>
+                                            <Insets left="10.0" top="5" bottom="10"/>
                                         </HBox.margin>
                                     </Label>
                                     <VBox prefWidth="185" prefHeight="30" alignment="TOP_RIGHT">
@@ -66,7 +67,7 @@
                                         </Glow>
                                     </effect>
                                     <VBox.margin>
-                                        <Insets left="50.0" fx:id="x2"/>
+                                        <Insets left="40.0" fx:id="x2"/>
                                     </VBox.margin>
                                 </Label>
                                 <TextField fx:id="login" id="textField1" prefWidth="200.0" promptText="Username">
@@ -96,7 +97,9 @@
                         <VBox id="vBox2" layoutY="200.0" prefHeight="122.0" prefWidth="400.0">
                             <children>
                                 <Label id="label3" prefHeight="17.0" prefWidth="306.0"/>
-                                <Button onAction="#login" id="button1" defaultButton="true" contentDisplay="CENTER"
+                                <Button onAction="#connectAndLogin" fx:id="loginButton" id="button1"
+                                        defaultButton="true"
+                                        contentDisplay="CENTER"
                                         prefHeight="50.0" prefWidth="258.0" text="Login" textAlignment="CENTER">
                                     <VBox.margin>
                                         <Insets left="70.0" right="10.0" top="20.0"/>

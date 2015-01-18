@@ -14,14 +14,11 @@ import javafx.util.Duration;
 
 import java.util.Random;
 
-/**
- * Created by Maxym on 2014-11-21.
- */
 public class BulletinGraphic extends AnchorPane {
 
-    final DoubleProperty scaleX = scaleXProperty();
-    final DoubleProperty scaleY = scaleYProperty();
-    final private Label title;
+    final private DoubleProperty scaleX = scaleXProperty();
+    final private DoubleProperty scaleY = scaleYProperty();
+    final private Title title;
     final private Content content;
     final private Controls controls;
     private final int bulletinNumber;
@@ -30,7 +27,7 @@ public class BulletinGraphic extends AnchorPane {
     public BulletinGraphic(int bulletinNumber, boolean isBelongToUser) {
         this.bulletinNumber = bulletinNumber;
         getStyleClass().add("bulletinBackground");
-        getStylesheets().add(getClass().getResource("../../../../../styles/bulletin.css").toExternalForm());
+        getStylesheets().add(ClassLoader.getSystemResource("styles/bulletin.css").toExternalForm());
         setPrefSize(155, 155);
         setMaxSize(155, 155);
 
@@ -48,18 +45,25 @@ public class BulletinGraphic extends AnchorPane {
 
         content = new Content();
         setTopAnchor(content, 30.0);
+        setBottomAnchor(content, 20.0);
+        setLeftAnchor(content, 0.0);
+        setRightAnchor(content, 0.0);
 
         title = new Title();
+        setTopAnchor(title, 0.0);
+        setLeftAnchor(title, 0.0);
+        setRightAnchor(title, 0.0);
 
         controls = new Controls();
         controls.setVisible(isBelongToUser);
-        setTopAnchor(controls, 135.0);
+        setBottomAnchor(controls, 0.0);
+        setLeftAnchor(controls, 0.0);
+        setRightAnchor(controls, 0.0);
 
         getChildren().addAll(title, content, controls);
 
         setOnMouseEntered(mouseEntered -> {
             rotate = getRotate();
-            //controls.setVisible(true);
             new Timeline(new KeyFrame(Duration.millis(150), new KeyValue(scaleX, 1.17f)),
                     new KeyFrame(Duration.millis(150), new KeyValue(scaleY, 1.17f)),
                     new KeyFrame(Duration.millis(150), new KeyValue(rotateProperty(), 0f))
@@ -67,55 +71,11 @@ public class BulletinGraphic extends AnchorPane {
             toFront();
         });
 
-        setOnMouseExited(mouseExited -> {
-            //controls.setVisible(false);
-            new Timeline(new KeyFrame(Duration.millis(150), new KeyValue(scaleX, 1f)),
-                    new KeyFrame(Duration.millis(150), new KeyValue(scaleY, 1f)),
-                    new KeyFrame(Duration.millis(150), new KeyValue(rotateProperty(), rotate))
-            ).play();
-        });
+        setOnMouseExited(mouseExited -> new Timeline(new KeyFrame(Duration.millis(150), new KeyValue(scaleX, 1f)),
+                new KeyFrame(Duration.millis(150), new KeyValue(scaleY, 1f)),
+                new KeyFrame(Duration.millis(150), new KeyValue(rotateProperty(), rotate))
+        ).play());
     }
-
-//    public Bulletin(int number) {
-//
-//        getStyleClass().add("bulletinBackground");
-//        getStylesheets().add(getClass().getResource("../styles/bulletin.css").toExternalForm());
-//        setPrefSize(155, 155);
-//        setMaxSize(155, 155);
-//
-//        if ((number + 1) % 2 == 0) {
-//            setStyle("-fx-rotate: 4deg; -fx-background-color: #cfc;");
-//        } else if ((number + 1) % 3 == 0) {
-//            setStyle("-fx-rotate: -3deg; -fx-background-color: #ccf;");
-//        } else if ((number + 1) % 5 == 0) {
-//            setStyle("-fx-rotate: 5deg; -fx-background-color: #ffc;");
-//        } else {
-//            setStyle("-fx-rotate: -6deg; -fx-background-color: #ffc;");
-//        }
-//
-//        contents = new Contents(number);
-//        setTopAnchor(contents, 30.0);
-//
-//        title = new Title(number);
-//
-//        getChildren().addAll(title, contents);
-//
-//        setOnMouseEntered(mouseEntered -> {
-//            rotate = getRotate();
-//            new Timeline(new KeyFrame(Duration.millis(135), new KeyValue(scaleX, 1.17f)),
-//                    new KeyFrame(Duration.millis(135), new KeyValue(scaleY, 1.17f)),
-//                    new KeyFrame(Duration.millis(135), new KeyValue(rotateProperty(), 0f))
-//            ).play();
-//            toFront();
-//        });
-//
-//        setOnMouseExited(mouseExited -> {
-//            new Timeline(new KeyFrame(Duration.millis(135), new KeyValue(scaleX, 1f)),
-//                    new KeyFrame(Duration.millis(135), new KeyValue(scaleY, 1f)),
-//                    new KeyFrame(Duration.millis(135), new KeyValue(rotateProperty(), rotate))
-//            ).play();
-//        });
-//    }
 
     public BulletinGraphic(int number, String title, String content, boolean isBelongToUser) {
         this(number, isBelongToUser);
@@ -123,7 +83,11 @@ public class BulletinGraphic extends AnchorPane {
         setContent(content);
     }
 
-    public int getBulletinNumber() {
+    public boolean isEditable() {
+        return controls.isVisible();
+    }
+
+    public int getBulletinID() {
         return bulletinNumber;
     }
 
@@ -145,24 +109,19 @@ public class BulletinGraphic extends AnchorPane {
 
     private class Title extends Label {
         public Title() {
-            setPrefSize(155, 30);
-            setMaxSize(155, 30);
             getStyleClass().add("title");
         }
+
     }
 
     private class Content extends Label {
         public Content() {
-            setPrefSize(155, 105);
-            setMaxSize(155, 105);
             getStyleClass().add("contents");
         }
     }
 
     private class Controls extends HBox {
         public Controls() {
-            setPrefSize(155, 20);
-            setMaxSize(155, 20);
             setAlignment(Pos.CENTER_RIGHT);
             getStyleClass().add("controls");
 

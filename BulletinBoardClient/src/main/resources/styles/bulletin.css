@@ -23,8 +23,7 @@
     -fx-alignment: top-left;
     -fx-effect: null;
     -fx-wrap-text: true;
-    /*-fx-border-color: black;*/
-    /*-fx-border-style: solid;*/
+    -fx-opacity: 1.0;
 }
 
 .controls {
@@ -41,13 +40,17 @@
     -fx-background-image: url("../images/cancel.png");
 }
 
-.delete, .accept {
+.resizeButton {
+    -fx-background-image: url("../images/resize.png");
+}
+
+.delete, .accept, .resizeButton {
     -fx-background-repeat: no-repeat;
     -fx-background-size: 75%;
     -fx-background-position: center;
 }
 
-.delete:hover, .accept:hover {
+.delete:hover, .accept:hover, .resizeButton:hover {
     -fx-background-size: 90%;
 }
 
@@ -60,13 +63,6 @@
 
 .edit:hover {
     -fx-background-size: 90%;
-}
-
-@font-face {
-    font-family: 'Reenie Beanie';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../fonts/ReenieBeanie.ttf');
 }
 
 .failure {

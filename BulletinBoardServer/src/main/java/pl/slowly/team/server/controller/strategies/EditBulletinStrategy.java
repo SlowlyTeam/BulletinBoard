@@ -22,7 +22,7 @@ public class EditBulletinStrategy extends Strategy {
         EditBulletinRequest editBulletinRequest = (EditBulletinRequest) packetWrapper.getPacket();
         Bulletin bulletin = editBulletinRequest.getBulletin();
         int clientId = packetWrapper.getUserID();
-        boolean success = model.editBulletin(bulletin, server.getUsername(clientId));
+        boolean success = model.editBulletin(bulletin, server.getUsername(clientId), server.getUserCategory(clientId));
         if (success) {
             server.sendResponseToClient(new EditBulletinResponse(ResponseStatus.OK, bulletin), clientId);
             server.sendBroadcastPacket(new EditBulletinBroadcast(bulletin), clientId);

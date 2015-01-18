@@ -1,6 +1,9 @@
 package pl.slowly.team.server.repository;
 
-import org.hibernate.*;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import pl.slowly.team.server.repository.dao.DAOUser;
 
 /**
@@ -9,67 +12,50 @@ import pl.slowly.team.server.repository.dao.DAOUser;
 public class UserRepository {
     private static SessionFactory factory;
 
-    public UserRepository()
-    {
+    public UserRepository() {
         factory = HibernateUtil.getSessionFactory();
     }
 
-    public DAOUser getUser(String name)
-    {
-        DAOUser user = new DAOUser();
+    public DAOUser getUser(String username) {
+        DAOUser user = null;
         Session session = factory.openSession();
         Transaction tx = null;
-        try
-        {
+        try {
             tx = session.beginTransaction();
-            Query query =  session.createQuery("FROM DAOUser WHERE userName = :name");
-            query.setParameter("name", name);
-            try {
-                user = (DAOUser) query.list().get(0);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            user = (DAOUser) session.get(DAOUser.class, username);
             tx.commit();
-        }
-        catch (HibernateException e)
-        {
-            if (tx!=null)
+        } catch (HibernateException e) {
+            if (tx != null)
                 tx.rollback();
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             session.close();
         }
         return user;
     }
 
-    public DAOUser getUser(int id)
-    {
-        DAOUser user = new DAOUser();
+    public boolean setNewCategory(String username, int newCategoryID) {
         Session session = factory.openSession();
         Transaction tx = null;
-        try
-        {
+        boolean result = false;
+        try {
+
             tx = session.beginTransaction();
-            Query query =  session.createQuery("FROM DAOUser WHERE userID = :id");
-            query.setParameter("id", id);
-            try {
-                user = (DAOUser) query.list().get(0);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+
+            DAOUser daoUser = getUser(username);
+            daoUser.setCategoryID(newCategoryID);
+            session.update(daoUser);
+
             tx.commit();
-        }
-        catch (HibernateException e)
-        {
-            if (tx!=null)
+            result = true;
+        } catch (HibernateException e) {
+            if (tx != null)
                 tx.rollback();
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             session.close();
         }
-        return user;
+        return result;
     }
 
 }

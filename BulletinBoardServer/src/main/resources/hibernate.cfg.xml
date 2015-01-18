@@ -4,15 +4,16 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
-        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.password">nJ6%hA5%</property>
-        <property name="hibernate.connection.url">jdbc:mysql://sql5.freesqldatabase.com:3306</property>
-        <property name="hibernate.connection.username">sql562098</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.default_schema">sql562098</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="bytecode.use_reflection_optimizer">false</property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.password">nJ6%hA5%</property>
+        <property name="connection.url">jdbc:mysql://sql5.freesqldatabase.com:3306</property>
+        <property name="default_schema">sql562098</property>
+        <property name="connection.username">sql562098</property>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hbm2ddl.auto">update</property>
         <property name="show_sql">true</property>
+        <property name="connection.characterEncoding">utf8</property>
         <mapping class="pl.slowly.team.server.repository.dao.DAOCategory"/>
         <mapping class="pl.slowly.team.server.repository.dao.DAOBulletin"/>
         <mapping class="pl.slowly.team.server.repository.dao.DAOUser"/>

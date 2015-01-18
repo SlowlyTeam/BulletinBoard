@@ -16,8 +16,7 @@ public class CategoryRepository implements ICategoryRepository {
 
     private static SessionFactory factory;
 
-    public CategoryRepository()
-    {
+    public CategoryRepository() {
         System.out.println("CategoryRepository");
         factory = HibernateUtil.getSessionFactory();
     }
@@ -27,17 +26,36 @@ public class CategoryRepository implements ICategoryRepository {
         List<DAOCategory> categories = new ArrayList<DAOCategory>();
         Session session = factory.openSession();
         Transaction tx = null;
-        try{
+        try {
             tx = session.beginTransaction();
             categories = session.createQuery("FROM DAOCategory").list();
             tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback();
             e.printStackTrace();
-        }finally {
+        } finally {
             session.close();
         }
         return categories;
+    }
+
+    @Override
+    public DAOCategory getCategory(int categoryID) {
+        DAOCategory category = null;
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            category = (DAOCategory) session.get(DAOCategory.class, categoryID);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return category;
     }
 
     @Override
@@ -45,21 +63,17 @@ public class CategoryRepository implements ICategoryRepository {
         System.out.println("Saving");
         Session session = factory.openSession();
         Transaction tx = null;
-        try
-        {
+        try {
             System.out.println("Begin");
             tx = session.beginTransaction();
             session.save(newCategory);
             tx.commit();
             System.out.println("End");
-        }
-        catch (HibernateException e)
-        {
-            if (tx!=null)
+        } catch (HibernateException e) {
+            if (tx != null)
                 tx.rollback();
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             session.close();
         }
     }

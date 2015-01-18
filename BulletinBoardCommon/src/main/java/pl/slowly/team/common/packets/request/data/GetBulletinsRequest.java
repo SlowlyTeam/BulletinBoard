@@ -3,7 +3,7 @@ package pl.slowly.team.common.packets.request.data;
 import com.sun.istack.internal.Nullable;
 import pl.slowly.team.common.packets.request.Request;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,17 +12,18 @@ import java.util.List;
 public class GetBulletinsRequest extends Request {
 
     private List<Integer> categoriesIds;
-    private LocalDateTime since;
+    private Date since;
 
-    public GetBulletinsRequest(List<Integer> categoriesIds, @Nullable LocalDateTime since) {
+    public GetBulletinsRequest(List<Integer> categoriesIds, @Nullable Date since) {
         this.categoriesIds = categoriesIds;
+        this.since = since;
     }
 
     public List<Integer> getCategoriesIds() {
         return categoriesIds;
     }
 
-    public LocalDateTime getSince() {
+    public Date getSince() {
         return since;
     }
 

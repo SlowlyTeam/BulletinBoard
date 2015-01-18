@@ -4,7 +4,7 @@ package pl.slowly.team.client.GUI;/*
  * and open the template in the editor.
  */
 
-import pl.slowly.team.client.connection.ClientController;
+import com.sun.istack.internal.Nullable;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -20,6 +20,10 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import org.controlsfx.control.action.Action;
+import org.controlsfx.dialog.Dialog;
+import org.controlsfx.dialog.Dialogs;
+import pl.slowly.team.client.connection.ClientController;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,14 +49,15 @@ public class ScreensController extends StackPane {
 
     public boolean loadScreen(Screens screen, ClientController clientController) {
         try {
-            FXMLLoader myLoader = new FXMLLoader(getClass().getResource(screen.RESOURCE));
+            FXMLLoader myLoader = new FXMLLoader(ClassLoader.getSystemResource(screen.RESOURCE));
             Parent loadScreen = myLoader.load();
-            ControlledScreen myScreenColector = myLoader.getController();
-            myScreenColector.setScreenController(this, clientController);
-            addScreen(screen.ID, new Pair<>(loadScreen, myScreenColector));
+            ControlledScreen myScreenCollector = myLoader.getController();
+            myScreenCollector.setScreenController(this, clientController);
+            addScreen(screen.ID, new Pair<>(loadScreen, myScreenCollector));
             System.out.println(screen.ID + " laoded");
             return true;
         } catch (IOException ioe) {
+            ioe.printStackTrace();
             return false;
         }
     }
@@ -60,9 +65,10 @@ public class ScreensController extends StackPane {
     public boolean showProgressScreen() {
         System.out.println("show");
         if (!getChildren().isEmpty()) {
-            //getChildren().get(0).setDisable(true);
             getChildren().add(screens.get("progressScreen").getKey());
+            screens.get("progressScreen").getKey().requestFocus();
             setOpacity(0.5f);
+            getChildren().get(0).setDisable(true);
             return true;
         } else {
             return false;
@@ -74,7 +80,8 @@ public class ScreensController extends StackPane {
         if (!getChildren().isEmpty()) {
             getChildren().remove(screens.get("progressScreen").getKey());
             setOpacity(1.0f);
-            //getChildren().get(0).setDisable(false);
+            getChildren().get(0).setDisable(false);
+            getChildren().get(0).requestFocus();
             return true;
         } else {
             return false;
@@ -171,10 +178,10 @@ public class ScreensController extends StackPane {
 
 
     public void showOnScreen(Node screen) {
-        //getChildren().get(0).setOpacity(0.3);
         getChildren().add(1, screen);
         new Timeline(new KeyFrame(Duration.millis(200), new KeyValue(getChildren().get(0).opacityProperty(), 0.1, Interpolator.EASE_IN))).play();
         getChildren().get(0).setDisable(true);
+        screen.requestFocus();
 
     }
 
@@ -182,5 +189,44 @@ public class ScreensController extends StackPane {
         getChildren().remove(1);
         getChildren().get(0).setDisable(false);
         getChildren().get(0).setOpacity(1);
+        getChildren().get(0).requestFocus();
+    }
+
+    public void showExitDialog(String message, @Nullable Exception exception) {
+        if (exception != null) {
+            Dialogs.create()
+                    .owner(getParent().getScene().getWindow())
+                    .title("Error")
+                    .masthead(message)
+                    .showException(exception);
+        } else {
+            Dialogs.create()
+                    .owner(getParent().getScene().getWindow())
+                    .title("Error")
+                    .message(message)
+                    .showError();
+        }
+        close();
+    }
+
+    private void close() {
+        ((Stage) getParent().getScene().getWindow()).close();
+    }
+
+    public void showWarning(String message) {
+        Dialogs.create()
+                .owner(getParent().getScene().getWindow())
+                .title("Warning")
+                .masthead(message)
+                .showWarning();
+    }
+
+    public Action showConfirmDialog(String message) {
+        return Dialogs.create()
+                .owner(getParent().getScene().getWindow())
+                .actions(Dialog.Actions.YES, Dialog.Actions.NO)
+                .title("Confirm")
+                .message(message)
+                .showConfirm();
     }
 }

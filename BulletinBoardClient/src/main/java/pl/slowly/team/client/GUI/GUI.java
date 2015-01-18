@@ -4,7 +4,6 @@ package pl.slowly.team.client.GUI;/*
  * and open the template in the editor.
  */
 
-import pl.slowly.team.client.connection.ClientController;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -12,8 +11,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import pl.slowly.team.client.connection.ClientController;
 
-import java.io.IOException;
+import java.net.InetAddress;
 
 /**
  * @author Maxym
@@ -30,15 +30,7 @@ public class GUI extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         ScreensController screensController = new ScreensController();
-        ClientController clientController;
-
-        try {
-            clientController = new ClientController(null, 8081, screensController);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
-        clientController.connectToServer();
+        ClientController clientController = new ClientController(InetAddress.getLocalHost().getHostAddress(), 8081, screensController);
 
         screensController.loadScreen(Screens.loginScreen, clientController);
         screensController.loadScreen(Screens.changeCategoryScreen, clientController);
@@ -55,7 +47,7 @@ public class GUI extends Application {
         root.setStyle("-fx-border-radius: 7; -fx-background-radius: 7;");
 
         stage.initStyle(StageStyle.UNDECORATED);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("../../../../../images/icon.png")));
+        stage.getIcons().add(new Image(ClassLoader.getSystemResourceAsStream("images/icon.png")));
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

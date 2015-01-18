@@ -9,5 +9,8 @@ import java.util.List;
  */
 public interface ICategoryRepository {
     public abstract List<DAOCategory> getAllCategories();
+
+    public DAOCategory getCategory(int categoryID);
+
     public abstract void saveCategory(DAOCategory newCategory);
 }

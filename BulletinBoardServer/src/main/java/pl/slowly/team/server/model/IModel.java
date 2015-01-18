@@ -6,7 +6,7 @@ import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.Credentials;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public interface IModel {
@@ -17,11 +17,15 @@ public interface IModel {
     /** Returns bulletins for specified user. */
     public List<Bulletin> getUserBulletins(String username);
     /** Adds a bulletin to database for specified user. */
-    public Integer addBulletin(Bulletin bulletin, String username);
-    /** Deletes the bulletin from database for specified user. */
-    public boolean deleteBulletin(int bulletinId, String username);
+    public Integer addBulletin(Bulletin bulletin, String username, int categoryID);
+    /** Deletes the bulletin from database */
+    public boolean deleteBulletin(int bulletinId);
     /** Returns bulletins from specified categories, from optional date since. */
-    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, int clientID);
+    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable Date since, String user);
     /** Returns success or failure as boolean. */
-    public boolean editBulletin(Bulletin bulletin, String username);
+    public boolean editBulletin(Bulletin bulletin, String username, int categoryID);
+    /** Returns category assigned to User - the last one */
+    public Category getUserCategory(String username);
+    /** Assign new category to User */
+    public void setUserCategory(String username, int newCategoryID);
 }

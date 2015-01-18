@@ -11,106 +11,89 @@ import pl.slowly.team.server.repository.dao.DAOBulletin;
 import pl.slowly.team.server.repository.dao.DAOCategory;
 import pl.slowly.team.server.repository.dao.DAOUser;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Model implements IModel {
 
-    private final List<Bulletin> bulletinList;
-    private final List<Category> categoryList;
-    private final Random random;
-    private int test_i;
-    private BulletinRepository bulletinRepository;
-    private CategoryRepository categoryRepository;
-    private UserRepository userRepository;
+    private final BulletinRepository bulletinRepository;
+    private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     public Model() {
         bulletinRepository = new BulletinRepository();
         categoryRepository = new CategoryRepository();
         userRepository = new UserRepository();
-        bulletinList = new ArrayList<>();
-        categoryList = new ArrayList<>();
-        random = new Random();
-        for (int i = 0; i < 100; ++i)
-            bulletinList.add(new Bulletin(random.nextInt(), "Note #" + i, "content number #" + i, random.nextBoolean()));
-        for (int i = 0; i < 20; ++i)
-            categoryList.add(new Category("kat. " + i, random.nextInt()));
-        test_i = 0;
     }
 
     @Override
     public boolean checkCredentials(Credentials credentials) {
         DAOUser client = userRepository.getUser(credentials.getUsername());
-        if(client.getPassword().equals(credentials.getPasswordHash()))
-            return true;
-        else
-            return false;
+        return client != null && client.getPassword().equals(credentials.getPasswordHash());
     }
 
     @Override
     public List<Category> getCategories() {
-        List<Category> result = new ArrayList<Category>();
-        for(DAOCategory cat : categoryRepository.getAllCategories()){
-            result.add(DaoToDto(cat));
-        }
-        return result;
+        return categoryRepository.getAllCategories().stream().map(this::DaoToDto).collect(Collectors.toList());
     }
 
     @Override
     public List<Bulletin> getUserBulletins(String username) {
-        List<Bulletin> result = new ArrayList<Bulletin>();
-        for(DAOBulletin bul : bulletinRepository.getUsersBulletins(username)){
-            result.add(DaoToDto(bul));
-        }
-        return result;
+        return bulletinRepository.getUsersBulletins(username)
+                .stream().map(bulletin -> DaoToDto(bulletin, true)).collect(Collectors.toList());
     }
 
     @Override
-    public Integer addBulletin(Bulletin bulletin, String username) {
+    public Integer addBulletin(Bulletin bulletin, String username, int categoryID) {
         DAOBulletin daoBulletin = DtoToDao(bulletin);
         daoBulletin.setAuthor(username);
         daoBulletin.setCreationDate(new Date());
-        bulletinRepository.saveBulletin(daoBulletin);
-        return ++test_i;
+        daoBulletin.setCategoryID(categoryID);
+        return bulletinRepository.saveBulletin(daoBulletin);
     }
 
     @Override
-    public boolean deleteBulletin(int bulletinId, String username) {
-        return bulletinRepository.deleteBulletin(bulletinId, username);
+    public boolean deleteBulletin(int bulletinId) {
+        return bulletinRepository.deleteBulletin(bulletinId);
     }
 
     @Override
-    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable LocalDateTime since, int clientID) {
-        List<Bulletin> result = new ArrayList<Bulletin>();
-        for(DAOBulletin bul : bulletinRepository.getBulletins(categoriesIds, since, clientID)){
-            result.add(DaoToDto(bul));
-        }
-        return result;
+    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable Date since, String username) {
+        setUserCategory(username, categoriesIds.get(0));
+        return bulletinRepository.getBulletins(categoriesIds, since)
+                .stream().map(bulletin -> DaoToDto(bulletin, bulletin.getAuthor().equalsIgnoreCase(username))).collect(Collectors.toList());
     }
 
     @Override
-    public boolean editBulletin(Bulletin bulletin, String username) {
+    public boolean editBulletin(Bulletin bulletin, String username, int categoryID) {
         DAOBulletin daoBulletin = DtoToDao(bulletin);
         daoBulletin.setAuthor(username);
+        daoBulletin.setCategoryID(categoryID);
         daoBulletin.setCreationDate(new Date());
         return bulletinRepository.editBulletin(daoBulletin, username);
     }
 
-    private Bulletin DaoToDto(DAOBulletin daoBulletin)
-    {
-        return new Bulletin(daoBulletin.getBulletinID(),daoBulletin.getBulletinTitle(), daoBulletin.getBulletinContent(),true);
+    @Override
+    public Category getUserCategory(String username) {
+        int categoryId = userRepository.getUser(username).getCategoryID();
+        return DaoToDto(categoryRepository.getCategory(categoryId));
     }
 
-    private Category DaoToDto(DAOCategory daoCategory)
-    {
+    @Override
+    public void setUserCategory(String username, int newCategoryID) {
+        userRepository.setNewCategory(username, newCategoryID);
+    }
+
+    private Bulletin DaoToDto(DAOBulletin daoBulletin, Boolean isBelongToUser) {
+        return new Bulletin(daoBulletin.getBulletinID(), daoBulletin.getBulletinTitle(), daoBulletin.getBulletinContent(), isBelongToUser);
+    }
+
+    private Category DaoToDto(DAOCategory daoCategory) {
         return new Category(daoCategory.getCategoryName(), daoCategory.getCategoryID());
     }
 
-    private DAOBulletin DtoToDao(Bulletin bulletin)
-    {
+    private DAOBulletin DtoToDao(Bulletin bulletin) {
         DAOBulletin daoBulletin = new DAOBulletin();
         daoBulletin.setBulletinContent(bulletin.getBulletinContent());
         daoBulletin.setBulletinTitle(bulletin.getBulletinTitle());

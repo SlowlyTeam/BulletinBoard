@@ -1,3 +1,17 @@
+@font-face {
+    font-family: 'Reenie Beanie';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/ReenieBeanie.ttf');
+}
+
+@font-face {
+    font-family: 'Kaushan Script';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/KaushanScript.ttf');
+}
+
 .background {
     -fx-background-image: url("../images/CoarseGrid.png");
     -fx-background-repeat: repeat;
@@ -17,13 +31,6 @@
     rgba(255, 255, 255, 0.08) transparent rgba(0, 0, 0, 0.5) transparent;
     -fx-border-width: 1, 1.5;
     -fx-border-insets: -1, 0;
-}
-
-.label {
-    -fx-font-family: "Arial";
-    -fx-font-size: 14;
-    -fx-text-fill: rgba(255, 255, 255, 0.4);
-    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.6), 0, 0.0, 0, 1);
 }
 
 .profileTitle {
@@ -132,8 +139,26 @@
     -fx-background-radius: 5;
 }
 
+#categoryHolder {
+    -fx-font-family: "Arial";
+    -fx-font-size: 18;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 4, 4);
+    -fx-padding: 0px 5px 0px 15px;
+}
+
+#categoryName {
+    -fx-font-family: "Kaushan Script";
+    -fx-font-size: 20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 0px 0px 3px 0px;
+    -fx-effect: dropshadow(three-pass-box, black, 10, 0, 4, 4);
+}
+
 #appName {
-    -fx-font-size: 30 !important;
+    -fx-font-family: "Arial";
+    -fx-font-size: 30;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(three-pass-box, black, 10, 0, 4, 4);

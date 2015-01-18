@@ -4,7 +4,6 @@ package pl.slowly.team.client.GUI;/*
  * and open the template in the editor.
  */
 
-import pl.slowly.team.client.connection.ClientController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -13,6 +12,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import pl.slowly.team.client.connection.ClientController;
+import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.response.LogInResponse;
 
@@ -37,17 +38,33 @@ public class LoginScreenController implements ControlledScreen {
     private double xOffset;
     private double yOffset;
 
-    public void login() throws IOException {
+
+    public void connectAndLogin() {
         screensController.showProgressScreen();
+
+        new Thread(() -> {
+            try {
+                clientController.connectToServer();
+                login();
+            } catch (IOException e) {
+                Platform.runLater(() -> {
+                    screensController.hideProgressScreen();
+                    screensController.showWarning("Nie można połączyć z serwerem");
+                });
+            }
+        }).start();
+    }
+
+    public void login() throws IOException {
         if (login.getText().isEmpty() || password.getText().isEmpty()) {
-            done(false);
+            done(false, null);
         } else {
             clientController.logIn(login.getText(), password.getText());
         }
     }
 
     public void logInResponse(LogInResponse logInResponse) {
-        done(logInResponse.getResponseStatus().equals(ResponseStatus.AUTHORIZED));
+        done(logInResponse.getResponseStatus().equals(ResponseStatus.AUTHORIZED), logInResponse.getCategory());
     }
 
     @Override
@@ -88,23 +105,21 @@ public class LoginScreenController implements ControlledScreen {
         stage.setY(event.getScreenY() - yOffset);
     }
 
-//    private void doInBackground() throws Exception {
-//        TimeUnit.SECONDS.sleep(1);
-//        if (!login.getText().equals("Maxym") || !password.getText().equals("open13")) {
-//            throw new Exception();
-//        }
-//    }
-
-    protected void done(boolean isLogged) {
+    protected void done(boolean isLogged, Category category) {
         Platform.runLater(() -> {
             if (isLogged) {
-                screensController.setScreen(Screens.changeCategoryScreen, true);
+                if (category != null) {
+                    MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
+                    mainViewController.setCategory(category);
+                    screensController.setMainScreen(Screens.mainScreen);
+                } else {
+                    screensController.setScreen(Screens.changeCategoryScreen, true);
+                }
             } else {
                 screensController.hideProgressScreen();
                 login.setStyle("-fx-background-color: rgba(230, 10, 10, 0.8)");
                 password.setStyle("-fx-background-color: rgba(230, 10, 10, 0.8)");
             }
-            // login.getParent().setDisable(false);
         });
     }
 

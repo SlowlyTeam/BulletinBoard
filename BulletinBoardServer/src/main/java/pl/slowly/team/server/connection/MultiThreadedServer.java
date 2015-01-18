@@ -53,11 +53,12 @@ public class MultiThreadedServer implements IServer, Runnable {
      * Start listening for new clients in loop.
      */
     @Override
-    public void listen() {
+    public void listen() throws RuntimeException{
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             LOGGER.error("Could not listen on port: " + port, e);
+            throw new RuntimeException();
         }
         new Thread(this).start();
     }
@@ -210,12 +211,12 @@ public class MultiThreadedServer implements IServer, Runnable {
     }
 
     @Override
-    public void setCategory(int clientID, int categoryID) {
+    public void setUserCategory(int clientID, int categoryID) {
         clientMap.get(clientID).setCategoryID(categoryID);
     }
 
     @Override
-    public int getCategory(int clientID) {
+    public int getUserCategory(int clientID) {
         return clientMap.get(clientID).getCategoryID();
     }
 
@@ -262,7 +263,7 @@ public class MultiThreadedServer implements IServer, Runnable {
         }
 
         /**
-         * Reciving packets from specified client in a loop.
+         * Receiving packets from specified client in a loop.
          */
         @Override
         public void run() {

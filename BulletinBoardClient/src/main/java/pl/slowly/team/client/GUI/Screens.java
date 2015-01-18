@@ -5,9 +5,9 @@ package pl.slowly.team.client.GUI;
  */
 public enum Screens {
 
-    loginScreen("loginScreen", "../../../../../fxmlFiles/loginScreen.fxml"),
-    changeCategoryScreen("chooseCategory", "../../../../../fxmlFiles/chooseCategory.fxml"),
-    mainScreen("mainScreen", "../../../../../fxmlFiles/mainView.fxml");
+    loginScreen("loginScreen", "fxmlFiles/loginScreen.fxml"),
+    changeCategoryScreen("chooseCategory", "fxmlFiles/chooseCategory.fxml"),
+    mainScreen("mainScreen", "fxmlFiles/mainView.fxml");
 
     public final String ID;
     public final String RESOURCE;
@@ -15,6 +15,5 @@ public enum Screens {
     private Screens(String ID, String RESOURCE) {
         this.ID = ID;
         this.RESOURCE = RESOURCE;
-
     }
 }
