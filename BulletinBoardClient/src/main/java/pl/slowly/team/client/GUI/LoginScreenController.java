@@ -49,7 +49,7 @@ public class LoginScreenController implements ControlledScreen {
             } catch (IOException e) {
                 Platform.runLater(() -> {
                     screensController.hideProgressScreen();
-                    screensController.showWarning("Nie można połączyć z serwerem");
+                    screensController.showWarning("Nie można połączyć z serwerem.");
                 });
             }
         }).start();

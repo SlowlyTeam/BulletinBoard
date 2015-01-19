@@ -39,7 +39,7 @@
     </effect>
     <HBox AnchorPane.topAnchor="400" prefHeight="53" prefWidth="400"
           alignment="CENTER_LEFT">
-        <Label id="categoryHolder">Category: </Label>
+        <Label id="categoryHolder">Kategoria: </Label>
         <Label fx:id="categoryName">Antyki i Sztuka</Label>
     </HBox>
     <HBox AnchorPane.topAnchor="400" prefWidth="600" alignment="CENTER_RIGHT">

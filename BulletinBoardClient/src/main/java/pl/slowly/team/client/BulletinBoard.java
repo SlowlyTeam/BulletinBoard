@@ -1,4 +1,4 @@
-package pl.slowly.team.client.GUI;/*
+package pl.slowly.team.client;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -11,6 +11,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import pl.slowly.team.client.GUI.ProgressPanel;
+import pl.slowly.team.client.GUI.Screens;
+import pl.slowly.team.client.GUI.ScreensController;
 import pl.slowly.team.client.connection.ClientController;
 
 import java.net.InetAddress;
@@ -18,7 +21,7 @@ import java.net.InetAddress;
 /**
  * @author Maxym
  */
-public class GUI extends Application {
+public class BulletinBoard extends Application {
 
     /**
      * @param args the command line arguments

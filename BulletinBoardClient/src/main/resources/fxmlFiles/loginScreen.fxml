@@ -52,7 +52,7 @@
                                     </VBox>
                                 </HBox>
 
-                                <Label id="label1" text="Username">
+                                <Label id="label1" text="Użytkownik">
                                     <effect>
                                         <Glow>
                                             <input>
@@ -70,12 +70,12 @@
                                         <Insets left="40.0" fx:id="x2"/>
                                     </VBox.margin>
                                 </Label>
-                                <TextField fx:id="login" id="textField1" prefWidth="200.0" promptText="Username">
+                                <TextField fx:id="login" id="textField1" prefWidth="200.0" promptText="Użytkownik">
                                     <VBox.margin>
                                         <Insets left="50.0" right="50.0"/>
                                     </VBox.margin>
                                 </TextField>
-                                <Label id="label2" text="Password" VBox.margin="$x2">
+                                <Label id="label2" text="Hasło" VBox.margin="$x2">
                                     <effect>
                                         <Glow>
                                             <input>
@@ -86,7 +86,7 @@
                                     </effect>
                                 </Label>
                                 <PasswordField fx:id="password" id="passwordField1" prefWidth="200.0"
-                                               promptText="Password">
+                                               promptText="Hasło">
                                     <VBox.margin>
                                         <Insets bottom="5.0" left="50.0" right="50.0"/>
                                     </VBox.margin>
@@ -100,7 +100,7 @@
                                 <Button onAction="#connectAndLogin" fx:id="loginButton" id="button1"
                                         defaultButton="true"
                                         contentDisplay="CENTER"
-                                        prefHeight="50.0" prefWidth="258.0" text="Login" textAlignment="CENTER">
+                                        prefHeight="50.0" prefWidth="258.0" text="Zaloguj" textAlignment="CENTER">
                                     <VBox.margin>
                                         <Insets left="70.0" right="10.0" top="20.0"/>
                                     </VBox.margin>

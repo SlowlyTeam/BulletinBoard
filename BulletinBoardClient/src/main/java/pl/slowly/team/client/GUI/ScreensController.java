@@ -157,7 +157,7 @@ public class ScreensController extends StackPane {
 
             return true;
         } else {
-            System.out.println("screen hasn't been loaded!!!");
+            System.out.println("screen hasn't been loaded!");
             return false;
         }
     }
@@ -195,13 +195,13 @@ public class ScreensController extends StackPane {
         if (exception != null) {
             Dialogs.create()
                     .owner(getParent().getScene().getWindow())
-                    .title("Error")
+                    .title("Błąd")
                     .masthead(message)
                     .showException(exception);
         } else {
             Dialogs.create()
                     .owner(getParent().getScene().getWindow())
-                    .title("Error")
+                    .title("Błąd")
                     .message(message)
                     .showError();
         }
@@ -215,7 +215,7 @@ public class ScreensController extends StackPane {
     public void showWarning(String message) {
         Dialogs.create()
                 .owner(getParent().getScene().getWindow())
-                .title("Warning")
+                .title("Uwaga")
                 .masthead(message)
                 .showWarning();
     }
@@ -224,7 +224,7 @@ public class ScreensController extends StackPane {
         return Dialogs.create()
                 .owner(getParent().getScene().getWindow())
                 .actions(Dialog.Actions.YES, Dialog.Actions.NO)
-                .title("Confirm")
+                .title("Potwierdź")
                 .message(message)
                 .showConfirm();
     }

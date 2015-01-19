@@ -113,7 +113,7 @@ public class EditNewBulletin extends AnchorPane {
 
         public Title() {
             getStyleClass().removeAll(getStyleClass());
-            setPromptText("Title");
+            setPromptText("Tytył");
             setTooltip(new Tooltip("Title"));
             setStyle("-fx-cursor: text");
             getStyleClass().add("title");
@@ -125,7 +125,7 @@ public class EditNewBulletin extends AnchorPane {
         public Content() {
             getStyleClass().removeAll(getStyleClass());
             setWrapText(true);
-            setPromptText("content");
+            setPromptText("Tekst");
             setStyle("-fx-cursor: text");
             skinProperty().addListener(new ChangeListener<Skin<?>>() {
 

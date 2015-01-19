@@ -180,7 +180,7 @@ public class MainViewController implements ControlledScreen, Initializable {
         if (deleteBulletinResponse.getResponseStatus() == ResponseStatus.OK) {
             deleteBulletinFromView(deleteBulletinResponse.getBulletinId());
         } else {
-            Platform.runLater(() -> screensController.showWarning("Nie można usunąć ogłoszenia. Spróboj ponownie."));
+            Platform.runLater(() -> screensController.showWarning("Nie można usunąć ogłoszenia. Spróbuj ponownie."));
         }
     }
 
@@ -191,7 +191,7 @@ public class MainViewController implements ControlledScreen, Initializable {
     public void deleteBulletinFromView(int bulletinId) {
         Bulletin bul = bulletinsList.stream().filter(bulletin -> bulletin.getBulletinId() == bulletinId).findFirst().get();
         if (bulletinsList.remove(bul)) {
-            System.out.println("Usunalem bulletin");
+            System.out.println("Usunalem bulletin.");
             Platform.runLater(this::refresh);
         }
     }
