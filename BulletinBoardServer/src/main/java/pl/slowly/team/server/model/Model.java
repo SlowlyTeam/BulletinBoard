@@ -1,6 +1,6 @@
 package pl.slowly.team.server.model;
 
-import com.sun.istack.internal.Nullable;
+
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.Credentials;
@@ -59,7 +59,7 @@ public class Model implements IModel {
     }
 
     @Override
-    public List<Bulletin> getBulletins(List<Integer> categoriesIds, @Nullable Date since, String username) {
+    public List<Bulletin> getBulletins(List<Integer> categoriesIds,  Date since, String username) {
         setUserCategory(username, categoriesIds.get(0));
         return bulletinRepository.getBulletins(categoriesIds, since)
                 .stream().map(bulletin -> DaoToDto(bulletin, bulletin.getAuthor().equalsIgnoreCase(username))).collect(Collectors.toList());

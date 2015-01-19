@@ -1,6 +1,5 @@
 package pl.slowly.team.common.packets.response;
 
-import com.sun.istack.internal.Nullable;
 import pl.slowly.team.common.data.Category;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 
@@ -10,7 +9,7 @@ import pl.slowly.team.common.packets.helpers.ResponseStatus;
 public class LogInResponse extends Response {
     private final Category category;
 
-    public LogInResponse(ResponseStatus responseStatus, @Nullable Category category) {
+    public LogInResponse(ResponseStatus responseStatus, Category category) {
         super(responseStatus);
         this.category = category;
     }

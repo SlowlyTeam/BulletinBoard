@@ -1,6 +1,6 @@
 package pl.slowly.team.server.repository;
 
-import com.sun.istack.internal.Nullable;
+
 import pl.slowly.team.server.repository.dao.DAOBulletin;
 
 import java.util.Date;
@@ -14,5 +14,5 @@ public interface IBulletinRepository {
     public abstract List<DAOBulletin> getUsersBulletins(String userName);
     public abstract boolean deleteBulletin(int bulletinID);
     public abstract boolean editBulletin(DAOBulletin bulletin, String username);
-    public abstract List<DAOBulletin> getBulletins(List<Integer> categoriesIds, @Nullable Date since);
+    public abstract List<DAOBulletin> getBulletins(List<Integer> categoriesIds,  Date since);
 }

@@ -4,7 +4,6 @@ package pl.slowly.team.client.GUI;/*
  * and open the template in the editor.
  */
 
-import com.sun.istack.internal.Nullable;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -192,7 +191,7 @@ public class ScreensController extends StackPane {
         getChildren().get(0).requestFocus();
     }
 
-    public void showExitDialog(String message, @Nullable Exception exception) {
+    public void showExitDialog(String message, Exception exception) {
         if (exception != null) {
             Dialogs.create()
                     .owner(getParent().getScene().getWindow())

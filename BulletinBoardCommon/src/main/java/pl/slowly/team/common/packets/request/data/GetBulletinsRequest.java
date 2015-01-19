@@ -1,6 +1,5 @@
 package pl.slowly.team.common.packets.request.data;
 
-import com.sun.istack.internal.Nullable;
 import pl.slowly.team.common.packets.request.Request;
 
 import java.util.Date;
@@ -14,7 +13,7 @@ public class GetBulletinsRequest extends Request {
     private List<Integer> categoriesIds;
     private Date since;
 
-    public GetBulletinsRequest(List<Integer> categoriesIds, @Nullable Date since) {
+    public GetBulletinsRequest(List<Integer> categoriesIds, Date since) {
         this.categoriesIds = categoriesIds;
         this.since = since;
     }

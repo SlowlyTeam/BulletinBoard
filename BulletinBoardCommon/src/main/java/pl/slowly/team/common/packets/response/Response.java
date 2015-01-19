@@ -1,6 +1,5 @@
 package pl.slowly.team.common.packets.response;
 
-import com.sun.istack.internal.Nullable;
 import pl.slowly.team.common.data.Entity;
 import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
@@ -15,7 +14,7 @@ public abstract class Response extends Packet {
     private ResponseStatus responseStatus;
     private List<? extends Entity> entities;
 
-    public Response(ResponseStatus responseStatus, @Nullable List<? extends Entity> entities) {
+    public Response(ResponseStatus responseStatus, List<? extends Entity> entities) {
         this.responseStatus = responseStatus;
         this.entities = entities;
     }

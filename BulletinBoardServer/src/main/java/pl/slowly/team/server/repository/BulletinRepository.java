@@ -1,6 +1,6 @@
 package pl.slowly.team.server.repository;
 
-import com.sun.istack.internal.Nullable;
+
 import org.hibernate.*;
 import pl.slowly.team.server.repository.dao.DAOBulletin;
 
@@ -103,7 +103,7 @@ public class BulletinRepository implements IBulletinRepository {
     }
 
     @Override
-    public List<DAOBulletin> getBulletins(List<Integer> categoriesIds, @Nullable Date since) {
+    public List<DAOBulletin> getBulletins(List<Integer> categoriesIds,  Date since) {
         if (since == null) {
             List<DAOBulletin> result = null;
             Session session = factory.openSession();
