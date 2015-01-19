@@ -16,11 +16,11 @@ public class EditBulletinResponseStrategy extends Strategy {
 
     @Override
     public void execute(Packet responsePacket) {
-        System.out.println("Odpowiedz po probie edycji bulletinu.");
         EditBulletinResponse editBulletinResponse = (EditBulletinResponse) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         if (editBulletinResponse.getResponseStatus() != ResponseStatus.ERROR)
             mainViewController.editUserBulletinInView(editBulletinResponse);
         else mainViewController.editUserBulletinInView(null);
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
     }
 }

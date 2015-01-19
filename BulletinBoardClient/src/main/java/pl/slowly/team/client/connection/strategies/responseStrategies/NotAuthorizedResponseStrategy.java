@@ -15,5 +15,6 @@ public class NotAuthorizedResponseStrategy extends Strategy {
     @Override
     public void execute(Packet responsePacket) {
         screensController.showExitDialog("Błąd autoryzacji. Aplikacja zostanie zamknięta", null);
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
     }
 }

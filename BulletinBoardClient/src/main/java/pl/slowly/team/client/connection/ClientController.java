@@ -1,6 +1,7 @@
 package pl.slowly.team.client.connection;
 
 import javafx.application.Platform;
+import org.apache.log4j.Logger;
 import pl.slowly.team.client.GUI.ScreensController;
 import pl.slowly.team.client.connection.strategies.Strategy;
 import pl.slowly.team.client.connection.strategies.packetStrategies.DeleteBulletinBroadcastStrategy;
@@ -28,7 +29,9 @@ import java.util.List;
 
 public class ClientController {
 
+    private final static Logger LOGGER = Logger.getLogger(ClientController.class);
     private final HashMap<Class<? extends Packet>, Strategy> strategyMap = new HashMap<>();
+
     private int port;
     private String host;
     private Socket socket;
@@ -42,6 +45,7 @@ public class ClientController {
         this.host = host;
         this.screensController = screensController;
         fillStrategyMap();
+        LOGGER.info("Client Controller created.");
     }
 
     private void fillStrategyMap() {
@@ -65,6 +69,7 @@ public class ClientController {
         inputStream = new ObjectInputStream(socket.getInputStream());
         serverResponseListener = new ServerResponseListener();
         serverResponseListener.start();
+        LOGGER.info("Connected to server.");
         return true;
     }
 
@@ -73,6 +78,7 @@ public class ClientController {
             return;
         serverResponseListener.stop();
         sendRequest(new DisconnectFromServerRequest());
+        LOGGER.info("Disconnected from server.");
     }
 
     public void logIn(String userName, String password) throws IOException {
@@ -80,7 +86,6 @@ public class ClientController {
     }
 
     public void addBulletin(String bulletinTitle, String bulletinContent) throws IOException {
-        System.out.println("Żądanie: dodaj nowy bulletin.");
         sendRequest(new AddBulletinRequest(new Bulletin(bulletinTitle, bulletinContent)));
     }
 
@@ -100,13 +105,9 @@ public class ClientController {
         sendRequest(new GetBulletinsRequest(categoriesId, null));
     }
 
-    public void getUserBulletins() throws IOException {
-        sendRequest(new GetUserBulletinsRequest());
-    }
-
     public void sendRequest(Request request) throws IOException {
         outputStream.writeObject(request);
-        System.out.println("Wysłano żądanie...");
+        LOGGER.info("Request " + request.getClass().getSimpleName() + " was sent.");
     }
 
     public class ServerResponseListener extends Thread {
@@ -118,16 +119,17 @@ public class ClientController {
                     Packet serverPacket = getResponse();
                     if (serverPacket == null)
                         return;
-
+                    LOGGER.info("Received packet " + serverPacket.getClass().getSimpleName() + ".");
                     Strategy strategy = strategyMap.get(serverPacket.getClass());
 
                     if (!strategy.equals(null)) {
                         strategy.execute(serverPacket);
                     } else {
-                        System.out.println("Nieznana strategia");
+                        LOGGER.info("Unknown strategy.");
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
+                LOGGER.error("Error: " + e);
                 Platform.runLater(() -> screensController.showExitDialog("Błąd połączenia z serwerem", e));
             }
         }
@@ -136,7 +138,7 @@ public class ClientController {
             if (!socket.isClosed()) {
                 return (Packet) inputStream.readObject();
             } else {
-                System.out.println("gniazdo zostało zamkniete.");
+                LOGGER.info("Gniazdo zostało zamkniete.");
             }
             return null;
         }

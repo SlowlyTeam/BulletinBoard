@@ -14,9 +14,9 @@ public class DeleteBulletinResponseStrategy extends Strategy {
 
     @Override
     public void execute(Packet responsePacket) {
-        System.out.println("Odpowiedz po probie usuniecia bulletinu.");
         DeleteBulletinResponse deleteBulletinResponse = (DeleteBulletinResponse) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         mainViewController.deletedBulletinInfo(deleteBulletinResponse);
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed.");
     }
 }

@@ -21,5 +21,6 @@ public class SendNewBulletinBroadcastStrategy extends Strategy {
         Bulletin bulletin = newBulletinBroadcast.getBulletin();
         mainViewController.addBulletinToView(
                 bulletin.getBulletinId(), bulletin.getBulletinTitle(), bulletin.getBulletinContent());
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
     }
 }

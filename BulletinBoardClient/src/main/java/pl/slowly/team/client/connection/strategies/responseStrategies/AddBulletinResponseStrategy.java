@@ -17,9 +17,9 @@ public class AddBulletinResponseStrategy extends Strategy {
 
     @Override
     public void execute(Packet responsePacket) {
-        System.out.println("Odpowiedz po probie dodania bulletinu.");
         AddBulletinResponse addBulletinResponse = (AddBulletinResponse) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         mainViewController.addUserBulletinToView(addBulletinResponse);
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed.");
     }
 }

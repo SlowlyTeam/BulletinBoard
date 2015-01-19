@@ -6,6 +6,7 @@ import pl.slowly.team.client.GUI.ScreensController;
 import pl.slowly.team.client.connection.strategies.Strategy;
 import pl.slowly.team.common.data.Bulletin;
 import pl.slowly.team.common.packets.Packet;
+import pl.slowly.team.common.packets.request.broadcast.DeleteBulletinBroadcast;
 import pl.slowly.team.common.packets.request.broadcast.EditBulletinBroadcast;
 
 public class EditBulletinBroadcastStrategy extends Strategy {
@@ -21,5 +22,6 @@ public class EditBulletinBroadcastStrategy extends Strategy {
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         Bulletin bulletin = editBulletinBroadcast.getBulletin();
         mainViewController.editBulletinInView(bulletin);
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
     }
 }

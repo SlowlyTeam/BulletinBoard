@@ -20,5 +20,6 @@ public class GetCategoriesResponseStrategy extends Strategy {
         GetCategoriesListResponse getCategoriesListResponse = (GetCategoriesListResponse) responsePacket;
         ChooseCategoryScreenController chooseCategoryScreenController = (ChooseCategoryScreenController) screensController.getControlledScreen(Screens.changeCategoryScreen);
         chooseCategoryScreenController.fillCategories(getCategoriesListResponse.getCategories());
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
     }
 }

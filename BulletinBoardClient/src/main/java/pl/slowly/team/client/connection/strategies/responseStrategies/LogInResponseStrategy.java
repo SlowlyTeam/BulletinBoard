@@ -16,11 +16,11 @@ public class LogInResponseStrategy extends Strategy {
         super(screensController);
     }
 
-
     @Override
     public void execute(Packet responsePacket) {
         LogInResponse logInResponse = (LogInResponse) responsePacket;
         LoginScreenController loginScreenController = (LoginScreenController) screensController.getControlledScreen(Screens.loginScreen);
         loginScreenController.logInResponse(logInResponse);
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
     }
 }
