@@ -34,5 +34,6 @@ public class LogInStrategy extends Strategy {
         } else {
             server.sendResponseToClient(new LogInResponse(ResponseStatus.NOT_AUTHORIZED, null), userId);
         }
+        LOGGER.info("Server executed strategy: Client loged in. Client id: " + userId);
     }
 }

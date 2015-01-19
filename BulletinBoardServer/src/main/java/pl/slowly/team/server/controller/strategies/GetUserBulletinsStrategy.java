@@ -28,5 +28,6 @@ public class GetUserBulletinsStrategy extends Strategy {
         String userName = server.getUsername(userId);
         List<Bulletin> bulletins = model.getUserBulletins(userName);
         server.sendResponseToClient(new GetBulletinsResponse(ResponseStatus.OK, bulletins), userId);
+        LOGGER.info("Server executed strategy: Get user bulletins. Client id: " + userId);
     }
 }

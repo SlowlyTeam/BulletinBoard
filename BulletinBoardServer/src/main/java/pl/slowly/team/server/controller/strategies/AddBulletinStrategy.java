@@ -35,5 +35,6 @@ public class AddBulletinStrategy extends Strategy {
         } else {
             server.sendResponseToClient(new AddBulletinResponse(ResponseStatus.ERROR), clientId);
         }
+        LOGGER.info("Server executed strategy: Add bulletin. Bulletin Id: " + bulletinId + " Client id: " + clientId);
     }
 }

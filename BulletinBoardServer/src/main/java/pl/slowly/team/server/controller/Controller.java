@@ -1,5 +1,6 @@
 package pl.slowly.team.server.controller;
 
+import org.apache.log4j.Logger;
 import pl.slowly.team.common.packets.Packet;
 import pl.slowly.team.common.packets.helpers.ResponseStatus;
 import pl.slowly.team.common.packets.request.authorization.LogInRequest;
@@ -7,6 +8,7 @@ import pl.slowly.team.common.packets.request.connection.DisconnectFromServerRequ
 import pl.slowly.team.common.packets.request.data.*;
 import pl.slowly.team.common.packets.response.NotAuthorizedResponse;
 import pl.slowly.team.server.connection.IServer;
+import pl.slowly.team.server.connection.MultiThreadedServer;
 import pl.slowly.team.server.controller.strategies.*;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
@@ -21,6 +23,7 @@ import java.util.concurrent.BlockingQueue;
  * between the clients and the server while sending packets.
  */
 public class Controller {
+    public final static Logger LOGGER = Logger.getLogger(Controller.class);
     /** Model being main class of the logic. */
     private final IModel model;
     /** Server managing connections with clients. */
@@ -58,9 +61,11 @@ public class Controller {
                 executeStrategyIfAuthorized(wrappedPacket);
             } catch (final InterruptedException e) {
                 e.printStackTrace();
+                LOGGER.error("Unexpected stopped process packages from blocking queue.", e);
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 System.out.println("Could not execute strategy. Network problems.");
+                LOGGER.error("Could not execute strategy. Network problems.", e);
                 e.printStackTrace();
             }
         }
@@ -98,6 +103,7 @@ public class Controller {
         if (strategy != null) {
             strategy.execute(wrappedPacket);
         } else {
+            LOGGER.error("Unknown strategy - unable to process strategy.");
             System.out.println("Unknown strategy.");
         }
     }

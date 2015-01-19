@@ -29,5 +29,6 @@ public class GetBulletinsStrategy extends Strategy {
         server.setUserCategory(clientId, getBulletins.getCategoriesIds().get(0));
         List<Bulletin> bulletins = model.getBulletins(getBulletins.getCategoriesIds(), getBulletins.getSince(), server.getUsername(clientId));
         server.sendResponseToClient(new GetBulletinsResponse(ResponseStatus.OK, bulletins), clientId);
+        LOGGER.info("Server executed strategy: Get bulletin. User Id: " + clientId + " Category: " + getBulletins.getCategoriesIds().get(0));
     }
 }

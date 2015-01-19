@@ -1,5 +1,6 @@
 package pl.slowly.team.server.controller.strategies;
 
+import org.apache.log4j.Logger;
 import pl.slowly.team.server.connection.IServer;
 import pl.slowly.team.server.helpers.PacketWrapper;
 import pl.slowly.team.server.model.IModel;
@@ -11,6 +12,7 @@ import java.io.IOException;
  */
 public abstract class Strategy {
 
+    public final static Logger LOGGER = Logger.getLogger(Strategy.class);
     protected IServer server;
     protected IModel model;
 

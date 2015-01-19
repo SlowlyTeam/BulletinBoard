@@ -33,5 +33,6 @@ public class DeleteBulletinStrategy extends Strategy {
         } else {
             server.sendResponseToClient(new DeleteBulletinResponse(ResponseStatus.ERROR, bulletinId), clientId);
         }
+        LOGGER.info("Server executed strategy: Delete bulletin. Bulletin Id: " + bulletinId + " Client id: " + clientId);
     }
 }

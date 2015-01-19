@@ -16,6 +16,7 @@ public class DisconnectFromServerStrategy extends Strategy {
     public void execute(PacketWrapper packetWrapper) throws IOException, InterruptedException {
         int clientId = packetWrapper.getUserID();
         server.disconnectClient(clientId);
+        LOGGER.info("Server executed strategy: Disconnect client from server. Client's id: " + clientId);
     }
 
 }

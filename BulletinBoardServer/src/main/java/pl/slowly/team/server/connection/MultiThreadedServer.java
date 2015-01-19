@@ -77,6 +77,7 @@ public class MultiThreadedServer implements IServer, Runnable {
                 final ObjectOutputStream oout = new ObjectOutputStream(nextClientSocket.getOutputStream());
                 final ClientInfo clientsSocketInfo = new ClientInfo(oout, nextClientSocket);
                 addClientToMap(currentClientId, clientsSocketInfo);
+                LOGGER.info("New user has connected to the server...");
                 threadPool.execute(new ClientConnection(nextClientSocket, currentClientId));
                 incrementClientDynamicId();
 
@@ -88,6 +89,7 @@ public class MultiThreadedServer implements IServer, Runnable {
 
     @Override
     public void disconnect() throws IOException {
+        LOGGER.info("Closed server...");
         serverSocket.close();
     }
 
@@ -204,6 +206,7 @@ public class MultiThreadedServer implements IServer, Runnable {
             if (!socket.isClosed()) {
                 clientMap.get(clientId).getClientSocket().close();
                 System.out.println("Connection with client closed");
+                LOGGER.info("Connection closed with client: " + clientId);
             }
             System.out.println("Connection with client closed by one of sides.");
             clientMap.remove(clientId);
@@ -255,10 +258,12 @@ public class MultiThreadedServer implements IServer, Runnable {
             try {
                 if (!clientSocket.isClosed()) {
                     System.out.println("Connection closed with " + clientId);
+                    LOGGER.info("Connection closed with " + clientId);
                     clientSocket.close();
                 }
             } catch (final IOException e1) {
                 e1.printStackTrace();
+                LOGGER.error("Error during closing client connection for id: " + clientId, e1);
             }
         }
 
@@ -270,11 +275,12 @@ public class MultiThreadedServer implements IServer, Runnable {
             try {
                 while (true) {
                     final Packet packet = (Packet) oin.readObject();
+                    LOGGER.info("Packet recieved: " + packet.getClass().getSimpleName() + " " + packet.toString());
                     packetsQueue.add(new PacketWrapper(clientId, packet));
                 }
             } catch (IOException | ClassNotFoundException e) {
                 // Broken connection
-                //TODO - event connection broken for specified client - optional
+                LOGGER.error("Broken connection: ", e);
                 closeClientConnection();
             }
         }

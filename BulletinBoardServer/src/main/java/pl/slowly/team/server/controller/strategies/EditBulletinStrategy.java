@@ -29,5 +29,6 @@ public class EditBulletinStrategy extends Strategy {
         } else {
             server.sendResponseToClient(new EditBulletinResponse(ResponseStatus.ERROR, null), clientId);
         }
+        LOGGER.info("Server executed strategy: Edit bulletin." + " Client id: " + clientId);
     }
 }

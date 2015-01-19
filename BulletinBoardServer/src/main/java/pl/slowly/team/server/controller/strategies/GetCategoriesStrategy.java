@@ -27,5 +27,6 @@ public class GetCategoriesStrategy extends Strategy {
         int userId = packetWrapper.getUserID();
         List<Category> categories = model.getCategories();
         server.sendResponseToClient(new GetCategoriesListResponse(ResponseStatus.OK, categories), userId);
+        LOGGER.info("Server executed strategy: Get category. " + "Client id: " + userId);
     }
 }
