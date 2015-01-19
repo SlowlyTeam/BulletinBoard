@@ -22,6 +22,7 @@ public class EditBulletinBroadcastStrategy extends Strategy {
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         Bulletin bulletin = editBulletinBroadcast.getBulletin();
         mainViewController.editBulletinInView(bulletin);
-        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. " +
+                "EditBulletinBroadcast with bulletin id: " + editBulletinBroadcast.getBulletin().getBulletinId());
     }
 }

@@ -18,6 +18,7 @@ public class DeleteBulletinBroadcastStrategy extends Strategy {
         DeleteBulletinBroadcast deleteBulletinBroadcast = (DeleteBulletinBroadcast) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         mainViewController.deleteBulletinFromView(deleteBulletinBroadcast.getBulletinId());
-        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. " +
+                "Bulletin id to be deleted was sent: " + deleteBulletinBroadcast.getBulletinId());
     }
 }

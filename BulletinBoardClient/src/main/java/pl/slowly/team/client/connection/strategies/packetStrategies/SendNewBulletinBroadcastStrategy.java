@@ -15,12 +15,12 @@ public class SendNewBulletinBroadcastStrategy extends Strategy {
 
     @Override
     public void execute(Packet responsePacket) {
-        System.out.println("Broadcast z nowym bulletinem.");
         SendNewBulletinBroadcast newBulletinBroadcast = (SendNewBulletinBroadcast) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         Bulletin bulletin = newBulletinBroadcast.getBulletin();
         mainViewController.addBulletinToView(
                 bulletin.getBulletinId(), bulletin.getBulletinTitle(), bulletin.getBulletinContent());
-        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. " +
+                "SendNewBulletinBroadcast with bulletin id: " + newBulletinBroadcast.getBulletin().getBulletinId());
     }
 }

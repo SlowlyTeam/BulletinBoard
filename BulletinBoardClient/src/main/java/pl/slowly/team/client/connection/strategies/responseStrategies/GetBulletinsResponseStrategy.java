@@ -24,6 +24,6 @@ public class GetBulletinsResponseStrategy extends Strategy {
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         List<Bulletin> bulletinList = getBulletinsResponse.getBulletins();
         mainViewController.setBulletins(bulletinList);
-        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed.");
     }
 }

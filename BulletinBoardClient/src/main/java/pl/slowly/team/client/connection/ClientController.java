@@ -45,7 +45,7 @@ public class ClientController {
         this.host = host;
         this.screensController = screensController;
         fillStrategyMap();
-        LOGGER.info("Client Controller created.");
+        LOGGER.info("Client Controller created. Host: " + host + ", port: " + port);
     }
 
     private void fillStrategyMap() {
@@ -82,32 +82,37 @@ public class ClientController {
     }
 
     public void logIn(String userName, String password) throws IOException {
+        LOGGER.info("Request LogInRequest was sent.");
         sendRequest(new LogInRequest(new Credentials(userName, password)));
     }
 
     public void addBulletin(String bulletinTitle, String bulletinContent) throws IOException {
+        LOGGER.info("Request AddBulletinRequest was sent. Title: " + bulletinTitle);
         sendRequest(new AddBulletinRequest(new Bulletin(bulletinTitle, bulletinContent)));
     }
 
     public void deleteBulletin(int bulletinId) throws IOException {
+        LOGGER.info("Request DeleteBulletinRequest was sent. Bulletin id: " + bulletinId);
         sendRequest(new DeleteBulletinRequest(bulletinId));
     }
 
     public void editBulletin(Bulletin bulletin) throws IOException {
+        LOGGER.info("Request EditBulletinRequest was sent. Bulletin id: " + bulletin.getBulletinId());
         sendRequest(new EditBulletinRequest(bulletin));
     }
 
     public void getCategories() throws IOException {
+        LOGGER.info("Request GetCategoriesRequest was sent.");
         sendRequest(new GetCategoriesRequest());
     }
 
     public void getBulletins(List<Integer> categoriesId) throws IOException {
+        LOGGER.info("Request GetBulletinsRequest was sent.");
         sendRequest(new GetBulletinsRequest(categoriesId, null));
     }
 
     public void sendRequest(Request request) throws IOException {
         outputStream.writeObject(request);
-        LOGGER.info("Request " + request.getClass().getSimpleName() + " was sent.");
     }
 
     public class ServerResponseListener extends Thread {

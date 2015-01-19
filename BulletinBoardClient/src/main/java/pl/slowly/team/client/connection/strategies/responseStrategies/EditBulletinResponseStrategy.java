@@ -21,6 +21,7 @@ public class EditBulletinResponseStrategy extends Strategy {
         if (editBulletinResponse.getResponseStatus() != ResponseStatus.ERROR)
             mainViewController.editUserBulletinInView(editBulletinResponse);
         else mainViewController.editUserBulletinInView(null);
-        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. " +
+                "EditBulletinResponse with bulletin id: " + editBulletinResponse.getBulletin().getBulletinId());
     }
 }

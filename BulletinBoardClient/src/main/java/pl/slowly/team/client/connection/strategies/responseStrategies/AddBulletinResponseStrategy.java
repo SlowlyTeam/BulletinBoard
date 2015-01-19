@@ -20,6 +20,7 @@ public class AddBulletinResponseStrategy extends Strategy {
         AddBulletinResponse addBulletinResponse = (AddBulletinResponse) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         mainViewController.addUserBulletinToView(addBulletinResponse);
-        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed.");
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed." +
+                "AddBulletinResponse with bulletin id: " + addBulletinResponse.getBulletinId());
     }
 }

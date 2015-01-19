@@ -21,6 +21,8 @@ public class LogInResponseStrategy extends Strategy {
         LogInResponse logInResponse = (LogInResponse) responsePacket;
         LoginScreenController loginScreenController = (LoginScreenController) screensController.getControlledScreen(Screens.loginScreen);
         loginScreenController.logInResponse(logInResponse);
-        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. ");
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed. " +
+                "LogInResponse with category name: " + logInResponse.getCategory().getCategoryName() +
+                " and category id: " + logInResponse.getCategory().getCategoryName());
     }
 }

@@ -17,6 +17,7 @@ public class DeleteBulletinResponseStrategy extends Strategy {
         DeleteBulletinResponse deleteBulletinResponse = (DeleteBulletinResponse) responsePacket;
         MainViewController mainViewController = (MainViewController) screensController.getControlledScreen(Screens.mainScreen);
         mainViewController.deletedBulletinInfo(deleteBulletinResponse);
-        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed.");
+        LOGGER.info("Strategy " + this.getClass().getSimpleName() + " was executed." +
+                "DeleteBulletinResponse with bulletin id: " + deleteBulletinResponse.getBulletinId());
     }
 }
